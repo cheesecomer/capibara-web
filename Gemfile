@@ -25,17 +25,22 @@ gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+
+gem 'devise'
+
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'capybara', '~> 2.13'
   gem 'selenium-webdriver'
   gem 'factory_girl_rails'
+  gem 'ffaker'
   gem 'rspec-rails'
 end
 
 group :test do
   gem 'rspec-power_assert'
-  gem 'ffaker'
   gem 'webmock'
   gem 'timecop'
   gem 'simplecov'
@@ -52,6 +57,7 @@ group :development do
   gem "guard-rspec"
   gem "guard-rubocop"
   gem "guard-shell"
+  gem 'pry-rails'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

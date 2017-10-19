@@ -2,6 +2,8 @@ DEPENDENCIES
   capibara
     path: site-cookbooks/capibara
   git
+  lang-ja
+    path: site-cookbooks/lang-ja
   mariadb
   nginx
   rbenv
@@ -23,6 +25,7 @@ GRAPH
   homebrew (4.2.0)
   inifile_chef_gem (0.1.0)
     build-essential (>= 0.0.0)
+  lang-ja (0.1.0)
   mariadb (1.5.2)
     apt (>= 0.0.0)
     build-essential (>= 0.0.0)

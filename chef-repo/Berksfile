@@ -1,9 +1,10 @@
-source "https://api.berkshelf.com"
+source 'https://api.berkshelf.com'
 
 cookbook 'git'
 cookbook 'nginx'
 cookbook 'unicorn'
 cookbook 'ruby_rbenv'
 cookbook 'mariadb'
-cookbook 'rbenv',           path: "./site-cookbooks/rbenv"
-cookbook 'capibara',        path: "./site-cookbooks/capibara"
+cookbook 'rbenv',    path: './site-cookbooks/rbenv'
+cookbook 'capibara', path: './site-cookbooks/capibara'
+cookbook 'lang-ja',  path: './site-cookbooks/lang-ja'
