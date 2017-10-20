@@ -4,7 +4,7 @@
     <%= content_tag :li, class: [:message, (message.sender.id == current_user.id ? :own : :others )] do %>
       <p class="nickname"><%= message.sender.nickname %></p>
       <div class="balloon">
-        <p><%= message.content %></p>
+        <p><%= simple_format h(message.content) %></p>
       </div>
       <p class="timestamp"><%= l(message.created_at, format: :default) %></p>
     <% end %>

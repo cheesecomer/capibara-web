@@ -15,7 +15,7 @@
  */
  @import "bootstrap-sprockets";
  @import "bootstrap";
-
+ @import "variable";
 
 body {
   margin: 0;
@@ -35,4 +35,11 @@ footer {
   background: #fff;
   height: 80px;
   box-shadow: 0 -4px 4px 0 rgba(0,0,0,.16), 0 0 4px 0 rgba(0,0,0,.12);
+}
+
+
+@media #{$small} {
+  .container {
+    width: 100%;
+  }
 }

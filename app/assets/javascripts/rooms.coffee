@@ -20,7 +20,7 @@ class RoomsViewController
 
       received: (data) ->
         nickname = $('<p>').addClass('nickname').text(data['sender']['nickname'])
-        balloon = $('<div>').addClass('balloon').append($('<p>').text(data['content']))
+        balloon = $('<div>').addClass('balloon').append($('<p>').html(data['content'].replace(/\r?\n/g, '<br>')))
         timestamp = $('<p>').addClass('timestamp').text(data['at'])
         container =
           $('<li>')
