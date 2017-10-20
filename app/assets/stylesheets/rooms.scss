@@ -2,7 +2,30 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@import "variable";
+
 body[data-controller="rooms"] {
+  &[data-action="index"] {
+    .card {
+      display: inline-block;
+      @media #{$small} {
+        width: 100%;
+      }
+
+      @media #{$middle} {
+        width: 300px;
+      }
+
+      @media #{$large} {
+        width: 377px;
+      }
+
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,.16), 0 0 2px 0 rgba(0,0,0,.12);
+    }
+  }
   &[data-action="show"] {
     ul.messages {
       list-style: none;
