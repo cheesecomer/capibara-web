@@ -9,6 +9,16 @@
   </head>
 
   <%= content_tag :body, data: { controller: @controller_path || controller.controller_path, action: controller.action_name } do %>
-    <%= yield %>
+    <%= content_tag :div, class: [:container], style: yield(:footer).present? ? 'margin-bottom: 80px;' : '' do %>
+      <%= yield %>
+    <% end -%>
+
+    <% if yield(:footer).present? -%>
+    <footer class="footer">
+      <div class="container">
+      <%= yield :footer %>
+      </div>
+    </footer>
+    <% end -%>
   <% end %>
 </html>

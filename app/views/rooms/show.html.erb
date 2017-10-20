@@ -13,3 +13,15 @@
 <script>
   this.App.view_controllers.rooms.room_id = <%= @room.id %>;
 </script>
+
+<% content_for :footer do %>
+  <div class="bottom_wrapper clearfix">
+    <div class="message_input_wrapper">
+      <textarea class="message_input" placeholder="Type your message here..."></textarea>
+    </div>
+    <div class="send_message">
+      <div class="icon"></div>
+      <div class="text">Send</div>
+    </div>
+  </div>
+<% end %>

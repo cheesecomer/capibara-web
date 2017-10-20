@@ -25,3 +25,14 @@ body {
   min-height: 100vh;
   flex-direction: column;
 }
+
+footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1030;
+  background: #fff;
+  height: 80px;
+  box-shadow: 0 -4px 4px 0 rgba(0,0,0,.16), 0 0 4px 0 rgba(0,0,0,.12);
+}
