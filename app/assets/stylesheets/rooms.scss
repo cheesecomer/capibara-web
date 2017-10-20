@@ -97,19 +97,8 @@ body[data-controller="rooms"] {
         border: 2px solid #a3d063;
         color: #fff;
         cursor: pointer;
-        transition: all 0.2s linear;
         text-align: center;
         float: right;
-        &:hover {
-          color: #a3d063;
-          background-color: #fff;
-        }
-        .text {
-          font-size: 18px;
-          font-weight: 300;
-          display: inline-block;
-          line-height: 48px;
-        }
       }
     }
   }

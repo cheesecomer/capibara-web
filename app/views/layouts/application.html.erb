@@ -9,6 +9,7 @@
   </head>
 
   <%= content_tag :body, data: { controller: @controller_path || controller.controller_path, action: controller.action_name } do %>
+    <p><%= link_to "ログアウト", session_path, method: :delete %></p>
     <%= content_tag :div, class: [:container], style: yield(:footer).present? ? 'margin-bottom: 80px;' : '' do %>
       <%= yield %>
     <% end -%>
