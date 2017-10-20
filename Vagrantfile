@@ -28,6 +28,11 @@ Vagrant.configure('2') do |config|
       nginx: {
         repo_source: 'epel'
       },
+      redisio: {
+        servers: [
+          { name: 'master', port: '6379', unixsocket: '/tmp/redis.sock', unixsocketperm: '755'},
+        ]
+      },
       rbenv: {
         user_installs: [
           {
@@ -84,6 +89,8 @@ Vagrant.configure('2') do |config|
       'git',
       'nginx',
       'rbenv',
+      'redisio',
+      'redisio::enable',
       'mariadb::server',
       'mariadb::client',
       'capibara'

@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
-  "https://github.com/#{repo_name}.git"
+  repo_name = '#{repo_name}/#{repo_name}' unless repo_name.include?('/')
+  'https://github.com/#{repo_name}.git'
 end
 
 gem 'rails', '~> 5.1.4'
@@ -11,6 +11,8 @@ gem 'mysql2'
 
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
+
+gem 'redis', '~> 3.0'
 
 gem 'sass-rails', '~> 5.0'
 
@@ -56,10 +58,10 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'annotate'
   gem 'rubocop'
-  gem "guard"
-  gem "guard-rspec"
-  gem "guard-rubocop"
-  gem "guard-shell"
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'guard-rubocop'
+  gem 'guard-shell'
   gem 'pry-rails'
 end
 
