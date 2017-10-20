@@ -6,6 +6,16 @@ module ApplicationCable
       self.current_user = find_verified_user
     end
 
+    def self.connected_user(&block)
+      ActionCable.server
+        .open_connections_statistics
+        .map{|v| v.with_indifferent_access }
+        .select {|v| v[:subscriptions].map{|s| JSON.parse(s).with_indifferent_access }.select{|h| yield h }.present? }
+        .map{|v| v[:identifier]}
+        .uniq
+        .size
+    end
+
     protected
 
     def find_verified_user
