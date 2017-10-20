@@ -1,10 +1,15 @@
 <h1><%= @room.name %></h1>
-<div id="messages">
-  <% @room.messages.where(created_at: 10.minutes.ago..10.minutes.since).last(20).each do |message| %>
-    <p><%= message.content %><p>
+<ul class="messages">
+  <% @room.messages.includes(:sender).where(created_at: 10.minutes.ago..10.minutes.since).last(20).each do |message| %>
+    <%= content_tag :li, class: [:message, (message.sender.id == current_user.id ? :own : :others )] do %>
+      <p class="nickname"><%= message.sender.nickname %></p>
+      <div class="balloon">
+        <p><%= message.content %></p>
+      </div>
+      <p class="timestamp"><%= l(message.created_at, format: :default) %></p>
+    <% end %>
   <% end %>
-</div>
-
+</ul>
 <script>
   this.App.view_controllers.rooms.room_id = <%= @room.id %>;
 </script>
