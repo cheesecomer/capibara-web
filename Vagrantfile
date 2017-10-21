@@ -12,8 +12,9 @@ Vagrant.configure('2') do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = 'centos7.2'
-  config.vm.box_url = 'https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.2/vagrant-centos-7.2.box'
+  # config.vm.box = 'centos7.2'
+  # config.vm.box_url = 'https://github.com/CommanderK5/packer-centos-template/releases/download/0.7.2/vagrant-centos-7.2.box'
+  config.vm.box = "bento/centos-7.2"
   config.vm.box_download_insecure = true
   config.vm.network 'forwarded_port', guest: 3000, host: 3000, auto_correct: true
   config.vm.network :public_network
@@ -27,6 +28,11 @@ Vagrant.configure('2') do |config|
     chef.json = {
       nginx: {
         repo_source: 'epel'
+      },
+      redisio: {
+        servers: [
+          { name: 'master', port: '6379', unixsocket: '/tmp/redis.sock', unixsocketperm: '755'},
+        ]
       },
       rbenv: {
         user_installs: [
@@ -80,10 +86,13 @@ Vagrant.configure('2') do |config|
       }
     }
     chef.run_list = [
+      'selinux-policy::upgrade',
       'lang-ja',
       'git',
       'nginx',
       'rbenv',
+      'redisio',
+      'redisio::enable',
       'mariadb::server',
       'mariadb::client',
       'capibara'

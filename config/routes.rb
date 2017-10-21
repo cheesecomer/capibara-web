@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   devise_scope :user do
     root to: 'sessions#new'
     resource :session, only: [:new, :create, :destroy], controller: :sessions
+    get '/session', to: 'sessions#new'
   end
 
   resources :rooms

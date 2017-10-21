@@ -1,0 +1,34 @@
+@import "variable";
+
+body[data-controller="sessions"] {
+  &[data-action="new"] {
+    .panel-heading {
+      margin-top: 25px;
+    }
+
+    h1.title {
+      font-size: 125px;
+      font-family: 'Passion One', cursive;
+      font-weight: bold;
+    }
+
+    .balloon {
+      @media #{$small} {
+        width: 100%;
+      }
+
+      @media #{$middle} {
+        width: 80%;
+      }
+      @media #{$large} {
+        width: 60%;
+      }
+
+      background: #FFF;
+      box-shadow: 0 10px 10px 0 rgba(0,0,0,.16), 0 0 10px 0 rgba(0,0,0,.12);
+      padding: 20px;
+      margin: 0 auto;
+      margin-top: 25px;
+    }
+  }
+}
