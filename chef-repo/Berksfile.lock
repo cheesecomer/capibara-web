@@ -12,6 +12,8 @@ DEPENDENCIES
     git: https://github.com/brianbianco/redisio.git
     revision: 5ccfdff183ae00ce9b71498ac3c1ae948fbc4057
   ruby_rbenv
+  selinux-policy
+    path: site-cookbooks/selinux-policy
 
 GRAPH
   apt (6.1.4)
@@ -51,6 +53,7 @@ GRAPH
     selinux_policy (>= 0.0.0)
     ulimit (>= 0.1.2)
   ruby_rbenv (2.0.5)
+  selinux-policy (0.1.0)
   selinux_policy (2.0.1)
     compat_resource (>= 12.16.3)
   seven_zip (2.0.2)
