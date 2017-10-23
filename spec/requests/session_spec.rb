@@ -9,7 +9,7 @@ RSpec.describe 'Session', type: :request do
       response
     end
     let(:request_header) do
-      { CONTENT_TYPE: 'application/json', accept: 'application/json' }
+      { 'content-type': 'application/json', accept: 'application/json' }
     end
     let(:error_response) { { message: I18n.t('devise.failure.invalid') } }
     context 'when email found and valid password' do
