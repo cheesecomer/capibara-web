@@ -2,7 +2,7 @@ class Api::SessionsController < Api::ApplicationController
   skip_before_action :authenticate_user_from_token!
 
   # POST /v1/login
-  # curl localhost:3000/api/session --data 'email=user@example.com&password=mypass'
+  # curl localhost:3000/api/session --data '{ "email": "user@email.com", "password": "password" }' --header "Content-type: application/json"
   def create
     @user = User.find_for_database_authentication(email: params[:email])
     invalid_email and return unless @user
@@ -20,11 +20,11 @@ class Api::SessionsController < Api::ApplicationController
 
   def invalid_email
     warden.custom_failure!
-    render json: { error: t('invalid_email') }
+    render json: { message: t('devise.failure.invalid') }, status: :unauthorized
   end
 
   def invalid_password
     warden.custom_failure!
-    render json: { error: t('invalid_password') }
+    render json: { message: t('devise.failure.invalid') }, status: :unauthorized
   end
 end
