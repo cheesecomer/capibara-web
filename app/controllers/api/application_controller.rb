@@ -39,6 +39,6 @@ class Api::ApplicationController < ActionController::API
   # Authentication Failure
   # Renders a 401 error
   def authenticate_error
-    render json: { error: t('devise.failure.unauthenticated') }, status: 401
+    render json: { message: t('devise.failure.unauthenticated') }, status: :unauthorized
   end
 end
