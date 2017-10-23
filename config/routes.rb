@@ -2,6 +2,9 @@ Rails.application.routes.draw do
   devise_for :users, only: []
 
   devise_scope :user do
+    authenticated :user do
+      root to: 'rooms#index', as: :authenticated_root
+    end
     root to: 'sessions#new'
     resource :session, only: [:new, :create, :destroy], controller: :sessions
     get '/session', to: 'sessions#new'
