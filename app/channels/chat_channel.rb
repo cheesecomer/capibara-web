@@ -14,8 +14,8 @@ class ChatChannel < ApplicationCable::Channel
       room_id: params[:room_id]
   end
 
-  def self.connected_user(room)
-    ApplicationCable::Connection.connected_user do |h|
+  def self.connected_users(room)
+    ApplicationCable::Connection.connected_users do |h|
       h[:channel] == ChatChannel.name && h[:room_id] == room.id
     end
   end

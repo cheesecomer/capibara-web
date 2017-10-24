@@ -3,18 +3,20 @@ module ApplicationCable
     identified_by :current_user
 
     def connect
-      self.current_user = find_verified_user
+      self.current_user = find_verified_user.access_token
     end
 
-    def self.connected_user(&block)
-      ActionCable \
-        .server
-        .open_connections_statistics
-        .map(&:with_indifferent_access)
-        .select { |v| select_subscriptions(v[:subscriptions], &block) }
-        .map { |v| v[:identifier] }
-        .uniq
-        .size
+    def self.connected_users(&block)
+      access_tokens =
+        ActionCable \
+          .server
+          .open_connections_statistics
+          .map(&:with_indifferent_access)
+          .select { |v| select_subscriptions(v[:subscriptions], &block) }
+          .map { |v| v[:identifier] }
+          .uniq
+
+      User.where access_token: access_tokens
     end
 
     protected
