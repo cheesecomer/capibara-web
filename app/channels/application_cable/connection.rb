@@ -37,7 +37,7 @@ module ApplicationCable
     end
 
     def find_verified_user_from_session
-      User.find(session['warden.user.user.key'][0][0])
+      User.find(session&.fetch('warden.user.user.key', nil)&.at(0)&.at(0))
     end
 
     def session
