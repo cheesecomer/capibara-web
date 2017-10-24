@@ -17,12 +17,12 @@ class Api::ApplicationController < ActionController::API
   private
 
   def authenticate_with_auth_token(auth_token)
-    return unless auth_token&.include?(':')
+    return unless auth_token
 
-    scheme, user_id = auth_token.split(':').first.split(' ')
-    user = User.where(id: user_id).first
+    access_token = auth_token.split(' ').last
+    user = User.where(access_token: access_token).first
 
-    if user && Devise.secure_compare(user.access_token, auth_token.split(' ').last)
+    if user
       # User can access
       sign_in user, store: false
       true
@@ -35,6 +35,8 @@ class Api::ApplicationController < ActionController::API
   # Authentication Failure
   # Renders a 401 error
   def authenticate_error
-    render json: { message: t('devise.failure.unauthenticated') }, status: :unauthorized
+    render \
+      json: { message: t('devise.failure.unauthenticated') },
+      status: :unauthorized
   end
 end

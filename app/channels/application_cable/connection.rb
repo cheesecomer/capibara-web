@@ -7,21 +7,33 @@ module ApplicationCable
     end
 
     def self.connected_user(&block)
-      ActionCable.server
+      ActionCable \
+        .server
         .open_connections_statistics
-        .map{|v| v.with_indifferent_access }
-        .select {|v| v[:subscriptions].map{|s| JSON.parse(s).with_indifferent_access }.select{|h| yield h }.present? }
-        .map{|v| v[:identifier]}
+        .map(&:with_indifferent_access)
+        .select { |v| select_subscriptions(v[:subscriptions], &block) }
+        .map { |v| v[:identifier] }
         .uniq
         .size
     end
 
     protected
 
+    def self.select_subscriptions(hash)
+      hash \
+        .map { |s| JSON.parse(s).with_indifferent_access }
+        .select { |h| yield h }
+        .present?
+    end
+
     def find_verified_user
-      find_verified_user_from_session rescue find_verified_user_from_auth_header
-    rescue
-      reject_unauthorized_connection
+      find_verified_user_from_session
+    rescue ActiveRecord::RecordNotFound
+      begin
+        find_verified_user_from_auth_header
+      rescue UnauthorizationError
+        reject_unauthorized_connection
+      end
     end
 
     def find_verified_user_from_session
@@ -29,18 +41,18 @@ module ApplicationCable
     end
 
     def session
-      @session ||= cookies.encrypted[Rails.application.config.session_options[:key]]
+      key = Rails.application.config.session_options[:key]
+      @session ||= cookies.encrypted[key]
     end
 
     def find_verified_user_from_auth_header
       auth_token = request.headers['Authorization']
       raise UnauthorizationError unless auth_token
-      raise UnauthorizationError unless auth_token.include?(':')
 
-      user_id = auth_token.split(':').first
-      user = User.find(user_id)
+      access_token = auth_token.split(' ').last
+      user = User.where(access_token: access_token).first
 
-      raise UnauthorizationError unless Devise.secure_compare(user.access_token, auth_token)
+      raise UnauthorizationError unless user
 
       user
     end
