@@ -10,7 +10,7 @@ class ChatChannel < ApplicationCable::Channel
   def speak(data)
     Message.create! \
       content: data[:message],
-      sender: current_user,
+      sender: connection.current_user,
       room_id: params[:room_id]
   end
 

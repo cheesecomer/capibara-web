@@ -1,13 +1,14 @@
 class TestConnection
-  attr_reader :identifiers, :logger, :current_user, :server, :transmissions
+  attr_reader :identifiers, :logger, :access_token, :current_user, :server, :transmissions
 
   delegate :pubsub, to: :server
 
   def initialize(user, coder: ActiveSupport::JSON, subscription_adapter: SuccessAdapter)
     @coder = coder
-    @identifiers = [ :current_user ]
+    @identifiers = [ :access_token ]
 
     @current_user = user
+    @access_token = user.access_token
     @logger = ActiveSupport::TaggedLogging.new ActiveSupport::Logger.new(StringIO.new)
     @server = TestServer.new(subscription_adapter: subscription_adapter)
     @transmissions = []

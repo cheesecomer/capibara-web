@@ -1,9 +1,12 @@
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
-    identified_by :current_user
+    identified_by :access_token
+
+    attr_reader :current_user
 
     def connect
-      self.current_user = find_verified_user.access_token
+      @current_user = find_verified_user
+      self.access_token = @current_user.access_token
     end
 
     def self.connected_users(&block)
@@ -48,7 +51,7 @@ module ApplicationCable
     end
 
     def find_verified_user_from_auth_header
-      auth_token = request.headers['Authorization']
+      auth_token = request.headers[:authorization]
       raise UnauthorizationError unless auth_token
 
       access_token = auth_token.split(' ').last
