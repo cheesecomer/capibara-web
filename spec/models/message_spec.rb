@@ -36,4 +36,23 @@ RSpec.describe Message, type: :model do
       end
     end
   end
+  describe '#to_broadcast_hash' do
+    let(:message) { FactoryGirl.create(:message) }
+    subject { message.to_broadcast_hash }
+    context 'when valid' do
+      it do
+        is_expected.to eq(
+          {
+            id: message.id,
+            content: message.content,
+            sender: {
+              id: message.sender.id,
+              nickname: message.sender.nickname
+            },
+            at: message.created_at
+          }
+        )
+      end
+    end
+  end
 end
