@@ -19,6 +19,7 @@ RSpec.describe 'Rooms', type: :request do
       let(:user) { FactoryGirl.create(:user) }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
+      it { expect(JSON.parse(subject.body).symbolize_keys).to eq rooms:[] }
     end
   end
 end
