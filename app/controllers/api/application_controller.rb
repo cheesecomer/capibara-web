@@ -1,10 +1,35 @@
 # app/controllers/api/application_controller.rb
 class Api::ApplicationController < ActionController::API
+  include ActionController::MimeResponds
   include AbstractController::Translation
 
   before_action :authenticate_user_from_token!
 
+  rescue_from ActiveRecord::RecordInvalid, with: :rescue422
+  rescue_from ActiveModel::ValidationError, with: :rescue422
+
   respond_to :json
+
+  protected
+
+  def rescue422(e)
+    request.format = :json if request.xhr?
+
+    errors = []
+    errors = e.record.errors if e.is_a?(ActiveRecord::RecordInvalid)
+    errors = e.model.errors  if e.is_a?(ActiveModel::ValidationError)
+
+    respond_to do |format|
+      format.json { render_unprocessable_entity(errors) }
+    end
+  end
+
+  def render_unprocessable_entity(errors)
+    render \
+      '/api/errors/unprocessable_entity',
+      locals: { errors: errors },
+      status: :unprocessable_entity
+  end
 
   ##
   # User Authentication

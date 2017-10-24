@@ -33,6 +33,8 @@ class User < ApplicationRecord
 
   after_create :update_access_token!
 
+  validates :nickname, presence: true
+
   def update_access_token!
     self.access_token = Digest::SHA256.hexdigest SecureRandom.uuid
     save and return self
