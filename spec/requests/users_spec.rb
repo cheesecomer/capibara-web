@@ -11,9 +11,23 @@ RSpec.describe 'Users', type: :request do
     end
     context 'When nickname is empty' do
       let(:request_json) { { nickname: '' }.to_json }
-      let(:response_body) { { message: '入力に誤りがあります', errors:[{ field: 'nickname', message: 'ニックネームを入力してください' }] } }
+      let(:response_body) {
+        {
+          message: I18n.t('api.errors.invalid_request'),
+          errors:[
+            {
+              attribute: 'nickname',
+              message: I18n.t(
+                'errors.format',
+                attribute: User.human_attribute_name(:nickname),
+                message: I18n.t('errors.messages.blank'))
+            }
+          ]
+        }
+      }
       it { expect(subject).to have_http_status :unprocessable_entity }
       it { expect { subject }.to_not change { User.all.count } }
+      it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
     end
     context 'When nickname is presence' do
       let(:request_json) { { nickname: FFaker::Name.name }.to_json }
@@ -21,7 +35,7 @@ RSpec.describe 'Users', type: :request do
       let(:response_body) { { access_token: user.access_token } }
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to change { User.all.count }.by(1) }
-      it { expect(JSON.parse(subject.body).symbolize_keys).to eq response_body }
+      it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
     end
   end
 end

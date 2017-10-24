@@ -1,4 +1,7 @@
 ja:
+  api:
+    errors:
+      invalid_request: 入力内容を確認してください
   activerecord:
     errors:
       messages:
