@@ -2,7 +2,9 @@ class Api::SessionsController < Api::ApplicationController
   skip_before_action :authenticate_user_from_token!
 
   # POST /v1/login
-  # curl localhost:3000/api/session --data '{ "email": "user@email.com", "password": "password" }' --header "Content-type: application/json"
+  #   curl localhost:3000/api/session \
+  #     --data '{ "email": "user@email.com", "password": "password" }' \
+  #     --header "Content-type: application/json"
   def create
     @user = User.find_for_database_authentication(email: params[:email])
     invalid_email and return unless @user
