@@ -11,27 +11,23 @@ class Api::ApplicationController < ActionController::API
   # Authenticates the user with OAuth2 Resource Owner Password Credentials
   def authenticate_user_from_token!
     auth_token = request.headers['Authorization']
-
-    if auth_token
-      authenticate_with_auth_token auth_token
-    else
-      authenticate_error
-    end
+    authenticate_error unless authenticate_with_auth_token auth_token
   end
 
   private
 
   def authenticate_with_auth_token(auth_token)
-    authenticate_error and return unless auth_token.include?(':')
+    return unless auth_token&.include?(':')
 
-    user_id = auth_token.split(':').first
+    scheme, user_id = auth_token.split(':').first.split(' ')
     user = User.where(id: user_id).first
 
-    if user && Devise.secure_compare(user.access_token, auth_token)
+    if user && Devise.secure_compare(user.access_token, auth_token.split(' ').last)
       # User can access
       sign_in user, store: false
+      true
     else
-      authenticate_error
+      false
     end
   end
 
@@ -39,6 +35,6 @@ class Api::ApplicationController < ActionController::API
   # Authentication Failure
   # Renders a 401 error
   def authenticate_error
-    render json: { error: t('devise.failure.unauthenticated') }, status: 401
+    render json: { message: t('devise.failure.unauthenticated') }, status: :unauthorized
   end
 end
