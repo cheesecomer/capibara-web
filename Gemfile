@@ -50,6 +50,7 @@ group :test do
   gem 'timecop'
   gem 'simplecov'
   gem 'codecov'
+  gem 'shoulda-matchers', '~> 3.1'
 end
 
 group :development do

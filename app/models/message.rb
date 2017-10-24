@@ -16,6 +16,11 @@ class Message < ApplicationRecord
 
   after_create_commit { MessageBroadcastJob.perform_later self }
 
+  # --------------------------------------------------------------------------
+  # Validations
+  # --------------------------------------------------------------------------
+  validates :content, presence: true
+
   def to_broadcast_hash
     {
       id: self.id,
