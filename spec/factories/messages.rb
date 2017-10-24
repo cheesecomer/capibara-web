@@ -12,8 +12,8 @@
 
 FactoryGirl.define do
   factory :message do
-    content "MyString"
-    user_id 1
-    room_id 1
+    content  { FFaker::Lorem.sentence }
+    association :sender, factory: :user
+    association :room, factory: :room
   end
 end

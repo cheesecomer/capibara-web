@@ -27,8 +27,13 @@ RSpec.describe Message, type: :model do
     it { is_expected.to validate_presence_of(:room) }
   end
   describe '#create' do
+    let(:message) { FactoryGirl.build(:message) }
+    subject { message.save }
     context 'when valid' do
-      it 'should execute MessageBroadcastJob.perform_later'
+      it 'when valid should execute MessageBroadcastJob.perform_later' do
+        expect(MessageBroadcastJob).to receive(:perform_later).with(message)
+        subject
+      end
     end
   end
 end
