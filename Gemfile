@@ -49,6 +49,7 @@ group :test do
   gem 'webmock'
   gem 'timecop'
   gem 'simplecov'
+  gem 'codecov'
 end
 
 group :development do
