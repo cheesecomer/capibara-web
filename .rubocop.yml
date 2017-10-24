@@ -1,0 +1,47 @@
+# 日本語でのコメントを許可
+AsciiComments:
+  Enabled: false
+
+# 複数行での「lambda」で「->」による省略記法を許可
+Lambda:
+  Enabled: false
+
+# モジュール名::クラス名の定義を許可
+ClassAndModuleChildren:
+  Enabled: false
+
+# クラスにコメントを残さない
+Documentation:
+  Enabled: false
+
+# 「and」「or」の使用を許可
+AndOr:
+  Enabled: false
+
+# チェック対象の追加、排除
+AllCops:
+  # Rubyのバージョンを指定
+  TargetRubyVersion: 2.4
+
+  #追加
+  # Include:
+  #  - '**/Rakefile' 記述例
+
+  #排除
+  # Exclude:
+  #  - 'db/**/*' 記述例
+
+# Rails準拠
+Rails:
+  Enabled: true
+
+# インスタンスメソッド内でselfを削除する設定を無効化(ローカル変数と自オブジェクトとの区別がつきにくので設定を切る)
+Style/RedundantSelf:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# private 又は protected のクラスメソッドの場合、self.xxxと記載するとエラーになる設定を無効化
+Lint/IneffectiveAccessModifier:
+  Enabled: false

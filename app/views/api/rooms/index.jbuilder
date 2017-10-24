@@ -3,6 +3,6 @@ json.set! :rooms do
     json.set! :id, room.id
     json.set! :name, room.name
     json.set! :capacity, room.capacity
-    json.set! :number_of_participants, ChatChannel::connected_user(room)
+    json.set! :number_of_participants, ChatChannel.connected_user(room)
   end
 end

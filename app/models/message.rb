@@ -14,7 +14,7 @@ class Message < ApplicationRecord
   belongs_to :sender, class_name: 'User'
   belongs_to :room
 
-  after_create_commit { MessageBroadcastJob.perform_later self}
+  after_create_commit { MessageBroadcastJob.perform_later self }
 
   def to_broadcast_hash
     {

@@ -2,8 +2,10 @@
 class Api::UsersController < Api::ApplicationController
   skip_before_action :authenticate_user_from_token!, only: [:create]
 
-  # POST
-  # curl localhost:3000/api/user --data '{"user": {"email": "user1@example.com", "password": "mypass", "nickname": "AAA"}}' -v -H "Accept: application/json" -H "Content-type: application/json"
+  # POST /users
+  #   curl localhost:3000/api/users \
+  #     --data '{ "nickname": "AAA" }' \
+  #     -v -H "Accept: application/json" -H "Content-type: application/json"
   # Create an user
   def create
     @user = User.new user_params
@@ -11,7 +13,9 @@ class Api::UsersController < Api::ApplicationController
     if @user.save
       render template: 'api/sessions/create'
     else
-      render json: { error: t('user_create_error') }, status: :unprocessable_entity
+      render \
+        json: { error: t('user_create_error') },
+        status: :unprocessable_entity
     end
   end
 
