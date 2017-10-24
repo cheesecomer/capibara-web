@@ -21,6 +21,7 @@ RSpec.describe 'Users', type: :request do
       let(:response_body) { { access_token: user.access_token } }
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to change { User.all.count }.by(1) }
+      it { expect(JSON.parse(subject.body).symbolize_keys).to eq response_body }
     end
   end
 end
