@@ -8,6 +8,7 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def speak(data)
+    data.deep_symbolize_keys!
     Message.create! \
       content: data[:message],
       sender: connection.current_user,
