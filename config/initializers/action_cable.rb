@@ -5,3 +5,5 @@ module ActionCable
     end
   end
 end
+
+ActionCable.server.config.disable_request_forgery_protection = true
