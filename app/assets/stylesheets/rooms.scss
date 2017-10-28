@@ -43,6 +43,7 @@ body[data-controller="rooms"] {
 
           p {
             margin: 0;
+            word-break:break-all;
           }
 
           & + * {
@@ -94,6 +95,9 @@ body[data-controller="rooms"] {
       width: 100%;
       padding: 20px 20px;
       bottom: 0;
+      @media #{$small} {
+        padding: 14px 0px;
+      }
       .message_input_wrapper {
         display: inline-block;
         height: 50px;
@@ -102,6 +106,10 @@ body[data-controller="rooms"] {
         width: calc(100% - 160px);
         position: relative;
         padding: 0 20px;
+        @media #{$small} {
+          width: calc(100% - 50px);
+          border-radius: 10px 0px 0px 10px;
+        }
         .message_input {
           border: none;
           height: 100%;
@@ -122,6 +130,11 @@ body[data-controller="rooms"] {
         cursor: pointer;
         text-align: center;
         float: right;
+
+        @media #{$small} {
+          width: 50px;
+          border-radius: 0px 10px 10px 0px;
+        }
       }
     }
   }
