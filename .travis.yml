@@ -17,7 +17,6 @@ deploy:
   provider: heroku
   api_key:
     secure: h82iYpTD9+6dh6NCdYQGZY3rbdA7q/HP5kzQhRXduA26hpBq3VNMlb0VzPdd85fg3PqyGt82EYds6td7wSi2g0ah0DbCEoE9JzJRzId41waYeHOLBKCr8chZLVsTKojgkCI1mF+BV5lfa6SoAsabpVKDaMkAsqxnpEq0P+ReCq790EAw8bmacPHyWV5IdYMFVV+3CutILuqh6Yb+CTqZf0zZ41K705Hr8P2wwOsuw6lEIrB1Ywi5PKisd4NQRgyhQUumzUGbUf1mkawjpXO42qVrKiNLybDJCfG3UYKZ+k98VK7xddXmkbYBebMslzTq5WXiwI7ow5+/zCmoz7+a6puU/XFOtUvFu5P0Um7muaHKSedR5ZF2SACC+RAXek50RdTYI17S51DvByqdmXSw3yq8DZDFnraUhBg4A9gwYJTSo/xP1ILpcgqAgLOOzZlyo7V5zOCMPvSf4HbR0plp7L9YhsWFySxX3BqK8Hi8gcrRYzaiCN0U0w9mYWTWCLrd8npsJvpaeqsmSBXfen2PoWg0GXuTyKaFo18GZDXOdyKZ3M3Mbni2Vu7ivhrBrNdseZA8TejwpLkUaHxO3AQGhrx/gcgZN9GNzPoJif8UpxD8OpyhTSN8YAHbsGCZwb1qr89o98gPLtt9ddYBO7sKP48ajpS+tcSQpo5zahA1nPs=
-  app: capibara-staging
-  on:
-    repo: cheesecomer/capibara-web
-    all_branches: true
+  app:
+    master: capibara-production
+    develop: capibara-staging
