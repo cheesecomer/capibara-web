@@ -12,4 +12,5 @@ test:
 
 production:
   <<: *default
+  url: <%= ENV["REDIS_URL"] %>
   channel_prefix: capibara_production
