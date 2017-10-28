@@ -25,3 +25,5 @@
 .vagrant
 
 /coverage
+
+/public/assets/
