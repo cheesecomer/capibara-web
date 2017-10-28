@@ -1,19 +1,18 @@
 language: ruby
-
 rvm:
- - 2.4.2
-
+- 2.4.2
 services:
-  - mysql
-
+- mysql
 bundler_args: "--without development --deployment"
-
 cache: bundler
-
 before_script:
-  - cp config/database.travis.yml config/database.yml
-  - bundle exec rake db:create
-  - bundle exec rake db:migrate
-
+- cp config/database.travis.yml config/database.yml
+- bundle exec rake db:create
+- bundle exec rake db:migrate
 script:
-  - bundle exec rspec
+- bundle exec rspec
+deploy:
+  provider: heroku
+  api_key:
+    secure: zJnbwemclqmX0des/kaAsjOQT1LkoHY9AUiQiJCgOBJKh4N0ah+I1ilMKYwxER6Bf17PHZu14SbKxTP0uwlGJeaWrBcO6G0yOWmR2yUL4zIZFGYCmR9TP/lRnkxt8YYGdTjHFWLFtLK+IEtXXV2fXmSl6xhIPYBxh38XZQ/bnZO3br1Vjs1ha612lCAWlMV4Arvff50RxapotkBFcy3G7yeFygFw/p7/Po4i34WnzbNV3ABn0ZvIrOVcFcYiW5chvX6zKIJZzeCOJ6OoHa04lWtqScL9mEu2KER14JNh2etfUFq8hmCxmc+A9lVD+/Um8im4Z5H8MYxsPUsGyZIQTiFgUyQaSDAklZVHQcj9VqVQkTZQUc+jQ88zvR2alU62JnnZwt1GqNzh1zEB9zq5HL3mSRDQps4UOL876CmukPRUcccH422ezwENgZcwaZ6oKMXIZhdtN9fzrFuXQxo5I17sHZR50X0nCPQ4Iw0mm6RtLXvuECLA5UlAbB9+VCuZoxo2tJ/4YeeUnrnjr/PFtwHZixyleX+OrBL/E/G++arhXNTQvDQR2RV7pnFwV4EVaRhJR4QLVwPO2n0aMGA0EbEHiBshFxmYBQzOMyXS786s6BJv3dnvUmUy3+nrWAdQhP7UkzSQIJR5Kdo6sfv09imKPX6PQQuFImhnobbOZ9E=
+  app: capibara-staging
