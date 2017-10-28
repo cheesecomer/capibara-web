@@ -10,6 +10,9 @@ body[data-controller="sessions"] {
       font-size: 125px;
       font-family: 'Passion One', cursive;
       font-weight: bold;
+      @media #{$small} {
+        font-size: 20vmin;
+      }
     }
 
     .balloon {
