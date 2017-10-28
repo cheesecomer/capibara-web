@@ -1,16 +1,18 @@
 language: ruby
 rvm:
-- 2.4.2
+  - 2.4.2
 services:
-- mysql
+  - mysql
 bundler_args: "--without development --deployment"
 cache: bundler
 before_script:
-- cp config/database.travis.yml config/database.yml
-- bundle exec rake db:create
-- bundle exec rake db:migrate
+  - cp config/database.travis.yml config/database.yml
+  - bundle exec rake db:create
+  - bundle exec rake db:migrate
 script:
-- bundle exec rspec
+  - bundle exec rspec
+before_deploy:
+  - git checkout -- .
 deploy:
   provider: heroku
   api_key:
