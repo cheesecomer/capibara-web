@@ -22,6 +22,19 @@ module ApplicationCable
       User.where access_token: access_tokens
     end
 
+    def self.connected_users_count(&block)
+      access_tokens =
+        ActionCable \
+          .server
+          .open_connections_statistics
+          .map(&:with_indifferent_access)
+          .select { |v| select_subscriptions(v[:subscriptions], &block) }
+          .map { |v| v[:identifier] }
+          .uniq
+
+      access_tokens.size
+    end
+
     protected
 
     def self.select_subscriptions(hash)

@@ -4,11 +4,11 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       t.string :nickname, null: false
 
       ## Database authenticatable
-      t.string :email
+      t.string :email, limit: 191
       t.string :encrypted_password
 
       ## Recoverable
-      t.string   :reset_password_token
+      t.string   :reset_password_token, limit: 191
       t.datetime :reset_password_sent_at
 
       ## Rememberable
@@ -21,7 +21,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
       t.string   :current_sign_in_ip
       t.string   :last_sign_in_ip
 
-      t.string :access_token
+      t.string :access_token, limit: 191
 
       ## Confirmable
       # t.string   :confirmation_token

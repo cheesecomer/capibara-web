@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20171019130907) do
 
-  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "content"
     t.integer "sender_id"
     t.integer "room_id"
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20171019130907) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "rooms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "rooms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "name"
     t.integer "capacity", limit: 1, null: false
     t.integer "priority", limit: 1, null: false
@@ -28,11 +28,11 @@ ActiveRecord::Schema.define(version: 20171019130907) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.string "nickname", null: false
-    t.string "email"
+    t.string "email", limit: 191
     t.string "encrypted_password"
-    t.string "reset_password_token"
+    t.string "reset_password_token", limit: 191
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20171019130907) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.string "access_token"
+    t.string "access_token", limit: 191
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["access_token"], name: "index_users_on_access_token", unique: true
