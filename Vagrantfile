@@ -51,9 +51,9 @@ Vagrant.configure('2') do |config|
         server_root_password: 'vagrant',
         mysqld: {
           options:{
-            :'collation-server' => 'utf8_unicode_ci',
-            :'init-connect' => '\'SET NAMES utf8\'',
-            :'character-set-server' => 'utf8'
+            :'collation-server' => 'utf8mb4_bin',
+            :'init-connect' => '\'SET NAMES utf8mb4\'',
+            :'character-set-server' => 'utf8mb4'
           }
         },
       },
@@ -63,8 +63,8 @@ Vagrant.configure('2') do |config|
         application_ruby_version: '2.4.2',
         mariadb: {
           databases: [
-            { name: 'capibara_development', encoding: 'utf8' },
-            { name: 'capibara_test'       , encoding: 'utf8' },
+            { name: 'capibara_development', encoding: 'utf8mb4' },
+            { name: 'capibara_test'       , encoding: 'utf8mb4' },
           ],
           users: [
             {
