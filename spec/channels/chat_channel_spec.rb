@@ -7,16 +7,44 @@ RSpec.describe ChatChannel, type: :channel do
   let(:connection) { TestConnection.new user }
 
   context '#subscribed' do
+    around do |e|
+      travel_to('2010-10-10 10:10'){ e.run }
+    end
+    let(:join_user_message) do
+      {
+        id: 0,
+        content: {
+          type: :join_user,
+          user: connection.current_user.to_broadcast_hash,
+          number_of_participants: 0
+        }.to_json,
+        at: Time.zone.now
+      }
+    end
     it do
       expect(channel).to receive(:stream_from).with("#{ChatChannel.channel_name}:#{room.id}")
-      expect(ChatChannel).to receive(:broadcast_to)
+      expect(ChatChannel).to receive(:broadcast_to).with(room.id, join_user_message)
       channel.subscribed
     end
   end
 
   context '#unsubscribed' do
+    around do |e|
+      travel_to('2010-10-10 10:10'){ e.run }
+    end
+    let(:leave_user_message) do
+      {
+        id: 0,
+        content: {
+          type: :leave_user,
+          user: connection.current_user.to_broadcast_hash,
+          number_of_participants: 0
+        }.to_json,
+        at: Time.zone.now
+      }
+    end
     it do
-      expect(ChatChannel).to receive(:broadcast_to)
+      expect(ChatChannel).to receive(:broadcast_to).with(room.id, leave_user_message)
       channel.unsubscribed
     end
   end
