@@ -14,7 +14,7 @@ RSpec.describe 'Session', type: :request do
     let(:error_response) { { message: I18n.t('devise.failure.invalid') } }
     context 'when email found and valid password' do
       let(:request_json) { { email: 'user@email.com', password: 'password' }.to_json }
-      let(:response_body) { { access_token: user.access_token } }
+      let(:response_body) { { access_token: user.access_token, user_id: user.id } }
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to change { user.access_token } }
       it { expect { subject }.to change { user.current_sign_in_at } }
