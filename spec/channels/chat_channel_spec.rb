@@ -9,7 +9,15 @@ RSpec.describe ChatChannel, type: :channel do
   context '#subscribed' do
     it do
       expect(channel).to receive(:stream_from).with("#{ChatChannel.channel_name}:#{room.id}")
+      expect(ChatChannel).to receive(:broadcast_to)
       channel.subscribed
+    end
+  end
+
+  context '#unsubscribed' do
+    it do
+      expect(ChatChannel).to receive(:broadcast_to)
+      channel.unsubscribed
     end
   end
 
