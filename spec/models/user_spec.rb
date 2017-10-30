@@ -33,4 +33,18 @@ RSpec.describe User, type: :model do
     let(:user) { FactoryGirl.create(:user) }
     it { expect { subject }.to change { user.access_token } }
   end
+  describe '#to_broadcast_hash' do
+    let(:user) { FactoryGirl.create(:user) }
+    subject { user.to_broadcast_hash }
+    context 'when valid' do
+      it do
+        is_expected.to eq(
+          {
+            id: user.id,
+            nickname: user.nickname
+          }
+        )
+      end
+    end
+  end
 end

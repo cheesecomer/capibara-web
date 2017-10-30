@@ -40,6 +40,13 @@ class User < ApplicationRecord
     save and return self
   end
 
+  def to_broadcast_hash
+    {
+      id: self.id,
+      nickname: self.nickname
+    }
+  end
+
   protected
 
   def email_required?
