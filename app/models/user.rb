@@ -35,6 +35,12 @@ class User < ApplicationRecord
 
   validates :nickname, presence: true
 
+  attr_accessor :is_api_request
+
+  after_initialize do
+    self.is_api_request = false
+  end
+
   def update_access_token!
     self.access_token = Digest::SHA256.hexdigest SecureRandom.uuid
     save and return self
@@ -50,10 +56,10 @@ class User < ApplicationRecord
   protected
 
   def email_required?
-    false
+    !self.is_api_request
   end
 
   def password_required?
-    false
+    !self.is_api_request
   end
 end
