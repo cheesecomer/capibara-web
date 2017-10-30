@@ -7,11 +7,12 @@ Rails.application.routes.draw do
     end
     root to: 'sessions#new'
     resource :session, only: [:new, :create, :destroy], controller: :sessions
+    resource :users, only: [:new, :create], controller: :user_registrations
     get '/session', to: 'sessions#new'
   end
 
   resources :rooms
-  resources :users
+  resources :users, only: [:show]
 
   namespace :api, defaults: { format: :json } do
     resource :session, only: [:create, :destroy], controller: :sessions

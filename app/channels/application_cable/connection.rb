@@ -12,12 +12,12 @@ module ApplicationCable
     def self.connected_users(&block)
       access_tokens =
         ActionCable \
-          .server
-          .open_connections_statistics
-          .map(&:with_indifferent_access)
-          .select { |v| select_subscriptions(v[:subscriptions], &block) }
-          .map { |v| v[:identifier] }
-          .uniq
+        .server
+        .open_connections_statistics
+        .map(&:with_indifferent_access)
+        .select { |v| select_subscriptions(v[:subscriptions], &block) }
+        .map { |v| v[:identifier] }
+        .uniq
 
       User.where access_token: access_tokens
     end
@@ -25,12 +25,12 @@ module ApplicationCable
     def self.connected_users_count(&block)
       access_tokens =
         ActionCable \
-          .server
-          .open_connections_statistics
-          .map(&:with_indifferent_access)
-          .select { |v| select_subscriptions(v[:subscriptions], &block) }
-          .map { |v| v[:identifier] }
-          .uniq
+        .server
+        .open_connections_statistics
+        .map(&:with_indifferent_access)
+        .select { |v| select_subscriptions(v[:subscriptions], &block) }
+        .map { |v| v[:identifier] }
+        .uniq
 
       access_tokens.size
     end

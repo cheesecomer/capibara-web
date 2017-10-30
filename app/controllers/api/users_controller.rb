@@ -8,7 +8,9 @@ class Api::UsersController < Api::ApplicationController
   #     -v -H "Accept: application/json" -H "Content-type: application/json"
   # Create an user
   def create
-    @user = User.create! user_params
+    @user = User.new user_params
+    @user.is_api_request = true
+    @user.save!
     render template: 'api/sessions/create'
   end
 

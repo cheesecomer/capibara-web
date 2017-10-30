@@ -47,7 +47,6 @@ end
 group :test do
   gem 'rspec-power_assert'
   gem 'webmock'
-  gem 'timecop'
   gem 'simplecov'
   gem 'codecov'
   gem 'shoulda-matchers', '~> 3.1'
