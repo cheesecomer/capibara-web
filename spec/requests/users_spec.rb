@@ -38,4 +38,27 @@ RSpec.describe 'Users', type: :request do
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
     end
   end
+
+  describe 'GET /api/users/#{id}' do
+    let(:user) { FactoryGirl.create(:user) }
+    subject do
+      get "/api/users/#{user.id}", headers: request_header
+      response
+    end
+    let(:request_header) do
+      { 'content-type': 'application/json', accept: 'application/json' }.merge optional_header
+    end
+    let(:error_response) { { message: I18n.t('devise.failure.unauthenticated') } }
+    context 'when unauthorized' do
+      let(:optional_header) { {} }
+      it { expect(subject).to have_http_status :unauthorized }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq error_response }
+    end
+    context 'when not empty' do
+      let(:signin_user) { FactoryGirl.create(:user) }
+      let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
+      it { expect(subject).to have_http_status :ok }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname }
+    end
+  end
 end

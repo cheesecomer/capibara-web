@@ -14,6 +14,10 @@ class Api::UsersController < Api::ApplicationController
     render template: 'api/sessions/create'
   end
 
+  def show
+    @user = User.find params[:id]
+  end
+
   private
 
   def user_params
