@@ -1,41 +1,41 @@
 require 'rails_helper'
 
 RSpec.describe 'Users', type: :request do
-  describe 'POST /api/users' do
+  describe 'GET /users/new' do
     subject do
-      post '/api/users', params: request_json, headers: request_header
+      get '/users/new'
       response
     end
-    let(:request_header) do
-      { 'content-type': 'application/json', accept: 'application/json' }
-    end
-    context 'When nickname is empty' do
-      let(:request_json) { { nickname: '' }.to_json }
-      let(:response_body) {
-        {
-          message: I18n.t('api.errors.invalid_request'),
-          errors:[
-            {
-              attribute: 'nickname',
-              message: I18n.t(
-                'errors.format',
-                attribute: User.human_attribute_name(:nickname),
-                message: I18n.t('errors.messages.blank'))
-            }
-          ]
-        }
-      }
-      it { expect(subject).to have_http_status :unprocessable_entity }
-      it { expect { subject }.to_not change { User.all.count } }
-      it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
-    end
-    context 'When nickname is presence' do
-      let(:request_json) { { nickname: FFaker::Name.name }.to_json }
-      let(:user) { User.last }
-      let(:response_body) { { access_token: user.access_token, user_id: user.id } }
+    context 'When not signin' do
       it { expect(subject).to have_http_status :ok }
+    end
+    context 'When signin' do
+      let(:user) { FactoryGirl.create(:user) }
+      before { sign_in user }
+      it { expect(subject).to have_http_status :found }
+    end
+  end
+
+  describe 'POST /users' do
+    subject do
+      post '/users', params: { user: request_body }
+      response
+    end
+    context 'When invalie' do
+      let(:request_body) { {} }
+      it { expect(subject).to have_http_status :ok }
+    end
+    context 'When valie' do
+      let(:request_body) { { nickname: FFaker::Name.name, email: FFaker::Internet.email, password: 'password', password_confirmation: 'password' } }
+      it { expect(subject).to have_http_status :found }
       it { expect { subject }.to change { User.all.count }.by(1) }
-      it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
+    end
+    context 'When signin' do
+      let(:user) { FactoryGirl.create(:user) }
+      let(:request_body) { { nickname: FFaker::Name.name, email: FFaker::Internet.email, password: 'password', password_confirmation: 'password' } }
+      before { sign_in user }
+      it { expect(subject).to have_http_status :found }
+      it { expect { subject }.to change { User.all.count }.by(0) }
     end
   end
 end
