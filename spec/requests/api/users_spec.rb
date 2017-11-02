@@ -32,7 +32,7 @@ RSpec.describe 'Users', type: :request do
     context 'When nickname is presence' do
       let(:request_json) { { nickname: FFaker::Name.name }.to_json }
       let(:user) { User.last }
-      let(:response_body) { { access_token: user.access_token, user_id: user.id, user_nickname: user.nickname } }
+      let(:response_body) { { access_token: user.access_token, user_id: user.id, user_nickname: user.nickname, user_biography: user.biography } }
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to change { User.all.count }.by(1) }
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
