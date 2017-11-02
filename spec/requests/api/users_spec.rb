@@ -58,7 +58,7 @@ RSpec.describe 'Users', type: :request do
       let(:signin_user) { FactoryGirl.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography }
     end
   end
 end
