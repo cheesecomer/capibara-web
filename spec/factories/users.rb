@@ -28,9 +28,12 @@
 
 FactoryGirl.define do
   factory :user do
-    nickname  { FFaker::Name.name }
     email     { FFaker::Internet.email }
-    biography { FFaker::Lorem.sentence }
     password  'password'
+    after(:build) do |user|
+      girl = Precure.all.sample
+      user.nickname  = girl[:precure_name]
+      user.biography = girl[:transform_message]
+    end
   end
 end
