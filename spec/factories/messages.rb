@@ -12,7 +12,7 @@
 
 FactoryGirl.define do
   factory :message do
-    content { FFaker::LoremJA.sentence }
+    content { FFaker::LoremJA.paragraph }
     association :sender, factory: :user
     association :room, factory: :room
   end
