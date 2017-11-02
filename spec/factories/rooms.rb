@@ -11,8 +11,12 @@
 #
 
 FactoryGirl.define do
+  titles = Precure.map(&:title).shuffle
   factory :room do
-    name { "#{FFaker::Name.name}の部屋" }
+    name do
+      titles = Precure.map(&:title).shuffle if titles.empty?
+      titles.shift
+    end
     capacity 10
     priority 1
   end

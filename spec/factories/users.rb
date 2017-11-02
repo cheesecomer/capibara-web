@@ -15,6 +15,7 @@
 #  current_sign_in_ip     :string(255)
 #  last_sign_in_ip        :string(255)
 #  access_token           :string(191)
+#  biography              :string(255)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #
@@ -27,8 +28,12 @@
 
 FactoryGirl.define do
   factory :user do
-    nickname { FFaker::Name.name }
-    email { FFaker::Internet.email }
-    password 'password'
+    email     { FFaker::Internet.email }
+    password  'password'
+    after(:build) do |user|
+      girl = Precure.all.sample
+      user.nickname  = girl[:precure_name]
+      user.biography = girl[:transform_message]
+    end
   end
 end

@@ -23,6 +23,9 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.1]
 
       t.string :access_token, limit: 191
 
+      # 自己紹介
+      t.string :biography
+
       ## Confirmable
       # t.string   :confirmation_token
       # t.datetime :confirmed_at
