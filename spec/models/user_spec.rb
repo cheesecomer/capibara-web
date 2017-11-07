@@ -18,6 +18,7 @@
 #  biography              :string(255)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  icon                   :string(255)
 #
 # Indexes
 #

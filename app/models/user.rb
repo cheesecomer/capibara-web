@@ -18,6 +18,7 @@
 #  biography              :string(255)
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
+#  icon                   :string(255)
 #
 # Indexes
 #
@@ -37,6 +38,8 @@ class User < ApplicationRecord
   validates :nickname, presence: true
 
   attr_accessor :is_api_request
+
+  mount_uploader :icon, ImageUploader
 
   after_initialize do
     self.is_api_request = false
