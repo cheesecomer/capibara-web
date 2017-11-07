@@ -39,7 +39,7 @@ class User < ApplicationRecord
 
   attr_accessor :is_api_request
 
-  mount_uploader :icon, ImageUploader
+  mount_base64_uploader :icon, ImageUploader
 
   after_initialize do
     self.is_api_request = false

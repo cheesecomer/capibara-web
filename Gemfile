@@ -37,6 +37,7 @@ gem 'bootstrap-sass'
 
 # File Uploader
 gem 'carrierwave'
+gem 'carrierwave-base64'
 gem 'rmagick'
 
 group :development, :test do
