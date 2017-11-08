@@ -27,5 +27,6 @@
 /coverage
 
 /public/assets/
+/public/uploads/
 
 .DS_Store
