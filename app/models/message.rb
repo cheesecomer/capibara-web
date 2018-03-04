@@ -27,7 +27,8 @@ class Message < ApplicationRecord
       content: self.content,
       sender: {
         id: self.sender.id,
-        nickname: self.sender.nickname
+        nickname: self.sender.nickname,
+        icon_url: self.sender.icon_url
       },
       at: self.created_at
     }

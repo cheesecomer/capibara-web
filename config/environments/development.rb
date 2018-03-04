@@ -52,3 +52,7 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::FileUpdateChecker
 end
+
+CarrierWave.configure do |config|
+  config.asset_host = 'http://localhost:3000'
+end

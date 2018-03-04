@@ -13,6 +13,7 @@ json.set! :messages do
     json.set! :sender do
       json.set! :id, message.sender.id
       json.set! :nickname, message.sender.nickname
+      json.set! :icon_url, message.sender.icon_url
     end
     json.set! :id, message.id
     json.set! :content, message.content

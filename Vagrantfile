@@ -93,6 +93,7 @@ Vagrant.configure('2') do |config|
       'rbenv',
       'redisio',
       'redisio::enable',
+      'imagemagick::rmagick',
       'mariadb::server',
       'mariadb::client',
       'capibara'
