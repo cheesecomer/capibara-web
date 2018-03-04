@@ -47,7 +47,8 @@ RSpec.describe Message, type: :model do
             content: message.content,
             sender: {
               id: message.sender.id,
-              nickname: message.sender.nickname
+              nickname: message.sender.nickname,
+              icon_url: nil
             },
             at: message.created_at
           }
