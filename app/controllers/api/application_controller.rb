@@ -7,6 +7,7 @@ class Api::ApplicationController < ActionController::API
 
   rescue_from ActiveRecord::RecordInvalid, with: :rescue422
   rescue_from ActiveModel::ValidationError, with: :rescue422
+  rescue_from Forbidden, with: :rescue403
 
   respond_to :json
 
@@ -21,6 +22,17 @@ class Api::ApplicationController < ActionController::API
 
     respond_to do |format|
       format.json { render_unprocessable_entity(errors) }
+    end
+  end
+
+  def rescue403(e)
+    request.format = :json if request.xhr?
+
+    respond_to do |format|
+      format.json {
+        render \
+          '/api/errors/forbidden',
+          status: :forbidden }
     end
   end
 
