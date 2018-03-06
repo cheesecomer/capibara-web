@@ -22,8 +22,9 @@ RSpec.describe ChatChannel, type: :channel do
       }
     end
     it do
-      expect(channel).to receive(:stream_from).with("#{ChatChannel.channel_name}:#{room.id}")
-      expect(ChatChannel).to receive(:broadcast_to).with(room.id, join_user_message)
+      expect(channel).to receive(:stream_for).with(room)
+      expect(channel).to receive(:stream_for).with([room, connection.current_user])
+      expect(ChatChannel).to receive(:broadcast_to).with(room, join_user_message)
       channel.subscribed
     end
   end
@@ -44,7 +45,7 @@ RSpec.describe ChatChannel, type: :channel do
       }
     end
     it do
-      expect(ChatChannel).to receive(:broadcast_to).with(room.id, leave_user_message)
+      expect(ChatChannel).to receive(:broadcast_to).with(room, leave_user_message)
       channel.unsubscribed
     end
   end
