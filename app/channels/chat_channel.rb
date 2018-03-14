@@ -1,11 +1,14 @@
 class ChatChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "#{self.channel_name}:#{params[:room_id]}"
-    ChatChannel.broadcast_to params[:room_id], join_user_message
+    room = Room.find params[:room_id]
+    stream_for room
+    stream_for [room, connection.current_user]
+    ChatChannel.broadcast_to room, join_user_message
   end
 
   def unsubscribed
-    ChatChannel.broadcast_to params[:room_id], leave_user_message
+    room = Room.find params[:room_id]
+    ChatChannel.broadcast_to room, leave_user_message
   end
 
   def speak(data)
@@ -30,17 +33,13 @@ class ChatChannel < ApplicationCable::Channel
 
   protected
 
-  def room
-    Room.find params[:room_id]
-  end
-
   def join_state_message(type)
     {
       id: 0,
       content: {
         type: type,
         user: connection.current_user.to_broadcast_hash,
-        number_of_participants: ChatChannel.connected_users_count(room)
+        number_of_participants: ChatChannel.connected_users_count(Room.find(params[:room_id]))
       }.to_json,
       at: Time.zone.now
     }
