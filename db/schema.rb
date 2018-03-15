@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180305090543) do
+ActiveRecord::Schema.define(version: 20180315053810) do
 
   create_table "blocks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer "owner_id", null: false
     t.integer "target_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "information", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.string "title", null: false
+    t.string "message", null: false
+    t.datetime "published_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
