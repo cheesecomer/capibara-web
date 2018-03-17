@@ -39,6 +39,7 @@ RSpec.describe 'Session', type: :request do
       oauth_user = double(Twitter::User)
       allow(oauth_user).to receive(:id).and_return(1)
       allow(oauth_user).to receive(:name).and_return('FooBar')
+      allow(oauth_user).to receive(:profile_image_uri?).and_return(false)
 
       client = double(Twitter::REST::Client)
       allow(client).to receive(:user).and_return(oauth_user)

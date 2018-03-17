@@ -39,16 +39,19 @@ class Api::SessionsController < Api::ApplicationController
       config.access_token = params[:access_token]
       config.access_token_secret = params[:access_token_secret]
     end
+
     oauth_user = client.user
 
     @user = User.where(oauth_uid: oauth_user.id, oauth_provider: :twitter).first
-    @user = User.create nickname: oauth_user.name, oauth_provider: :twitter, oauth_uid: oauth_user.id if @user.nil?
+    if @user.nil?
+      @user = User.create nickname: oauth_user.name, oauth_provider: :twitter, oauth_uid: oauth_user.id
+      @user.remote_icon_url = oauth_user.profile_image_uri.to_s if oauth_user.profile_image_uri?
+    end
 
-    @user.update \
-      oauth_access_token: params[:access_token],
-      oauth_access_token_secret: params[:access_token_secret]
-
+    @user.oauth_access_token = params[:access_token],
+    @user.oauth_access_token = params[:access_token_secret]
     @user.update_access_token!
+
     sign_in :user, @user
     render
   end
