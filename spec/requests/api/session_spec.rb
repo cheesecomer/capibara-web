@@ -14,7 +14,7 @@ RSpec.describe 'Session', type: :request do
     let(:error_response) { { message: I18n.t('devise.failure.invalid') } }
     context 'when email found and valid password' do
       let(:request_json) { { email: 'user@email.com', password: 'password' }.to_json }
-      let(:response_body) { { access_token: user.access_token, user_id: user.id, user_nickname: user.nickname, user_biography: user.biography } }
+      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil } }
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to change { user.access_token } }
       it { expect { subject }.to change { user.current_sign_in_at } }
@@ -59,7 +59,7 @@ RSpec.describe 'Session', type: :request do
       end
       let!(:user) { FactoryGirl.create(:user, oauth_provider: :twitter, oauth_uid: oauth_uid) }
       let(:oauth_uid) { 1 }
-      let(:response_body) { { access_token: user.access_token, user_id: user.id, user_nickname: user.nickname, user_biography: user.biography } }
+      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil } }
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to change { User.all.count }.by(0) }
       it { expect(JSON.parse(subject.body).symbolize_keys).to eq response_body }
@@ -72,7 +72,7 @@ RSpec.describe 'Session', type: :request do
       end
       let(:oauth_uid) { 10 }
       let(:user) { User.last }
-      let(:response_body) { { access_token: user.access_token, user_id: user.id, user_nickname: user.nickname, user_biography: user.biography } }
+      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil } }
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to change { User.all.count }.by(1) }
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
