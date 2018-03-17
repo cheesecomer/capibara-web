@@ -1,4 +1,5 @@
 json.set! :access_token, @user.access_token
-json.set! :user_id, @user.id
-json.set! :user_nickname, @user.nickname
-json.set! :user_biography, @user.biography
+json.set! :id, @user.id
+json.set! :nickname, @user.nickname
+json.set! :biography, @user.biography
+json.set! :icon_url, @user.icon_url
