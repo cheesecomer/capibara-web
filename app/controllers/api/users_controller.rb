@@ -26,6 +26,11 @@ class Api::UsersController < Api::ApplicationController
     render :show
   end
 
+  def destroy
+    current_user.destroy!
+    head :no_content
+  end
+
   private
 
   def user_create_params

@@ -121,4 +121,25 @@ RSpec.describe 'Users', type: :request do
       it { expect { subject }.to_not change { User.all.count } }
     end
   end
+
+  describe 'DELETE /api/users/' do
+    subject do
+      delete "/api/users/", headers: request_header
+      response
+    end
+    let(:request_header) do
+      { 'content-type': 'application/json', accept: 'application/json' }.merge optional_header
+    end
+    let(:error_response) { { message: I18n.t('devise.failure.unauthenticated') } }
+    context 'when unauthorized' do
+      let(:optional_header) { {} }
+      it { expect(subject).to have_http_status :unauthorized }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq error_response }
+    end
+    context 'when logined' do
+      let(:signin_user) { FactoryGirl.create(:user) }
+      let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
+      it { expect(subject).to have_http_status :no_content }
+    end
+  end
 end
