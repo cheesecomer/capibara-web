@@ -69,10 +69,10 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
-  describe 'PUT /api/users/#{id}' do
+  describe 'PUT /api/users/' do
     let!(:user) { FactoryGirl.create(:user) }
     subject do
-      put "/api/users/#{user.id}", params: params.to_json, headers: request_header
+      put "/api/users/", params: params.to_json, headers: request_header
       response
     end
     let(:request_header) do
@@ -113,12 +113,6 @@ RSpec.describe 'Users', type: :request do
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to_not change { User.all.count } }
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
-    end
-    context 'When not login user' do
-      let(:params) { { nickname: FFaker::Name.name, biography: FFaker::LoremJA.paragraph } }
-      let!(:optional_header) { { authorization: "Token #{FactoryGirl.create(:user).access_token}" } }
-      it { expect(subject).to have_http_status :forbidden }
-      it { expect { subject }.to_not change { User.all.count } }
     end
   end
 
