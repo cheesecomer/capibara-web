@@ -18,7 +18,8 @@ Rails.application.routes.draw do
     resource :session, only: [:create, :destroy], controller: :sessions
     resources :rooms, only: [:index, :show]
     resources :informations, only: [:index]
-    resources :users, only: [:create, :destroy, :update, :show]
+    resources :users, only: [:create, :update, :show]
+    resource :user, only: [:destroy], path: :users
     resources :blocks, only: [:index, :create, :destroy]
   end
 
