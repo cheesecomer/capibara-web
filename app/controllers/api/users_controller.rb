@@ -19,11 +19,15 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def update
-    head :forbidden and return unless current_user.id == params[:id].to_i
-    @user = User.find params[:id]
+    @user = current_user
     @user.is_api_request = true
     @user.update! user_update_params
     render :show
+  end
+
+  def destroy
+    current_user.destroy!
+    head :no_content
   end
 
   private

@@ -14,7 +14,8 @@ json.set! :messages do
       json.set! :id, message.sender.id
       json.set! :nickname, message.sender.nickname
       json.set! :icon_url, message.sender.icon_url
-    end
+    end unless message.sender.nil?
+    json.set! :sender, nil if message.sender.nil?
     json.set! :id, message.id
     json.set! :content, message.content
     json.set! :at, message.created_at

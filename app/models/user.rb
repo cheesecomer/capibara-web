@@ -23,15 +23,19 @@
 #  oauth_access_token        :string(255)
 #  oauth_access_token_secret :string(255)
 #  oauth_uid                 :string(255)
+#  deleted_at                :datetime
 #
 # Indexes
 #
 #  index_users_on_access_token          (access_token) UNIQUE
+#  index_users_on_deleted_at            (deleted_at)
 #  index_users_on_email                 (email) UNIQUE
 #  index_users_on_reset_password_token  (reset_password_token) UNIQUE
 #
 
 class User < ApplicationRecord
+  acts_as_paranoid
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
