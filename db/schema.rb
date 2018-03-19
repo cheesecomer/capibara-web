@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180318133126) do
+ActiveRecord::Schema.define(version: 20180319031818) do
 
   create_table "blocks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer "owner_id", null: false
@@ -31,6 +31,15 @@ ActiveRecord::Schema.define(version: 20180318133126) do
     t.string "content"
     t.integer "sender_id"
     t.integer "room_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reports", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+    t.integer "sender_id", null: false
+    t.integer "target_id", null: false
+    t.integer "reason", null: false
+    t.string "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
