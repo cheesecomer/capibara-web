@@ -71,13 +71,14 @@ class User < ApplicationRecord
     provider = oauth[:provider].to_s.downcase.to_sym
     uid = oauth[:uid]
     nickname = oauth[:info][:nickname]
+    name = oauth[:info][:name]
     image_url = oauth[:info][:image]
     token = oauth[:credentials][:token]
     token_secret = oauth[:credentials][:secret]
     description = oauth[:info][:description]
 
     self.find_or_create_by(oauth_provider: provider, oauth_uid: uid) do |user|
-      user.nickname = nickname
+      user.nickname = name || nickname
       user.remote_icon_url = image_url if image_url.present?
       user.oauth_access_token = token
       user.oauth_access_token_secret = token_secret
