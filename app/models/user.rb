@@ -49,7 +49,10 @@ class User < ApplicationRecord
 
   mount_base64_uploader :icon, ImageUploader
 
-  enum oauth_provider: { twitter: 1 }
+  enum oauth_provider: {
+    twitter: 1,
+    line: 2
+  }
 
   after_initialize do
     self.is_api_request = false
