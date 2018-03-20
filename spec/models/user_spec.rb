@@ -38,11 +38,11 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   context '.update_access_token!' do
     subject { user.update_access_token! }
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     it { expect { subject }.to change { user.access_token } }
   end
   describe '#to_broadcast_hash' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     subject { user.to_broadcast_hash }
     context 'when valid' do
       it do
@@ -53,6 +53,33 @@ RSpec.describe User, type: :model do
           }
         )
       end
+    end
+  end
+  describe '.find_or_create_from_oauth' do
+    subject { User.find_or_create_from_oauth(oauth) }
+    let(:oauth) {
+      girl = Precure.all.sample
+      {
+        provider: 'twitter',
+        uid: '1',
+        info: {
+          nickname: girl[:precure_name],
+          image: nil,
+          description: girl[:transform_message]
+        },
+        credentials: {
+          token: '1234567890',
+          secret: 'abcdefghijklmnopqrstuvwxyz'
+        }
+      }
+    }
+    context 'when exists' do
+      let!(:user) { FactoryBot.create(:user, oauth_provider: :twitter, oauth_uid: 1)}
+      it { expect { subject }.to change { User.all.count }.by(0) }
+      it { is_expected.to eq(user) }
+    end
+    context 'when not exists' do
+      it { expect { subject }.to change { User.all.count }.by(1) }
     end
   end
 end

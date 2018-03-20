@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe ApplicationCable::Connection, type: :channel do
-  let(:user) { FactoryGirl.create :user }
+  let(:user) { FactoryBot.create :user }
   let(:connection) { started_connection }
   let(:unstarted_connection) { setup_connection }
 

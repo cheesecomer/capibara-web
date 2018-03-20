@@ -10,14 +10,14 @@ RSpec.describe 'SessionsController', type: :request do
       it { expect(subject).to have_http_status :ok }
     end
     context 'When signin' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
       before { sign_in user }
       it { expect(subject).to have_http_status :found }
     end
   end
 
   describe 'POST /session' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     subject do
       post '/session', params: { user: request_body }
       response

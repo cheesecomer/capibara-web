@@ -22,6 +22,9 @@ Rails.application.routes.draw do
     resource :user, only: [:create, :update, :destroy], path: :users
     resources :blocks, only: [:index, :create, :destroy]
     resources :reports, only: [:create]
+    resources :oauth, only: [], param: :provider do
+      get 'callback', on: :member
+    end
   end
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

@@ -10,7 +10,7 @@
 #  updated_at :datetime         not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   titles = Precure.map(&:title).shuffle
   factory :room do
     name do

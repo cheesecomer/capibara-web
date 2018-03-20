@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ChatChannel, type: :channel do
-  let(:user) { FactoryGirl.create :user }
-  let(:room) { FactoryGirl.create :room }
+  let(:user) { FactoryBot.create :user }
+  let(:room) { FactoryBot.create :room }
   let(:channel) { ChatChannel.new(connection, {}, room_id: room.id) }
   let(:connection) { TestConnection.new user }
 
@@ -57,14 +57,14 @@ RSpec.describe ChatChannel, type: :channel do
   end
 
   describe '.connected_users' do
-    let!(:users) { FactoryGirl.create_list :user, 10 }
+    let!(:users) { FactoryBot.create_list :user, 10 }
     subject { ChatChannel.connected_users(room) }
     context 'when connected user nobody' do
       it { is_expected.to be_empty }
     end
 
     context 'when connected user exists in other channels' do
-      let(:rooms) { FactoryGirl.create_list :room, 10 }
+      let(:rooms) { FactoryBot.create_list :room, 10 }
       before(:each) do
         connections_statistics =
           users.map do|user|
@@ -94,14 +94,14 @@ RSpec.describe ChatChannel, type: :channel do
   end
 
   describe '.connected_users_count' do
-    let!(:users) { FactoryGirl.create_list :user, 10 }
+    let!(:users) { FactoryBot.create_list :user, 10 }
     subject { ChatChannel.connected_users_count(room) }
     context 'when connected user nobody' do
       it { is_expected.to eq 0 }
     end
 
     context 'when connected user exists in other channels' do
-      let(:rooms) { FactoryGirl.create_list :room, 10 }
+      let(:rooms) { FactoryBot.create_list :room, 10 }
       before(:each) do
         connections_statistics =
           users.map do|user|

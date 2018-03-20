@@ -16,14 +16,14 @@ RSpec.describe 'Informations', type: :request do
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq error_response }
     end
     context 'when empty' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq informations: [] }
     end
     context 'when not empty' do
-      let(:user) { FactoryGirl.create(:user) }
-      let!(:informations) { FactoryGirl.create_list(:information, 10) }
+      let(:user) { FactoryBot.create(:user) }
+      let!(:informations) { FactoryBot.create_list(:information, 10) }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq informations: informations.map {|v| { id: v.id, title: v.title, message: v.message, published_at: v.published_at.iso8601(3) } } }
