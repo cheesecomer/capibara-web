@@ -40,7 +40,7 @@ RSpec.describe 'Users', type: :request do
   end
 
   describe 'GET /api/users/#{id}' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     subject do
       get "/api/users/#{user.id}", headers: request_header
       response
@@ -55,22 +55,22 @@ RSpec.describe 'Users', type: :request do
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq error_response }
     end
     context 'when not empty' do
-      let(:signin_user) { FactoryGirl.create(:user) }
+      let(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, is_block: false }
     end
     context 'when is block' do
-      let(:signin_user) { FactoryGirl.create(:user) }
+      let(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
-      let!(:block) { FactoryGirl.create(:block, owner: signin_user, target: user) }
+      let!(:block) { FactoryBot.create(:block, owner: signin_user, target: user) }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, is_block: true }
     end
   end
 
   describe 'PUT /api/users/' do
-    let!(:user) { FactoryGirl.create(:user) }
+    let!(:user) { FactoryBot.create(:user) }
     subject do
       put "/api/users/", params: params.to_json, headers: request_header
       response
@@ -131,7 +131,7 @@ RSpec.describe 'Users', type: :request do
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq error_response }
     end
     context 'when logined' do
-      let(:signin_user) { FactoryGirl.create(:user) }
+      let(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       it { expect(subject).to have_http_status :no_content }
     end

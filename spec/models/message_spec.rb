@@ -27,7 +27,7 @@ RSpec.describe Message, type: :model do
     it { is_expected.to validate_presence_of(:room) }
   end
   describe '#create' do
-    let(:message) { FactoryGirl.build(:message) }
+    let(:message) { FactoryBot.build(:message) }
     subject { message.save }
     context 'when valid' do
       it 'when valid should execute MessageBroadcastJob.perform_later' do
@@ -37,7 +37,7 @@ RSpec.describe Message, type: :model do
     end
   end
   describe '#to_broadcast_hash' do
-    let(:message) { FactoryGirl.create(:message) }
+    let(:message) { FactoryBot.create(:message) }
     subject { message.to_broadcast_hash }
     context 'when valid' do
       it do

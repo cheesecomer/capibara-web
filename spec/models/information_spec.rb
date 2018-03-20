@@ -19,11 +19,11 @@ RSpec.describe Information, type: :model do
       it { is_expected.to be_empty }
     end
     context 'when future' do
-      let!(:information) { FactoryGirl.create(:information, published_at: 1.days.since) }
+      let!(:information) { FactoryBot.create(:information, published_at: 1.days.since) }
       it { is_expected.to be_empty }
     end
     context 'when past' do
-      let!(:information) { FactoryGirl.create(:information, published_at: 1.days.ago) }
+      let!(:information) { FactoryBot.create(:information, published_at: 1.days.ago) }
       it { is_expected.to eq [information] }
     end
   end

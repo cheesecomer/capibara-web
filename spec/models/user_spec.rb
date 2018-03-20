@@ -38,11 +38,11 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   context '.update_access_token!' do
     subject { user.update_access_token! }
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     it { expect { subject }.to change { user.access_token } }
   end
   describe '#to_broadcast_hash' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     subject { user.to_broadcast_hash }
     context 'when valid' do
       it do
@@ -74,7 +74,7 @@ RSpec.describe User, type: :model do
       }
     }
     context 'when exists' do
-      let!(:user) { FactoryGirl.create(:user, oauth_provider: :twitter, oauth_uid: 1)}
+      let!(:user) { FactoryBot.create(:user, oauth_provider: :twitter, oauth_uid: 1)}
       it { expect { subject }.to change { User.all.count }.by(0) }
       it { is_expected.to eq(user) }
     end

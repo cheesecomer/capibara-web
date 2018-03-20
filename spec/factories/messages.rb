@@ -10,7 +10,7 @@
 #  updated_at :datetime         not null
 #
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :message do
     content { FFaker::LoremJA.paragraph }
     association :sender, factory: :user

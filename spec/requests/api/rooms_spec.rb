@@ -16,14 +16,14 @@ RSpec.describe 'Rooms', type: :request do
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq error_response }
     end
     context 'when empty' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq rooms:[] }
     end
     context 'when not empty' do
-      let(:user) { FactoryGirl.create(:user) }
-      let!(:rooms) { FactoryGirl.create_list(:room, 10) }
+      let(:user) { FactoryBot.create(:user) }
+      let!(:rooms) { FactoryBot.create_list(:room, 10) }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq rooms: rooms.map {|v| v.attributes.symbolize_keys.slice(:id, :name, :capacity).merge number_of_participants: 0 } }
@@ -31,7 +31,7 @@ RSpec.describe 'Rooms', type: :request do
   end
 
   describe 'GET /api/rooms/#{id}' do
-    let!(:room) { FactoryGirl.create(:room) }
+    let!(:room) { FactoryBot.create(:room) }
     subject do
       get "/api/rooms/#{room.id}", headers: request_header
       response
@@ -46,40 +46,40 @@ RSpec.describe 'Rooms', type: :request do
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq error_response }
     end
     context 'when not empty' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: room.id, name: room.name, capacity: room.capacity, number_of_participants: 0, participants: [], messages: [] }
     end
     context 'when has blockuser message' do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:block) { FactoryGirl.create(:block, owner: user) }
-      let!(:message) { FactoryGirl.create(:message, sender: block.target, room: room)}
+      let(:user) { FactoryBot.create(:user) }
+      let(:block) { FactoryBot.create(:block, owner: user) }
+      let!(:message) { FactoryBot.create(:message, sender: block.target, room: room)}
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: room.id, name: room.name, capacity: room.capacity, number_of_participants: 0, participants: [], messages: [] }
     end
     context 'when block' do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:block) { FactoryGirl.create(:block, target: user) }
-      let!(:message) { FactoryGirl.create(:message, sender: block.owner, room: room)}
+      let(:user) { FactoryBot.create(:user) }
+      let(:block) { FactoryBot.create(:block, target: user) }
+      let!(:message) { FactoryBot.create(:message, sender: block.owner, room: room)}
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: room.id, name: room.name, capacity: room.capacity, number_of_participants: 0, participants: [], messages: [] }
     end
     context 'when has not blockuser message' do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:block) { FactoryGirl.create(:block) }
-      let!(:message) { FactoryGirl.create(:message, sender: block.owner, room: room)}
+      let(:user) { FactoryBot.create(:user) }
+      let(:block) { FactoryBot.create(:block) }
+      let!(:message) { FactoryBot.create(:message, sender: block.owner, room: room)}
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: room.id, name: room.name, capacity: room.capacity, number_of_participants: 0, participants: [], messages: [
         { sender: { id: message.sender.id, nickname: message.sender.nickname, icon_url: message.sender.icon_url }, id: message.id, content: message.content, at: message.created_at.iso8601(3) }] }
     end
     context 'when deleted' do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:other_user) { FactoryGirl.create(:user).destroy }
-      let!(:message) { FactoryGirl.create(:message, sender: other_user, room: room)}
+      let(:user) { FactoryBot.create(:user) }
+      let(:other_user) { FactoryBot.create(:user).destroy }
+      let!(:message) { FactoryBot.create(:message, sender: other_user, room: room)}
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: room.id, name: room.name, capacity: room.capacity, number_of_participants: 0, participants: [], messages: [
