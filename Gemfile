@@ -42,6 +42,7 @@ gem 'rmagick'
 
 gem 'omniauth'
 gem 'omniauth-twitter'
+gem 'omniauth-line'
 
 gem "paranoia", "~> 2.2"
 
