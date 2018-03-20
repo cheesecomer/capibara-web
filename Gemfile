@@ -40,6 +40,8 @@ gem 'carrierwave'
 gem 'carrierwave-base64'
 gem 'rmagick'
 
+gem 'omniauth'
+gem 'omniauth-twitter'
 gem 'twitter'
 
 gem "paranoia", "~> 2.2"
