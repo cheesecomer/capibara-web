@@ -49,7 +49,7 @@ class User < ApplicationRecord
 
   mount_base64_uploader :icon, ImageUploader
 
-  enum oauth_provider: { twitter: 0 }
+  enum oauth_provider: { twitter: 1 }
 
   after_initialize do
     self.is_api_request = false
@@ -65,6 +65,24 @@ class User < ApplicationRecord
       id: self.id,
       nickname: self.nickname
     }
+  end
+
+  def self.find_or_create_from_oauth(oauth)
+    provider = oauth[:provider].to_s.downcase.to_sym
+    uid = oauth[:uid]
+    nickname = oauth[:info][:nickname]
+    image_url = oauth[:info][:image]
+    token = oauth[:credentials][:token]
+    token_secret = oauth[:credentials][:secret]
+    description = oauth[:info][:description]
+
+    self.find_or_create_by(oauth_provider: provider, oauth_uid: uid) do |user|
+      user.nickname = nickname
+      user.remote_icon_url = image_url if image_url.present?
+      user.oauth_access_token = token
+      user.oauth_access_token_secret = token_secret
+      user.biography = description
+    end
   end
 
   protected
