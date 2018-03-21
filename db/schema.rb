@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180319031818) do
+ActiveRecord::Schema.define(version: 20180321072422) do
 
   create_table "blocks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
     t.integer "owner_id", null: false
@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20180319031818) do
     t.string "oauth_access_token_secret"
     t.string "oauth_uid"
     t.datetime "deleted_at"
+    t.boolean "accepted", default: false, null: false
     t.index ["access_token"], name: "index_users_on_access_token", unique: true
     t.index ["deleted_at"], name: "index_users_on_deleted_at"
     t.index ["email"], name: "index_users_on_email", unique: true

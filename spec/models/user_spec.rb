@@ -24,6 +24,7 @@
 #  oauth_access_token_secret :string(255)
 #  oauth_uid                 :string(255)
 #  deleted_at                :datetime
+#  accepted                  :boolean          default(FALSE), not null
 #
 # Indexes
 #

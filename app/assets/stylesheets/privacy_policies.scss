@@ -1,0 +1,24 @@
+@import "variable";
+
+body[data-controller="privacy_policies"] {
+  &[data-action="show"] {
+    ol li {
+      margin: 0 0 2rem 0;
+    }
+    li {
+      list-style: none;
+    }
+    ol {
+      padding-left: 30px;
+    }
+    .date {
+      text-align: right;
+    }
+    p {
+      margin: 0 0 1rem 0;
+    }
+    .category {
+      margin: 0 0 50px 0;
+    }
+  }
+}
