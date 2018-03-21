@@ -32,7 +32,7 @@ RSpec.describe 'Users', type: :request do
     context 'When nickname is presence' do
       let(:request_json) { { nickname: FFaker::Name.name }.to_json }
       let(:user) { User.last }
-      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil } }
+      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil, accepted: false } }
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to change { User.all.count }.by(1) }
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
@@ -66,6 +66,13 @@ RSpec.describe 'Users', type: :request do
       let!(:block) { FactoryBot.create(:block, owner: signin_user, target: user) }
       it { expect(subject).to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, is_block: true }
+    end
+    context 'when myself' do
+      let(:signin_user) { user }
+      let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
+      let!(:block) { FactoryBot.create(:block, owner: signin_user, target: user) }
+      it { expect(subject).to have_http_status :ok }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, accepted: false }
     end
   end
 
@@ -106,10 +113,18 @@ RSpec.describe 'Users', type: :request do
       it { expect { subject }.to_not change { User.all.count } }
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
     end
-    context 'When presence' do
+    context 'When nickname is presence' do
       let(:params) { { nickname: FFaker::Name.name, biography: FFaker::LoremJA.paragraph } }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
-      let(:response_body) { { id: user.id, nickname: params[:nickname], biography: params[:biography], icon_url: user.icon_url, is_block: false } }
+      let(:response_body) { { id: user.id, nickname: params[:nickname], biography: params[:biography], icon_url: user.icon_url, accepted: false } }
+      it { expect(subject).to have_http_status :ok }
+      it { expect { subject }.to_not change { User.all.count } }
+      it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
+    end
+    context 'When accepted' do
+      let(:params) { { nickname: FFaker::Name.name, biography: FFaker::LoremJA.paragraph, accepted: true } }
+      let(:optional_header) { { authorization: "Token #{user.access_token}" } }
+      let(:response_body) { { id: user.id, nickname: params[:nickname], biography: params[:biography], icon_url: user.icon_url, accepted: true } }
       it { expect(subject).to have_http_status :ok }
       it { expect { subject }.to_not change { User.all.count } }
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }

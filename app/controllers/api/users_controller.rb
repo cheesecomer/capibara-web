@@ -11,6 +11,7 @@ class Api::UsersController < Api::ApplicationController
     @user = User.new user_create_params
     @user.is_api_request = true
     @user.save!
+    sign_in @user, store: false
     render template: 'api/sessions/create'
   end
 
@@ -37,6 +38,6 @@ class Api::UsersController < Api::ApplicationController
   end
 
   def user_update_params
-    params.require(:user).permit(:nickname, :icon, :biography)
+    params.require(:user).permit(:nickname, :icon, :biography, :accepted)
   end
 end
