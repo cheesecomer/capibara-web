@@ -26,7 +26,7 @@ RSpec.describe 'Informations', type: :request do
       let!(:informations) { FactoryBot.create_list(:information, 10) }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { expect(subject).to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq informations: informations.map {|v| { id: v.id, title: v.title, message: v.message, published_at: v.published_at.iso8601(3) } } }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq informations: informations.map {|v| { id: v.id, title: v.title, message: v.message, published_at: v.published_at.iso8601(3), url: information_url(v) } } }
     end
   end
 end
