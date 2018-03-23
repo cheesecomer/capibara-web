@@ -8,6 +8,7 @@
 #  published_at :datetime         not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  content      :text(65535)
 #
 
 class Information < ApplicationRecord
