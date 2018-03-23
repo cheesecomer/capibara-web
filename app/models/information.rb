@@ -11,5 +11,9 @@
 #
 
 class Information < ApplicationRecord
-    scope :published, -> { where(arel_table[:published_at].lteq(Time.zone.now)) }
+  scope :published, -> { where(arel_table[:published_at].lteq(Time.zone.now)) }
+
+  def published?
+    self.published_at < Time.zone.now
+  end
 end
