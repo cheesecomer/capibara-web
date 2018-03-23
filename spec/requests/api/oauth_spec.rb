@@ -10,8 +10,8 @@ RSpec.describe 'Oath', type: :request do
     context 'when twitter' do
       let (:provider) { :twitter }
       let (:user) { FactoryBot.create(:user) }
-      it { expect(subject).to have_http_status :found }
-      it { expect(subject).to redirect_to "com.cheesecomer.capibara://oauth?access_token=#{user.access_token}&id=#{user.id}" }
+      it { is_expected.to have_http_status :found }
+      it { is_expected.to redirect_to "com.cheesecomer.capibara://oauth?access_token=#{user.access_token}&id=#{user.id}" }
     end
   end
 end

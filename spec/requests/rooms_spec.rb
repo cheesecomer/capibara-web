@@ -7,12 +7,12 @@ RSpec.describe 'RoomsController', type: :request do
       response
     end
     context 'When not signin' do
-      it { expect(subject).to have_http_status :found }
+      it { is_expected.to have_http_status :found }
     end
     context 'When signin' do
       let(:user) { FactoryBot.create(:user) }
       before { sign_in user }
-      it { expect(subject).to have_http_status :ok }
+      it { is_expected.to have_http_status :ok }
     end
   end
 
@@ -23,19 +23,19 @@ RSpec.describe 'RoomsController', type: :request do
     end
     context 'When not signin' do
       let(:room_id) { FactoryBot.create(:room).id }
-      it { expect(subject).to have_http_status :found }
+      it { is_expected.to have_http_status :found }
     end
     context 'When not found' do
       let(:user) { FactoryBot.create(:user) }
       let(:room_id) { 0 }
       before { sign_in user }
-      it { expect(subject).to have_http_status :not_found }
+      it { is_expected.to have_http_status :not_found }
     end
     context 'When found' do
       let(:user) { FactoryBot.create(:user) }
       let(:room_id) { FactoryBot.create(:room).id }
       before { sign_in user }
-      it { expect(subject).to have_http_status :ok }
+      it { is_expected.to have_http_status :ok }
     end
   end
 end

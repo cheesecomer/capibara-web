@@ -7,12 +7,12 @@ RSpec.describe 'SessionsController', type: :request do
       response
     end
     context 'When not signin' do
-      it { expect(subject).to have_http_status :ok }
+      it { is_expected.to have_http_status :ok }
     end
     context 'When signin' do
       let(:user) { FactoryBot.create(:user) }
       before { sign_in user }
-      it { expect(subject).to have_http_status :found }
+      it { is_expected.to have_http_status :found }
     end
   end
 
@@ -24,16 +24,16 @@ RSpec.describe 'SessionsController', type: :request do
     end
     context 'When valie' do
       let(:request_body) { { email: user.email, password: 'password' } }
-      it { expect(subject).to have_http_status :found }
+      it { is_expected.to have_http_status :found }
     end
     context 'When invalie' do
       let(:request_body) { { email: user.email, password: 'xxxxxxxx' } }
-      it { expect(subject).to have_http_status :ok }
+      it { is_expected.to have_http_status :ok }
     end
     context 'When signin' do
       let(:request_body) { { email: user.email, password: 'password' } }
       before { sign_in user }
-      it { expect(subject).to have_http_status :found }
+      it { is_expected.to have_http_status :found }
     end
   end
 end
