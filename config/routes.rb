@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     root to: 'sessions#new'
     resource :session, only: [:new, :create, :destroy], controller: :sessions
     resource :users, only: [:new, :create], controller: :user_registrations
+    resources :informations, only: [:index, :show]
     get '/session', to: 'sessions#new'
   end
 

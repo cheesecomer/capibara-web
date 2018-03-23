@@ -8,8 +8,13 @@
 #  published_at :datetime         not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  content      :text(65535)
 #
 
 class Information < ApplicationRecord
-    scope :published, -> { where(arel_table[:published_at].lteq(Time.zone.now)) }
+  scope :published, -> { where(arel_table[:published_at].lteq(Time.zone.now)) }
+
+  def published?
+    self.published_at < Time.zone.now
+  end
 end

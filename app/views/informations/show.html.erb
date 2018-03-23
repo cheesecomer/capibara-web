@@ -1,0 +1,6 @@
+<% provide(:title, @information.title) %>
+<% provide(:container_append_class, [:white]) %>
+<%= content_tag :h1, @information.title %>
+<%= content_tag :p, l(@information.created_at, format: :default), class: [:timestamp] %>
+<%= content_tag :p, @information.message %>
+<%= @information.content&.html_safe %>

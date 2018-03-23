@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Capibara</title>
+    <%= content_tag :title, "#{yield(:title).present? ? "#{yield(:title)} | " : ''}Capibara" %>
     <%= csrf_meta_tags %>
     <meta name='viewport' content='width=device-width,initial-scale=1'>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
@@ -9,14 +9,10 @@
 		<link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
 		<link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
   </head>
-
   <%= content_tag :body, data: { controller: @controller_path || controller.controller_path, action: controller.action_name } do %>
-
-    <% if user_signed_in? %>
-      <p><%= link_to "ログアウト", session_path, method: :delete %></p>
-    <% end %>
-
-    <%= content_tag :div, class: [:container], style: yield(:footer).present? ? 'margin-bottom: 80px;' : '' do %>
+      <%= content_tag :div, class: [:container] + (eval(yield(:container_append_class).presence || '') || []), style: yield(:footer).present? ? 'margin-bottom: 80px;' : '' do %>    <% if user_signed_in? %>
+        <p style="margin-top: 15px;"><%= link_to "ログアウト", session_path, method: :delete %></p>
+      <% end %>
       <% unless yield(:flash).present? -%>
         <% if notice.present? %>
           <div class="alert alert-info" role="alert"><%= notice %></div>
@@ -25,10 +21,8 @@
           <div class="alert alert-danger" role="alert"><%= alert %></div>
         <% end %>
       <% end -%>
-
       <%= yield %>
     <% end -%>
-
     <% if yield(:footer).present? -%>
     <footer class="footer">
       <div class="container">

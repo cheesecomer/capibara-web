@@ -1,0 +1,13 @@
+
+@import "variable";
+
+body[data-controller="informations"] {
+  &[data-action="show"] {
+    .timestamp {
+      font-size: 12px;
+      white-space: nowrap;
+      margin-bottom: 20px;
+      color: #999999;
+    }
+  }
+}
