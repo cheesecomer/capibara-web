@@ -67,7 +67,9 @@ class User < ApplicationRecord
   def to_broadcast_hash
     {
       id: self.id,
-      nickname: self.nickname
+      nickname: self.nickname,
+      icon_url: self.icon_url,
+      icon_thumb_url: self.icon_url(:thumb)
     }
   end
 

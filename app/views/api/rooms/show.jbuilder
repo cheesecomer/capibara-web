@@ -6,6 +6,8 @@ json.set! :participants do
   json.array! ChatChannel.connected_users(@room) do |user|
     json.set! :id, user.id
     json.set! :nickname, user.nickname
+    json.set! :icon_url, user.icon_url
+    json.set! :icon_thumb_url, user.icon_url(:thumb)
   end
 end
 json.set! :messages do

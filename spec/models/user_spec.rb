@@ -50,7 +50,9 @@ RSpec.describe User, type: :model do
         is_expected.to eq(
           {
             id: user.id,
-            nickname: user.nickname
+            nickname: user.nickname,
+            icon_url: user.icon_url,
+            icon_thumb_url: user.icon_url(:thumb)
           }
         )
       end
