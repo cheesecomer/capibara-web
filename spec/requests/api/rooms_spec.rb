@@ -74,7 +74,7 @@ RSpec.describe 'Rooms', type: :request do
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { is_expected.to have_http_status :ok }
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: room.id, name: room.name, capacity: room.capacity, number_of_participants: 0, participants: [], messages: [
-        { sender: { id: message.sender.id, nickname: message.sender.nickname, icon_url: message.sender.icon_url }, id: message.id, content: message.content, at: message.created_at.iso8601(3) }] }
+        { sender: { id: message.sender.id, nickname: message.sender.nickname, icon_url: message.sender.icon_url, icon_thumb_url: message.sender.icon_url(:thumb) }, id: message.id, content: message.content, at: message.created_at.iso8601(3) }] }
     end
     context 'when deleted' do
       let(:user) { FactoryBot.create(:user) }

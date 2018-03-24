@@ -28,7 +28,8 @@ class Message < ApplicationRecord
       sender: {
         id: self.sender.id,
         nickname: self.sender.nickname,
-        icon_url: self.sender.icon_url
+        icon_url: self.sender.icon_url,
+        icon_thumb_url: self.sender.icon_url(:thumb)
       },
       at: self.created_at
     }
