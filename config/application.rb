@@ -18,5 +18,11 @@ module Capibara
     config.time_zone = 'Tokyo'
 
     config.i18n.default_locale = :ja
+
+    config.application_versions = {
+      'test': Gem::Version.new('1.0'),
+      'iOS': Gem::Version.new('1.0'),
+      'Android': Gem::Version.new('1.0')
+    }.with_indifferent_access
   end
 end

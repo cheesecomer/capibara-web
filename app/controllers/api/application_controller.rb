@@ -4,6 +4,7 @@ class Api::ApplicationController < ActionController::API
   include AbstractController::Translation
 
   before_action :authenticate_user_from_token!
+  before_action :verify_http_header!
 
   rescue_from ActiveRecord::RecordInvalid, with: :rescue422
   rescue_from ActiveModel::ValidationError, with: :rescue422
@@ -49,6 +50,13 @@ class Api::ApplicationController < ActionController::API
   def authenticate_user_from_token!
     auth_token = request.headers['Authorization']
     authenticate_error unless authenticate_with_auth_token auth_token
+  end
+
+  def verify_http_header!
+    application_version = request.headers['HTTP_X_APPLICATIONVERSION']
+    platform = request.headers['HTTP_X_PLATFORM']
+    head :bad_request and return unless platform.present? && application_version.present?
+    head :upgrade_required and return if Capibara::Application.config.application_versions[platform] > Gem::Version.new(application_version)
   end
 
   private
