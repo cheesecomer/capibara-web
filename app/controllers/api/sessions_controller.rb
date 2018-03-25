@@ -1,6 +1,12 @@
 class Api::SessionsController < Api::ApplicationController
 
-  skip_before_action :authenticate_user_from_token!
+  skip_before_action :authenticate_user_from_token!, only: [:create]
+
+  def show
+    @user = current_user
+    @user.update_access_token!
+    render :create
+  end
 
   # POST /v1/login
   #   curl localhost:3000/api/session \

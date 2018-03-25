@@ -60,8 +60,7 @@ class User < ApplicationRecord
   end
 
   def update_access_token!
-    self.access_token = Digest::SHA256.hexdigest SecureRandom.uuid
-    save and return self
+    update!(access_token: Digest::SHA256.hexdigest(SecureRandom.uuid)) and return self
   end
 
   def to_broadcast_hash
@@ -95,10 +94,10 @@ class User < ApplicationRecord
   protected
 
   def email_required?
-    !(self.is_api_request || self.oauth_provider.present?)
+    !(persisted? || self.is_api_request || self.oauth_provider.present?)
   end
 
   def password_required?
-    !(self.is_api_request || self.oauth_provider.present?)
+    !(persisted? || self.is_api_request || self.oauth_provider.present?)
   end
 end
