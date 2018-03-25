@@ -9,7 +9,7 @@ RSpec.describe 'Session', type: :request do
       response
     end
     let(:request_header) do
-      { 'content-type': 'application/json', accept: 'application/json' }.merge optional_header
+      { 'content-type': 'application/json', accept: 'application/json', 'X-ApplicationVersion': '1.0', 'X-Platform': 'test' }.merge optional_header
     end
     context 'when unauthorized' do
       let(:optional_header) { {} }
@@ -34,7 +34,7 @@ RSpec.describe 'Session', type: :request do
       response
     end
     let(:request_header) do
-      { 'content-type': 'application/json', accept: 'application/json' }
+      { 'content-type': 'application/json', accept: 'application/json', 'X-ApplicationVersion': '1.0', 'X-Platform': 'test' }
     end
     let(:error_response) { { message: I18n.t('devise.failure.invalid') } }
     context 'when email found and valid password' do

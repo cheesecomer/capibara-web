@@ -7,7 +7,7 @@ RSpec.describe 'Inquiries', type: :request do
       response
     end
     let(:request_header) do
-      { 'content-type': 'application/json', accept: 'application/json' }.merge optional_header
+      { 'content-type': 'application/json', accept: 'application/json', 'X-ApplicationVersion': '1.0', 'X-Platform': 'test' }.merge optional_header
     end
     let(:target) { FactoryBot.create(:user) }
     context 'when unauthorized' do

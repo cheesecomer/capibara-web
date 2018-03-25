@@ -7,7 +7,7 @@ RSpec.describe 'Blocks', type: :request do
       response
     end
     let(:request_header) do
-      { 'content-type': 'application/json', accept: 'application/json' }.merge optional_header
+      { 'content-type': 'application/json', accept: 'application/json', 'X-ApplicationVersion': '1.0', 'X-Platform': 'test' }.merge optional_header
     end
     context 'when unauthorized' do
       let(:error_response) { { message: I18n.t('devise.failure.unauthenticated') } }
@@ -40,7 +40,7 @@ RSpec.describe 'Blocks', type: :request do
       response
     end
     let(:request_header) do
-      { 'content-type': 'application/json', accept: 'application/json' }.merge optional_header
+      { 'content-type': 'application/json', accept: 'application/json', 'X-ApplicationVersion': '1.0', 'X-Platform': 'test' }.merge optional_header
     end
     let(:target) { FactoryBot.create(:user) }
     context 'when unauthorized' do
@@ -74,7 +74,7 @@ RSpec.describe 'Blocks', type: :request do
     let!(:blocks) { FactoryBot.create_list(:block, 10, owner: user) }
     let!(:other_blocks) { FactoryBot.create_list(:block, 10, owner: other_user) }
     let(:request_header) do
-      { 'content-type': 'application/json', accept: 'application/json' }.merge optional_header
+      { 'content-type': 'application/json', accept: 'application/json', 'X-ApplicationVersion': '1.0', 'X-Platform': 'test' }.merge optional_header
     end
     let(:error_response) { { message: I18n.t('devise.failure.unauthenticated') } }
     context 'when unauthorized' do
