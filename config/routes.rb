@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   resources :users, only: [:show]
   resource :privacy_policy, only: [:show]
   resources :inquiries, only: [:new, :create]
+  resource :terms, only: [:show]
 
   namespace :api, defaults: { format: :json } do
     resource :session, only: [:show, :create, :destroy], controller: :sessions
