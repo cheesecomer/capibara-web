@@ -52,7 +52,8 @@ class User < ApplicationRecord
 
   enum oauth_provider: {
     twitter: 1,
-    line: 2
+    line: 2,
+    google: 3
   }
 
   after_initialize do
