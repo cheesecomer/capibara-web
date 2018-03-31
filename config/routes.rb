@@ -1,19 +1,9 @@
 Rails.application.routes.draw do
+  root to: 'welcoms#show'
+  get '/inquiries', to: 'welcoms#show'
+  resource :welcom, only: [:show]
   devise_for :users, only: []
-
-  devise_scope :user do
-    authenticated :user do
-      root to: 'rooms#index', as: :authenticated_root
-    end
-    root to: 'sessions#new'
-    resource :session, only: [:new, :create, :destroy], controller: :sessions
-    resource :users, only: [:new, :create], controller: :user_registrations
-    resources :informations, only: [:index, :show]
-    get '/session', to: 'sessions#new'
-  end
-
-  resources :rooms
-  resources :users, only: [:show]
+  resources :informations, only: [:index, :show]
   resource :privacy_policy, only: [:show]
   resources :inquiries, only: [:new, :create]
   resource :terms, only: [:show]

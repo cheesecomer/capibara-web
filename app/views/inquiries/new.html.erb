@@ -1,0 +1,19 @@
+<% provide(:title, 'お問い合わせ') %>
+<% provide(:container_append_class, [:white]) %>
+<h2>お問い合わせ</h2>
+<%= form_for @inquiry, html: { style: "margin-top: 50px; margin-left: 20px" } do |f| %>
+  <div class="form-group">
+    <label for="inquiry_name">お名前</label>
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <label for="inquiry_emal">ご連絡先メールアドレス</label>
+    <%= f.text_field :email, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <label for="inquiry_content">お問い合わせ内容</label>
+    <%= f.text_area :content, class: "form-control" %>
+  </div>
+
+  <%= f.submit "送信する", class: %w[btn btn-primary mb-2], style: "margin-top: 50px;" %>
+<% end %>
