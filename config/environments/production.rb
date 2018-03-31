@@ -89,3 +89,7 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
+
+CarrierWave.configure do |config|
+  config.asset_host = 'https://s3-ap-northeast-1.amazonaws.com/capibara'
+end
