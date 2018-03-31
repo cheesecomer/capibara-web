@@ -17,13 +17,8 @@ class Inquiry < ApplicationRecord
   # --------------------------------------------------------------------------
   # Associations
   # --------------------------------------------------------------------------
-  belongs_to :sender, class_name: 'User'
+  belongs_to :sender, class_name: 'User', optional: true
 
-  # --------------------------------------------------------------------------
-  # Enums
-  # --------------------------------------------------------------------------
-  enum reason: {
-    untreated: 0,
-    treated: 1
-  }
+  validates :email, presence: true
+  validates :content, presence: true
 end
