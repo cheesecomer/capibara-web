@@ -20,3 +20,4 @@ deploy:
   app:
     master: capibara-production
     develop: capibara-staging
+    release/1.0: capibara-staging
