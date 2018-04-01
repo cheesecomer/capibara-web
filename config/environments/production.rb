@@ -91,7 +91,7 @@ Rails.application.configure do
 end
 
 CarrierWave.configure do |config|
-  config.asset_host = 'https://s3-ap-northeast-1.amazonaws.com/capibara'
+  config.asset_host = "https://s3-ap-northeast-1.amazonaws.com/#{ENV['AWS_S3_BUCKET']}"
   config.fog_credentials = {
     provider: 'AWS',
     aws_access_key_id: ENV['AWS_S3_ACCESS_KEY'],
@@ -99,6 +99,6 @@ CarrierWave.configure do |config|
     region: 'ap-northeast-1'
   }
 
-  config.fog_directory  = 'capibara'
+  config.fog_directory  = ENV['AWS_S3_BUCKET']
   config.cache_storage = :fog
 end
