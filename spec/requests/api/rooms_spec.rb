@@ -23,10 +23,10 @@ RSpec.describe 'Rooms', type: :request do
     end
     context 'when not empty' do
       let(:user) { FactoryBot.create(:user) }
-      let!(:rooms) { FactoryBot.create_list(:room, 10) }
+      let!(:rooms) { (1..10).map{ |v| v }.reverse.map {|v| FactoryBot.create(:room, priority: v) } }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq rooms: rooms.map {|v| v.attributes.symbolize_keys.slice(:id, :name, :capacity).merge number_of_participants: 0 } }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq rooms: rooms.reverse.map {|v| v.attributes.symbolize_keys.slice(:id, :name, :capacity).merge number_of_participants: 0 } }
     end
   end
 
