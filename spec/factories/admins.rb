@@ -25,6 +25,11 @@
 
 FactoryBot.define do
   factory :admin do
-    
+    email     { FFaker::Internet.email }
+    password  'password'
+    after(:build) do |user|
+      girl = Precure.all.sample
+      user.nickname  = girl[:precure_name]
+    end
   end
 end
