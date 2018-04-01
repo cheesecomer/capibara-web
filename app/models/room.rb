@@ -8,8 +8,11 @@
 #  priority   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  deleted_at :datetime
 #
 
 class Room < ApplicationRecord
+  acts_as_paranoid
+
   has_many :messages, dependent: :destroy
 end
