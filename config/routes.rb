@@ -1,20 +1,23 @@
 Rails.application.routes.draw do
   devise_for :users, only: []
 
-  resource :welcom, only: [:show]
-  resources :informations, only: [:index, :show]
-  resource :privacy_policy, only: [:show]
-  resources :inquiries, only: [:new, :create]
-  resource :terms, only: [:show]
-  get '/inquiries', to: 'welcoms#show'
-
   devise_for :admins, only: []
   devise_scope :admin do
     resource :session, only: [:new, :create, :destroy], controller: :sessions
     get '/session', to: 'sessions#new'
-
-    resource :dashboard, only: [:show]
   end
+
+  resource :dashboard, only: [:show]
+  resources :informations, except: [:new, :edit]
+  resources :inquiries, except: [:edit, :destroy]
+  resources :rooms, except: [:new, :edit]
+  resources :reports, only: [:index, :show]
+
+  resource :welcom, only: [:show]
+  resource :privacy_policy, only: [:show]
+  resource :terms, only: [:show]
+
+  get '/inquiries', to: 'welcoms#show'
 
   namespace :api, defaults: { format: :json } do
     resource :session, only: [:show, :create, :destroy], controller: :sessions
