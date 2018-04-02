@@ -13,11 +13,10 @@
  *= require_tree .
  *= require_self
  */
- @import "bootstrap-sprockets";
- @import "bootstrap";
- @import "variable";
+@import "bootstrap";
+@import "variable";
 
- @font-face {
+@font-face {
   font-family: "Phenomena";
   src: font-url("Phenomena-Bold.otf");
 }
@@ -83,77 +82,71 @@ h3 {
 }
 
 body.admin {
-  position: relative;
-  overflow-x: hidden;
-  height: 100%;
-  .container
-  {
+  h1 {
+    margin-bottom: 20px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid #eee;
+  }
+
+  main {
+    margin-left: 220px;
+    padding-right: 15px;
+    padding-left: 15px;
     width: 100%;
-  }
-  .nav .open > a,
-  .nav .open > a:hover,
-  .nav .open > a:focus { background-color: transparent; }
-
-  /*-------------------------------*/
-  /*           Wrappers            */
-  /*-------------------------------*/
-
-  #wrapper {
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-    padding-left: 220px;
-    width: 100%;
-    #sidebar-wrapper {
-      width: 220px;
-    }
+    background: white;
+    border-left: none;
+    min-height: 100vh;
   }
 
-  #sidebar-wrapper {
-    z-index: 1000;
-    left: 220px;
-    width: 0;
-    height: 100%;
-    margin-left: -220px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: #1a1a1a;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-  }
+  /*
+  * Sidebar
+  */
 
-  #sidebar-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-
-  #page-content-wrapper {
-      width: 100%;
-  }
-
-  .sign-out {
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    display: block;
-    color: #ddd;
-    text-decoration: none;
-    padding: 10px 15px 10px 30px;
-  }
-
-  /*-------------------------------*/
-  /*     Sidebar nav styles        */
-  /*-------------------------------*/
-
-  .sidebar-nav {
-    position: absolute;
-    top: 0;
+  .sidebar {
+    background-color: #292b2c !important;
     width: 220px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
+    position: fixed;
+    top: 0px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    border-right: 1px solid #eee;
+    padding-left: 0;
+    padding-right: 0;
+    .navbar-brand {
+      margin-bottom: 30px;
+      color: white !important;
+      font-family: Phenomena;
+      font-size: 2.5em;
+      height: 60px;
+      margin-top: -20px;
+      padding-left: 15px;
+    }
+    .sign-out {
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      display: block;
+      color: #ddd;
+      text-decoration: none;
+      padding: 0px 0px 50px 30px;
+    }
+    .nav {
+      padding-left: 5px;
+    }
+    .nav-item {
+      width: 100%;
+    }
+    .nav-item + .nav-item {
+      margin-left: 0;
+    }
+
+    .nav-link {
+      border-radius: 0;
+    }
     li {
       position: relative;
       line-height: 20px;
@@ -172,35 +165,29 @@ body.admin {
         -moz-transition:  width .2s ease-in;
         -ms-transition:  width .2s ease-in;
         transition: width .2s ease-in;
-
       }
-      &:first-child a {
-        color: #fff;
-        background-color: #1a1a1a;
-      }
-
-      &:nth-child(2):before {
+      &:nth-child(1):before {
         background-color: #ec1b5a;
       }
-      &:nth-child(3):before {
+      &:nth-child(2):before {
         background-color: #79aefe;
       }
-      &:nth-child(4):before {
+      &:nth-child(3):before {
         background-color: #314190;
       }
-      &:nth-child(5):before {
+      &:nth-child(4):before {
         background-color: #279636;
       }
-      &:nth-child(6):before {
+      &:nth-child(5):before {
         background-color: #7d5d81;
       }
-      &:nth-child(7):before {
+      &:nth-child(6):before {
         background-color: #ead24c;
       }
-      &:nth-child(8):before {
+      &:nth-child(7):before {
         background-color: #2d2366;
       }
-      &:nth-child(9):before {
+      &:nth-child(8):before {
         background-color: #35acdf;
       }
       &:hover:before,
@@ -229,29 +216,5 @@ body.admin {
         background-color: transparent;
       }
     }
-    > .sidebar-brand {
-      font-family: 'Phenomena';
-      font-size: 45px;
-      margin-top: 15px;
-      margin-bottom: 30px;
-      a {
-        padding-left: 15px;
-      }
-    }
-    .dropdown-menu {
-      position: relative;
-      width: 100%;
-      padding: 0;
-      margin: 0;
-      border-radius: 0;
-      border: none;
-      background-color: #222;
-      box-shadow: none;
-    }
   }
-}
-
-.text-secondary {
-  color: #6c757d !important;
-  font-size: 0.9em;
 }

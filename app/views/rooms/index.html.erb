@@ -1,6 +1,6 @@
 <% provide(:container_append_class, [:white]) %>
 <table class="table">
-  <thead class="thead-dark">
+  <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
@@ -21,3 +21,38 @@
   <% end %>
   </tbody>
 </table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Room</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= form_for(Room.new) do |f| %>
+          <div class="form-group">
+            <label for="inquiry_name">Name</label>
+            <%= f.text_field :name, class: "form-control" %>
+          </div>
+          <div class="row">
+          <div class="form-group col-xs-6">
+            <label for="inquiry_name">Capacity</label>
+            <%= f.text_field :capacity, class: "form-control" %>
+          </div>
+          <div class="form-group col-xs-6">
+            <label for="inquiry_name">Priority</label>
+            <%= f.text_field :priority, class: "form-control" %>
+          </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

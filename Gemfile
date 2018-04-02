@@ -33,7 +33,7 @@ gem 'jquery-ui-rails'
 gem 'devise'
 
 # bootstrap
-gem 'bootstrap-sass'
+gem 'bootstrap', '~> 4.0.0'
 
 # File Uploader
 gem 'carrierwave'
