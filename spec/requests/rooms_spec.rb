@@ -19,4 +19,26 @@ RSpec.describe RoomsController, type: :request do
       end
     end
   end
+  describe 'POST /rooms' do
+    subject do
+      post rooms_url, params: { room: request_body }, headers: { accept: 'application/json' }
+      response
+    end
+    context 'When not signin' do
+      let(:request_body) { { name: nil } }
+      it { is_expected.to have_http_status :unauthorized }
+    end
+    context 'When valie' do
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      let(:request_body) { { name: nil } }
+      it { is_expected.to have_http_status 422 }
+    end
+    context 'When invalie' do
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      let(:request_body) { { name: Precure.map(&:title).sample, capacity: 10, priority: 1 } }
+      it { is_expected.to have_http_status :ok }
+    end
+  end
 end

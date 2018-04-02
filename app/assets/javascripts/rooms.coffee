@@ -8,49 +8,32 @@ this.App.view_controllers ?= {}
 class RoomsViewController
   room_id: null
   user_id: null
-  show: ->
-    self = this
-    App.cable.subscriptions.remove(App.chat) if App.chat?
-    App.chat = App.cable.subscriptions.create { channel: 'ChatChannel', room_id: @room_id },
-      connected: ->
-        # Called when the subscription is ready for use on the server
-
-      disconnected: ->
-        # Called when the subscription has been terminated by the server
-
-      received: (data) ->
-        nickname = $('<p>').addClass('nickname').text(data['sender']['nickname'])
-        balloon = $('<div>').addClass('balloon').append($('<p>').html(data['content'].replace(/\r?\n/g, '<br>')))
-        timestamp = $('<p>').addClass('timestamp').text(data['at'])
-        container =
-          $('<li>')
-            .addClass('message')
-            .addClass(if self.user_id == data['sender']['id'] then 'own' else 'others')
-            .append(nickname)
-            .append(balloon)
-            .append(timestamp)
-
-        $('.messages').append(container)
-
-
-        $(window).scrollTop($(document).height() - $(window).height())
-
-      speak: (message) ->
-        @perform 'speak', message: message
-
-    $('.send_message').on 'click', ->
-      return if !$('.message_input').val()
-
-      $('.send_message').prop("disabled", true);
-
-      if App.chat.speak $('.message_input').val()
-        $('.message_input').val('')
-
-      $('.send_message').prop("disabled", false);
-      return;
-
-    $(window).scrollTop($(document).height() - $(window).height())
-
+  index: ->
+    $('button[data-modal]')
+      .on 'click', ()->
+        $(".modal[data-modal='#{$(this).data('modal')}']").modal('show')
+    $('.modal [data-submit]')
+      .on 'click', ->
+        $(@).parents('.modal').find('button').prop("disabled", true)
+        $($(@).data('submit')).submit()
+    $('.modal')
+      .on 'show.bs.modal', () ->
+        $(@).parents('.modal').find('button').prop("disabled", false)
+        $('.error[data-attribute]').empty()
+        $('.error[data-attribute]').hide()
+    $('.modal form')
+      .on 'ajax:error', (event, xhr, status, error) ->
+        $('.error[data-attribute]').empty()
+        $('.error[data-attribute]').hide()
+        xhr.responseJSON.errors.forEach (v) ->
+          $(".modal form [data-attribute='#{v.attribute}']").append $('<p>').text(v.message)
+        $('.error[data-attribute]').not(':empty').show()
+        $(@).parents('.modal').find('button').prop("disabled", false)
+      .on 'ajax:success', (event, data, status, xhr) ->
+        $('.error[data-attribute]').empty()
+        $('.error[data-attribute]').hide()
+        $(@).parents('.modal').find('button').prop("disabled", false)
+        Turbolinks.visit window.location.toString(), { action: 'replace' }
     return
 
 this.App.view_controllers.rooms = new RoomsViewController

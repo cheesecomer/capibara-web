@@ -1,4 +1,5 @@
 <% provide(:container_append_class, [:white]) %>
+<button type="button" class="btn btn-primary" style="width: 120px; margin-bottom: 50px;" data-modal="create">Add</button>
 <table class="table">
   <thead>
     <tr>
@@ -22,7 +23,7 @@
   </tbody>
 </table>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-modal="create">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -32,26 +33,29 @@
         </button>
       </div>
       <div class="modal-body">
-        <%= form_for(Room.new) do |f| %>
+        <%= form_for(Room.new, remote: true) do |f| %>
           <div class="form-group">
             <label for="inquiry_name">Name</label>
             <%= f.text_field :name, class: "form-control" %>
           </div>
-          <div class="row">
-          <div class="form-group col-xs-6">
-            <label for="inquiry_name">Capacity</label>
-            <%= f.text_field :capacity, class: "form-control" %>
+          <div class="error alert alert-danger" data-attribute="name"></div>
+          <div class="form-group row">
+            <div class="col-md-6">
+              <label for="inquiry_name">Capacity</label>
+              <%= f.text_field :capacity, class: "form-control" %>
+            </div>
+            <div class="col-md-6">
+              <label for="inquiry_name">Priority</label>
+              <%= f.text_field :priority, class: "form-control" %>
+            </div>
           </div>
-          <div class="form-group col-xs-6">
-            <label for="inquiry_name">Priority</label>
-            <%= f.text_field :priority, class: "form-control" %>
-          </div>
-          </div>
+          <div class="error col-md-12 alert alert-danger" data-attribute="capacity"></div>
+          <div class="error col-md-12 alert alert-danger" data-attribute="priority"></div>
         <% end %>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-submit=".modal[data-modal='create'] form">Save changes</button>
+        </div>
       </div>
     </div>
   </div>

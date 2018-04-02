@@ -6,25 +6,11 @@ class Api::ApplicationController < ActionController::API
   before_action :authenticate_user_from_token!
   before_action :verify_http_header!
 
-  rescue_from ActiveRecord::RecordInvalid, with: :rescue422
-  rescue_from ActiveModel::ValidationError, with: :rescue422
   rescue_from Forbidden, with: :rescue403
 
   respond_to :json
 
   protected
-
-  def rescue422(e)
-    request.format = :json if request.xhr?
-
-    errors = []
-    errors = e.record.errors if e.is_a?(ActiveRecord::RecordInvalid)
-    errors = e.model.errors  if e.is_a?(ActiveModel::ValidationError)
-
-    respond_to do |format|
-      format.json { render_unprocessable_entity(errors) }
-    end
-  end
 
   def rescue403(e)
     request.format = :json if request.xhr?
@@ -35,13 +21,6 @@ class Api::ApplicationController < ActionController::API
           '/api/errors/forbidden',
           status: :forbidden }
     end
-  end
-
-  def render_unprocessable_entity(errors)
-    render \
-      '/api/errors/unprocessable_entity',
-      locals: { errors: errors },
-      status: :unprocessable_entity
   end
 
   ##
