@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActiveRecord::RecordNotFound, with: :rescue404
 
+  layout 'public'
+
   def rescue404(e)
     request.format = :json if request.xhr?
 
