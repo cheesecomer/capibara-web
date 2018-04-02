@@ -13,6 +13,7 @@ RSpec.describe InformationsController, type: :request do
       let(:admin) { FactoryBot.create(:admin) }
       before { sign_in admin }
       it { is_expected.to have_http_status :ok }
+      it { is_expected.to render_template(locals: :index, layout: :admin) }
       it 'when valid should execute order by published_at desc' do
         expect(Information).to receive(:order).with(published_at: :desc).and_return(Information.all)
         subject
