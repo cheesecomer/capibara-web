@@ -17,6 +17,11 @@
  @import "bootstrap";
  @import "variable";
 
+ @font-face {
+  font-family: "Phenomena";
+  src: font-url("Phenomena-Bold.otf");
+}
+
 body {
   margin: 0;
   background-color: #eee;
@@ -225,9 +230,13 @@ body.admin {
       }
     }
     > .sidebar-brand {
-      height: 65px;
-      font-size: 20px;
-      line-height: 44px;
+      font-family: 'Phenomena';
+      font-size: 45px;
+      margin-top: 15px;
+      margin-bottom: 30px;
+      a {
+        padding-left: 15px;
+      }
     }
     .dropdown-menu {
       position: relative;
