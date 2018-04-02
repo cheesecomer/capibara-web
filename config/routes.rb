@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   devise_for :users, only: []
-  root to: 'welcoms#show'
+
   resource :welcom, only: [:show]
   resources :informations, only: [:index, :show]
   resource :privacy_policy, only: [:show]
@@ -10,13 +10,10 @@ Rails.application.routes.draw do
 
   devise_for :admins, only: []
   devise_scope :admin do
-    authenticated :admin do
-      # root to: 'rooms#index', as: :authenticated_root
-    end
     resource :session, only: [:new, :create, :destroy], controller: :sessions
     get '/session', to: 'sessions#new'
 
-    resource :dashboard
+    resource :dashboard, only: [:show]
   end
 
   namespace :api, defaults: { format: :json } do
@@ -32,5 +29,7 @@ Rails.application.routes.draw do
       get 'callback', on: :member
     end
   end
+
+  root to: 'welcoms#show'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
