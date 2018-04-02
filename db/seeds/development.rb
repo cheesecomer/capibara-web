@@ -23,3 +23,6 @@ FactoryBot.create_list :information, 10
 puts 'Create reports'
 FactoryBot.create_list :report, 5, sender: odd_user
 FactoryBot.create_list :report, 5, sender: evn_user
+
+puts 'Create inquiries'
+FactoryBot.create_list :inquiry, 10
