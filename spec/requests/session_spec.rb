@@ -22,11 +22,11 @@ RSpec.describe 'SessionsController', type: :request do
       post '/session', params: { admin: request_body }
       response
     end
-    context 'When valie' do
+    context 'When valid' do
       let(:request_body) { { email: admin.email, password: 'password' } }
       it { is_expected.to have_http_status :found }
     end
-    context 'When invalie' do
+    context 'When invalid' do
       let(:request_body) { { email: admin.email, password: 'xxxxxxxx' } }
       it { is_expected.to have_http_status :ok }
     end

@@ -34,12 +34,12 @@ RSpec.describe InquiriesController, type: :request do
       post inquiries_url, params: { inquiry: request_body }
       response
     end
-    context 'When valie' do
+    context 'When valid' do
       let(:request_body) { { name: nil } }
       it { is_expected.to have_http_status :ok }
       it { is_expected.to render_template(locals: :create, layout: :public) }
     end
-    context 'When invalie' do
+    context 'When invalid' do
       let(:request_body) { { name: Precure.all.sample[:precure_name], email: FFaker::Internet.email, content: FFaker::LoremJA.sentence } }
       it { is_expected.to have_http_status :ok }
       it { is_expected.to render_template(locals: :new, layout: :public) }

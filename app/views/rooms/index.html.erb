@@ -8,6 +8,7 @@
       <th scope="col">Capacity</th>
       <th scope="col">Priority</th>
       <th scope="col">User Num</th>
+      <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody>
@@ -18,6 +19,9 @@
       <%= content_tag :td, room.capacity %>
       <%= content_tag :td, room.priority %>
       <%= content_tag :td, ChatChannel.connected_users_count(room) %>
+      <td>
+        <%= link_to 'Edit', edit_room_path(room), remote: true, class: %[btn btn-success], style: 'width: 120px' %>
+      </td>
     </tr>
   <% end %>
   </tbody>

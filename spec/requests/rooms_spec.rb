@@ -28,13 +28,37 @@ RSpec.describe RoomsController, type: :request do
       let(:request_body) { { name: nil } }
       it { is_expected.to have_http_status :unauthorized }
     end
-    context 'When valie' do
+    context 'When invalid' do
       let(:admin) { FactoryBot.create(:admin) }
       before { sign_in admin }
       let(:request_body) { { name: nil } }
       it { is_expected.to have_http_status 422 }
     end
-    context 'When invalie' do
+    context 'When valid' do
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      let(:request_body) { { name: Precure.map(&:title).sample, capacity: 10, priority: 1 } }
+      it { is_expected.to have_http_status :ok }
+    end
+  end
+
+  describe 'PUT /rooms/id' do
+    let(:room) { FactoryBot.create :room }
+    subject do
+      put room_url(room), params: { room: request_body }, headers: { accept: 'application/json' }
+      response
+    end
+    context 'When not signin' do
+      let(:request_body) { { name: nil } }
+      it { is_expected.to have_http_status :unauthorized }
+    end
+    context 'When invalid' do
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      let(:request_body) { { name: nil } }
+      it { is_expected.to have_http_status 422 }
+    end
+    context 'When valid' do
       let(:admin) { FactoryBot.create(:admin) }
       before { sign_in admin }
       let(:request_body) { { name: Precure.map(&:title).sample, capacity: 10, priority: 1 } }
