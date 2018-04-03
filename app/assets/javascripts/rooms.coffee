@@ -9,7 +9,14 @@ class RoomsViewController
   room_id: null
   user_id: null
   index: ->
-    $('#room-modal')
+    $('[data-method="delete"]')
+      .on 'ajax:error', () ->
+        Turbolinks.visit window.location.toString(), { action: 'replace' }
+        return
+      .on 'ajax:success', () ->
+        Turbolinks.visit window.location.toString(), { action: 'replace' }
+        return
+    $('.modal')
       .on 'click', '[data-submit]', ->
         $(@).parents('.modal').find('button').prop("disabled", true)
         $($(@).data('submit')).submit()

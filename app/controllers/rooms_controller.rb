@@ -1,12 +1,14 @@
 class RoomsController < ApplicationController
   layout 'admin'
+  before_action only: [:show, :edit, :update, :destroy] do
+    @room = Room.find(params[:id])
+  end
 
   def index
     @rooms = Room.order :priority
   end
 
   def edit
-    @room = Room.find(params[:id])
     render layout: false
   end
 
@@ -20,11 +22,13 @@ class RoomsController < ApplicationController
   end
 
   def update
-    Room.find(params[:id]).update! create_or_update_params
+    @room.update! create_or_update_params
     head :ok
   end
 
   def destroy
+    @room.destroy
+    head :no_content
   end
 
   private

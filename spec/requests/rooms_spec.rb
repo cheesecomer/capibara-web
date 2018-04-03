@@ -39,11 +39,12 @@ RSpec.describe RoomsController, type: :request do
       before { sign_in admin }
       let(:request_body) { { name: Precure.map(&:title).sample, capacity: 10, priority: 1 } }
       it { is_expected.to have_http_status :ok }
+      it { expect { subject }.to change { Room.all.count }.by(1) }
     end
   end
 
   describe 'PUT /rooms/id' do
-    let(:room) { FactoryBot.create :room }
+    let!(:room) { FactoryBot.create :room }
     subject do
       put room_url(room), params: { room: request_body }, headers: { accept: 'application/json' }
       response
@@ -63,6 +64,25 @@ RSpec.describe RoomsController, type: :request do
       before { sign_in admin }
       let(:request_body) { { name: Precure.map(&:title).sample, capacity: 10, priority: 1 } }
       it { is_expected.to have_http_status :ok }
+      it { expect { subject }.to_not change { Room.all.count } }
+    end
+  end
+
+  describe 'DELETE /rooms/id' do
+    let!(:room) { FactoryBot.create :room }
+    subject do
+      delete room_url(room), headers: { accept: 'application/json' }
+      response
+    end
+    context 'When not signin' do
+      let(:request_body) { { name: nil } }
+      it { is_expected.to have_http_status :unauthorized }
+    end
+    context 'When signin' do
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      it { is_expected.to have_http_status :no_content }
+      it { expect { subject }.to change { Room.all.count }.by(-1) }
     end
   end
 end

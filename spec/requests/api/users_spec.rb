@@ -149,6 +149,7 @@ RSpec.describe 'Users', type: :request do
       let(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       it { is_expected.to have_http_status :no_content }
+      it { expect { subject }.to change { User.all.count }.by(-1) }
     end
   end
 end
