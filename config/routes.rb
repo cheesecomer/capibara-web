@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resource :dashboard, only: [:show]
   resources :informations, except: [:new, :edit]
   resources :inquiries, except: [:edit, :destroy]
-  resources :rooms, except: [:new, :edit]
+  resources :rooms
   resources :reports, only: [:index, :show]
 
   resource :welcom, only: [:show]

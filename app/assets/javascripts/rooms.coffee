@@ -9,31 +9,31 @@ class RoomsViewController
   room_id: null
   user_id: null
   index: ->
-    $('button[data-modal]')
-      .on 'click', ()->
-        $(".modal[data-modal='#{$(this).data('modal')}']").modal('show')
-    $('.modal [data-submit]')
-      .on 'click', ->
+    $('#room-modal')
+      .on 'click', '[data-submit]', ->
         $(@).parents('.modal').find('button').prop("disabled", true)
         $($(@).data('submit')).submit()
-    $('.modal')
+        return
       .on 'show.bs.modal', () ->
         $(@).parents('.modal').find('button').prop("disabled", false)
         $('.error[data-attribute]').empty()
         $('.error[data-attribute]').hide()
-    $('.modal form')
-      .on 'ajax:error', (event, xhr, status, error) ->
+        return
+      .on 'ajax:error', 'form', (event, xhr, status, error) ->
         $('.error[data-attribute]').empty()
         $('.error[data-attribute]').hide()
         xhr.responseJSON.errors.forEach (v) ->
           $(".modal form [data-attribute='#{v.attribute}']").append $('<p>').text(v.message)
+          return
         $('.error[data-attribute]').not(':empty').show()
         $(@).parents('.modal').find('button').prop("disabled", false)
-      .on 'ajax:success', (event, data, status, xhr) ->
+        return
+      .on 'ajax:success', 'form', (event, data, status, xhr) ->
         $('.error[data-attribute]').empty()
         $('.error[data-attribute]').hide()
         $(@).parents('.modal').find('button').prop("disabled", false)
         Turbolinks.visit window.location.toString(), { action: 'replace' }
+        return
     return
 
 this.App.view_controllers.rooms = new RoomsViewController

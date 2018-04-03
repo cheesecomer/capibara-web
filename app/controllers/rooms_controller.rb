@@ -5,7 +5,8 @@ class RoomsController < ApplicationController
     @rooms = Room.order :priority
   end
 
-  def show
+  def new
+    render layout: false
   end
 
   def create
