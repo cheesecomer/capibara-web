@@ -17,7 +17,12 @@
         <%= content_tag :p, information.message.truncate(50), class: "text-secondary" %>
       </td>
       <%= content_tag :td, information.published_at.to_s(:long) %>
-      <%= content_tag :td, information.published? ? 'Published' : 'Pending' %>
+      <%= content_tag :td do %>
+        <% content_tag :div,
+          information.published? ? 'Published' : 'Pending',
+          class: information.published? ? %[alert alert-success] : %[alert alert-secondary],
+          style: 'height: 50px;' %>
+      <% end %>
     </tr>
   <% end %>
   </tbody>
