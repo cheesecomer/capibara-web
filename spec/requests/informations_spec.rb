@@ -35,5 +35,17 @@ RSpec.describe InformationsController, type: :request do
       let(:published_at) { 1.days.ago }
       it { is_expected.to have_http_status :ok }
     end
+    context 'when future and signin' do
+      let(:published_at) { 1.days.since }
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      it { is_expected.to have_http_status :ok }
+    end
+    context 'when past and signin' do
+      let(:published_at) { 1.days.ago }
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      it { is_expected.to have_http_status :ok }
+    end
   end
 end
