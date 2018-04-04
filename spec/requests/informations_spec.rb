@@ -21,6 +21,30 @@ RSpec.describe InformationsController, type: :request do
     end
   end
 
+  describe 'POST /rooms' do
+    subject do
+      post informations_url, params: { information: request_body }, headers: { accept: 'application/json' }
+      response
+    end
+    context 'When not signin' do
+      let(:request_body) { { name: nil } }
+      it { is_expected.to have_http_status :unauthorized }
+    end
+    context 'When invalid' do
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      let(:request_body) { { title: nil } }
+      it { is_expected.to have_http_status 422 }
+    end
+    context 'When valid' do
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      let(:request_body) { { title: FFaker::LoremJA.sentence, message: FFaker::LoremJA.paragraph, published_at: Time.zone.now } }
+      it { is_expected.to have_http_status :ok }
+      it { expect { subject }.to change { Information.all.count }.by(1) }
+    end
+  end
+
   describe 'GET #show' do
     subject do
       get information_url information

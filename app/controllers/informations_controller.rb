@@ -7,8 +7,18 @@ class InformationsController < ApplicationController
 
   def new; end
 
+  def create
+    @information = Information.create! create_or_update_params
+    head :ok
+  end
+
   def show
     @information = Information.find(params[:id])
     raise ActiveRecord::RecordNotFound if current_admin.nil? && !@information.published?
+  end
+
+  private
+  def create_or_update_params
+    params.require(:information).permit(:title, :message, :content, :published_at)
   end
 end
