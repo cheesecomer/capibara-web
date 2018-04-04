@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20180401233540) do
 
-  create_table "admins", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "admins", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "nickname", null: false
     t.string "email", limit: 191
     t.string "encrypted_password"
@@ -30,14 +30,14 @@ ActiveRecord::Schema.define(version: 20180401233540) do
     t.index ["reset_password_token"], name: "index_admins_on_reset_password_token", unique: true
   end
 
-  create_table "blocks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "blocks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.integer "owner_id", null: false
     t.integer "target_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "information", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "information", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "title", null: false
     t.string "message", null: false
     t.datetime "published_at", null: false
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20180401233540) do
     t.text "content"
   end
 
-  create_table "inquiries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "inquiries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.integer "sender_id"
     t.string "name"
     t.string "email", limit: 191, null: false
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 20180401233540) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "content"
     t.integer "sender_id"
     t.integer "room_id"
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 20180401233540) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "reports", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "reports", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.integer "sender_id", null: false
     t.integer "target_id", null: false
     t.integer "reason", null: false
@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20180401233540) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "rooms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "rooms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "name"
     t.integer "capacity", limit: 1, null: false
     t.integer "priority", limit: 1, null: false
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 20180401233540) do
     t.datetime "deleted_at"
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "nickname", null: false
     t.string "email", limit: 191
     t.string "encrypted_password"
