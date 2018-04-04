@@ -13,8 +13,8 @@
     <tr>
       <%= content_tag :th, index, scope: 'row' %>
       <td>
-        <%= content_tag :p, information.title %>
-        <%= content_tag :p, information.message.truncate(50), class: "text-secondary" %>
+        <%= link_to information.title, information_path(information) %>
+        <%= content_tag :p, information.message.truncate(50), class: "text-secondary", style:"margin-top: 1rem; margin-bottom: 0;" %>
       </td>
       <%= content_tag :td, information.published_at.to_s(:long) %>
       <%= content_tag :td do %>
