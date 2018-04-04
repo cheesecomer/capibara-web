@@ -146,7 +146,7 @@ RSpec.describe 'Users', type: :request do
       it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq error_response }
     end
     context 'when logined' do
-      let(:signin_user) { FactoryBot.create(:user) }
+      let!(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       it { is_expected.to have_http_status :no_content }
       it { expect { subject }.to change { User.all.count }.by(-1) }

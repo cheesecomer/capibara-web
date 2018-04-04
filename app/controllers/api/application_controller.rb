@@ -1,5 +1,6 @@
 # app/controllers/api/application_controller.rb
 class Api::ApplicationController < ActionController::API
+  include Rescue
   include ActionController::MimeResponds
   include AbstractController::Translation
 
@@ -11,17 +12,6 @@ class Api::ApplicationController < ActionController::API
   respond_to :json
 
   protected
-
-  def rescue403(e)
-    request.format = :json if request.xhr?
-
-    respond_to do |format|
-      format.json {
-        render \
-          '/api/errors/forbidden',
-          status: :forbidden }
-    end
-  end
 
   ##
   # User Authentication
@@ -39,6 +29,17 @@ class Api::ApplicationController < ActionController::API
   end
 
   private
+
+  def rescue403(e)
+    request.format = :json if request.xhr?
+
+    respond_to do |format|
+      format.json {
+        render \
+          '/api/errors/forbidden',
+          status: :forbidden }
+    end
+  end
 
   def authenticate_with_auth_token(auth_token)
     return unless auth_token
