@@ -1,0 +1,7 @@
+<%= form_for(information, remote: true) do |f| %>
+  <div class="form-group">
+    <label for="inquiry_name">Title</label>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+  <div class="error alert alert-danger" data-attribute="title"></div>
+<% end %>

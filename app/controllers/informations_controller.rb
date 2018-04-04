@@ -5,6 +5,8 @@ class InformationsController < ApplicationController
     render layout: 'admin'
   end
 
+  def new; end
+
   def show
     @information = Information.find(params[:id])
     raise ActiveRecord::RecordNotFound if current_admin.nil? && !@information.published?
