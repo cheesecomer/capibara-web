@@ -9,6 +9,7 @@
     <div class="modal-body">
       <%= render partial: 'form', locals: { information: Information.new } %>
       <div class="modal-footer">
+        <button type="button" class="btn btn-info mr-auto" data-clone=".modal form" data-preview="/informations/preview">Preview</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" data-submit=".modal form">Save changes</button>
       </div>

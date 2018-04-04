@@ -2,7 +2,8 @@
 @import "variable";
 
 body[data-controller="informations"] {
-  &[data-action="show"] {
+  &[data-action="show"],
+  &[data-action="preview"] {
     .timestamp {
       font-size: 12px;
       white-space: nowrap;

@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   end
 
   resource :dashboard, only: [:show]
-  resources :informations, except: [:new, :edit]
+  resources :informations do
+    post :preview, on: :collection
+  end
   resources :inquiries, except: [:edit, :destroy]
   resources :rooms
   resources :reports, only: [:index, :show]
