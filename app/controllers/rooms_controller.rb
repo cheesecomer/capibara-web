@@ -8,13 +8,9 @@ class RoomsController < ApplicationController
     @rooms = Room.order :priority
   end
 
-  def edit
-    render layout: false
-  end
+  def new; end
 
-  def new
-    render layout: false
-  end
+  def edit; end
 
   def create
     @room = Room.create! create_or_update_params
