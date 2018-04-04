@@ -14,6 +14,15 @@
 require 'rails_helper'
 
 RSpec.describe Information, type: :model do
+  describe '#title' do
+    it { is_expected.to validate_presence_of(:title) }
+  end
+  describe '#message' do
+    it { is_expected.to validate_presence_of(:message) }
+  end
+  describe '#published_at' do
+    it { is_expected.to validate_presence_of(:published_at) }
+  end
   describe '#published' do
     subject { Information.published }
     context 'when empty' do

@@ -1,0 +1,23 @@
+<%= form_for(information, remote: true) do |f| %>
+  <div class="form-group">
+    <label for="inquiry_name">Title</label>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+  <div class="error alert alert-danger" data-attribute="title"></div>
+  <div class="form-group">
+    <label for="inquiry_name">Message</label>
+    <%= f.text_field :message, class: "form-control" %>
+  </div>
+  <div class="error alert alert-danger" data-attribute="message"></div>
+  <div class="form-group">
+    <label for="inquiry_name">Published At</label>
+    <div>
+      <%= f.datetime_select :published_at, {}, class: "form-control", style: "display: inline-block; width: auto;" %>
+    </div>
+  </div>
+  <div class="error alert alert-danger" data-attribute="published_at"></div>
+  <div class="form-group">
+    <label for="inquiry_name">Content</label>
+    <%= f.text_area :content, class: "form-control" %>
+  </div>
+<% end %>

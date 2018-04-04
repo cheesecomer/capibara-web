@@ -12,6 +12,14 @@
 #
 
 class Information < ApplicationRecord
+  self.table_name = 'information'
+
+  validates :title, presence: true
+
+  validates :message, presence: true
+
+  validates :published_at, presence: true
+
   scope :published, -> { where(arel_table[:published_at].lteq(Time.zone.now)) }
 
   def published?

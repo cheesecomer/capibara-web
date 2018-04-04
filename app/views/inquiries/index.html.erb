@@ -1,0 +1,21 @@
+<% provide(:container_append_class, [:white]) %>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Sender</th>
+      <th scope="col">Message</th>
+      <th scope="col">Created At</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @inquiries.each.with_index(1) do |inquiry, index| %>
+    <tr>
+      <%= content_tag :th, index, scope: 'row' %>
+      <%= content_tag :td, inquiry.sender&.nickname || inquiry.name %>
+      <%= content_tag :td, inquiry.content&.truncate(50) %>
+      <%= content_tag :td, inquiry.created_at.to_s(:long) %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

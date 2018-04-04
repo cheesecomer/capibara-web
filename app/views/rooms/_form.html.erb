@@ -1,0 +1,19 @@
+<%= form_for(room, remote: true) do |f| %>
+  <div class="form-group">
+    <label for="inquiry_name">Name</label>
+    <%= f.text_field :name, class: "form-control" %>
+  </div>
+  <div class="error alert alert-danger" data-attribute="name"></div>
+  <div class="form-group row">
+    <div class="col-md-6">
+      <label for="inquiry_name">Capacity</label>
+      <%= f.text_field :capacity, class: "form-control" %>
+    </div>
+    <div class="col-md-6">
+      <label for="inquiry_name">Priority</label>
+      <%= f.text_field :priority, class: "form-control" %>
+    </div>
+  </div>
+  <div class="error col-md-12 alert alert-danger" data-attribute="capacity"></div>
+  <div class="error col-md-12 alert alert-danger" data-attribute="priority"></div>
+<% end %>

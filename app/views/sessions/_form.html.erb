@@ -1,9 +1,4 @@
-<div class="panel-heading">
-  <div class="panel-title text-center">
-    <h1 class="title">Capibara</h1>
-  </div>
-</div>
-
+<% provide(:title, 'ログイン') %>
 <div class="balloon">
   <% content_for :flash do %>
     <% if notice.present? %>
@@ -33,6 +28,4 @@
       <%= f.submit "Sign in.", class: "btn btn-lg btn-primary btn-block" %>
     </div>
   <% end %>
-  <%= link_to 'アカウント登録はこちら', new_users_path %>
-  <div class="text-warning">パスワードは忘れないでください</div>
 </div>
