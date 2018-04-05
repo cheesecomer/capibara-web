@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :inquiries, except: [:edit, :destroy]
   resources :rooms
   resources :reports, only: [:index, :show]
+  resources :users
 
   resource :welcom, only: [:show]
   resource :privacy_policy, only: [:show]
