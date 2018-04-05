@@ -38,8 +38,9 @@
 class User < ApplicationRecord
   acts_as_paranoid
 
-
   has_many :reports, foreign_key: :sender_id
+
+  belongs_to :ban_device, foreign_key: :last_device_id, primary_key: :device_id
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -62,6 +63,10 @@ class User < ApplicationRecord
 
   after_initialize do
     self.is_api_request = false
+  end
+
+  def ban!
+    BanDevice.create device_id: self.last_device_id if last_device_id.present? && BanDevice.where(device_id: self.last_device_id).first.nil?
   end
 
   def update_access_token!
