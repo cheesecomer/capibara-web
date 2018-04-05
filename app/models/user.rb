@@ -67,6 +67,19 @@ class User < ApplicationRecord
     update!(access_token: Digest::SHA256.hexdigest(SecureRandom.uuid)) and return self
   end
 
+  def update_oauth!(oauth)
+    provider = oauth[:provider].to_s.downcase.to_sym
+    uid = oauth[:uid]
+    token = oauth[:credentials][:token]
+    token_secret = oauth[:credentials][:secret]
+
+    # 自分以外のユーザーでログインしたSNSと紐付いているならば、ユーザーを削除
+    User.where(oauth_provider: provider, oauth_uid: uid).where.not(id: self.id).first&.destroy
+
+    self.update oauth_provider: provider, oauth_uid: uid, oauth_access_token: token, oauth_access_token: token
+    self.update_access_token!
+  end
+
   def to_broadcast_hash
     {
       id: self.id,
