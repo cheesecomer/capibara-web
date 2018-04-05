@@ -25,6 +25,7 @@
 #  oauth_uid                 :string(255)
 #  deleted_at                :datetime
 #  accepted                  :boolean          default(FALSE), not null
+#  last_device_id            :string(255)
 #
 # Indexes
 #
@@ -70,13 +71,15 @@ class User < ApplicationRecord
   def update_oauth!(oauth)
     provider = oauth[:provider].to_s.downcase.to_sym
     uid = oauth[:uid]
-    token = oauth[:credentials][:token]
-    token_secret = oauth[:credentials][:secret]
 
     # 自分以外のユーザーでログインしたSNSと紐付いているならば、ユーザーを削除
     User.where(oauth_provider: provider, oauth_uid: uid).where.not(id: self.id).first&.destroy
 
-    self.update oauth_provider: provider, oauth_uid: uid, oauth_access_token: token, oauth_access_token: token
+    self.update \
+      oauth_provider: provider,
+      oauth_uid: uid,
+      oauth_access_token: oauth[:credentials][:token],
+      oauth_access_token_secret: oauth[:credentials][:secret]
     self.update_access_token!
   end
 
@@ -92,20 +95,18 @@ class User < ApplicationRecord
   def self.find_or_create_from_oauth(oauth)
     provider = oauth[:provider].to_s.downcase.to_sym
     uid = oauth[:uid]
-    nickname = oauth[:info][:nickname]
-    name = oauth[:info][:name]
     image_url = oauth[:info][:image]
-    token = oauth[:credentials][:token]
-    token_secret = oauth[:credentials][:secret]
-    description = oauth[:info][:description]
 
-    self.find_or_create_by(oauth_provider: provider, oauth_uid: uid) do |user|
-      user.nickname = name || nickname
+    user = self.find_or_create_by(oauth_provider: provider, oauth_uid: uid) do |user|
+      user.nickname = oauth[:info][:name] || oauth[:info][:nickname]
       user.remote_icon_url = image_url if image_url.present?
-      user.oauth_access_token = token
-      user.oauth_access_token_secret = token_secret
-      user.biography = description
+      user.biography = oauth[:info][:description]
     end
+
+    user.update \
+      oauth_access_token: oauth[:credentials][:token],
+      oauth_access_token_secret: oauth[:credentials][:secret]
+    user
   end
 
   protected

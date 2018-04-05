@@ -25,6 +25,7 @@
 #  oauth_uid                 :string(255)
 #  deleted_at                :datetime
 #  accepted                  :boolean          default(FALSE), not null
+#  last_device_id            :string(255)
 #
 # Indexes
 #
