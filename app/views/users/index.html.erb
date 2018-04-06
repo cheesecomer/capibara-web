@@ -18,7 +18,7 @@
         <%= link_to user.nickname, user, remote: true %>
       <% end %>
       <%= content_tag :td, user.oauth_provider %>
-      <%= content_tag :td, user.last_sign_in_at.to_s(:long) %>
+      <%= content_tag :td, user.last_sign_in_at&.to_s(:long) %>
       <td>
         <%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: %[btn btn-danger], style: 'width: 120px' %>
       </td>

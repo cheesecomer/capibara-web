@@ -24,6 +24,7 @@ class Api::ApplicationController < ActionController::API
   def verify_http_header!
     application_version = request.headers['HTTP_X_APPLICATIONVERSION']
     platform = request.headers['HTTP_X_PLATFORM']
+    head :forbidden and return if BanDevice.where(device_id: request.headers['HTTP_X_DEVICEID'] || '').first.present?
     head :bad_request and return unless platform.present? && application_version.present?
     head :upgrade_required and return if Capibara::Application.config.application_versions[platform] > Gem::Version.new(application_version)
   end
@@ -50,6 +51,7 @@ class Api::ApplicationController < ActionController::API
     if user
       # User can access
       sign_in user, store: false
+      user.update last_device_id: request.headers['HTTP_X_DEVICEID']
       true
     else
       false
