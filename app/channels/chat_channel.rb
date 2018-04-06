@@ -1,6 +1,10 @@
 class ChatChannel < ApplicationCable::Channel
   def subscribed
     room = Room.find params[:room_id]
+    join_users_num = ChatChannel.connected_users_count room
+    if join_users_num >= room.capacity
+      reject_subscription and return
+    end
     stream_for room
     stream_for [room, connection.current_user]
     ChatChannel.broadcast_to room, join_user_message
@@ -9,6 +13,7 @@ class ChatChannel < ApplicationCable::Channel
   def unsubscribed
     room = Room.find params[:room_id]
     ChatChannel.broadcast_to room, leave_user_message
+    stop_all_streams
   end
 
   def speak(data)
@@ -32,6 +37,17 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   protected
+
+  def reject_subscribe_message(message)
+    {
+      id: 0,
+      content: {
+        type: :reject_subscribe,
+        message: message
+      }.to_json,
+      at: Time.zone.now
+    }
+  end
 
   def join_state_message(type)
     {
