@@ -2,7 +2,7 @@ class ChatChannel < ApplicationCable::Channel
   def subscribed
     room = Room.find params[:room_id]
     join_users_num = ChatChannel.connected_users_count room
-    if join_users_num >= room.capacity
+    if join_users_num > room.capacity
       reject_subscription and return
     end
     stream_for room
