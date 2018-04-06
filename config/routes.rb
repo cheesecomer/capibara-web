@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :rooms
   resources :reports, only: [:index, :show]
   resources :users
+  resources :ban_devices
 
   resource :welcom, only: [:show]
   resource :privacy_policy, only: [:show]
