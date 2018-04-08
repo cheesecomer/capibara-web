@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe InformationsController, type: :request do
-  describe 'GET #index' do
+  describe '#index' do
     subject do
       get informations_url
       response
@@ -21,7 +21,7 @@ RSpec.describe InformationsController, type: :request do
     end
   end
 
-  describe 'POST /rooms' do
+  describe '#create' do
     subject do
       post informations_url, params: { information: request_body }, headers: { accept: 'application/json' }
       response
@@ -58,18 +58,46 @@ RSpec.describe InformationsController, type: :request do
     context 'when past' do
       let(:published_at) { 1.days.ago }
       it { is_expected.to have_http_status :ok }
+      it { is_expected.to render_template(locals: :show, layout: :public) }
     end
     context 'when future and signin' do
       let(:published_at) { 1.days.since }
       let(:admin) { FactoryBot.create(:admin) }
       before { sign_in admin }
       it { is_expected.to have_http_status :ok }
+      it { is_expected.to render_template(locals: :show, layout: :public) }
     end
     context 'when past and signin' do
       let(:published_at) { 1.days.ago }
       let(:admin) { FactoryBot.create(:admin) }
       before { sign_in admin }
       it { is_expected.to have_http_status :ok }
+      it { is_expected.to render_template(locals: :show, layout: :public) }
+    end
+  end
+
+  describe '#preview' do
+    subject do
+      post preview_informations_url, params: { information: request_body }, headers: { accept: 'text/javascript' }
+      response
+    end
+    context 'When not signin' do
+      let(:request_body) { { name: nil } }
+      it { is_expected.to have_http_status :unauthorized }
+    end
+    context 'When invalid' do
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      let(:request_body) { { title: nil } }
+      it { is_expected.to have_http_status :ok }
+      it { expect { subject }.to change { Information.all.count }.by(0) }
+    end
+    context 'When valid' do
+      let(:admin) { FactoryBot.create(:admin) }
+      before { sign_in admin }
+      let(:request_body) { { title: FFaker::LoremJA.sentence, message: FFaker::LoremJA.paragraph, published_at: Time.zone.now } }
+      it { is_expected.to have_http_status :ok }
+      it { expect { subject }.to change { Information.all.count }.by(0) }
     end
   end
 end
