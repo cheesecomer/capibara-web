@@ -65,10 +65,6 @@ class User < ApplicationRecord
     self.is_api_request = false
   end
 
-  def ban!
-    BanDevice.create device_id: self.last_device_id if last_device_id.present? && BanDevice.where(device_id: self.last_device_id).first.nil?
-  end
-
   def update_access_token!
     update!(access_token: Digest::SHA256.hexdigest(SecureRandom.uuid)) and return self
   end
