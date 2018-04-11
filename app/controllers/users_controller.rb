@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   end
 
   def index
-    @users = User.includes(:reports)
+    @users = User.includes(:reports).order((params[:order_by] || :created_at) => (params[:order] || :asc))
   end
 
   def show; end
