@@ -11,7 +11,7 @@ json.set! :participants do
   end
 end
 json.set! :messages do
-  json.array! @room.messages.where.not(sender_id: Block.where(target: current_user).pluck(:owner_id) + Block.where(owner: current_user).pluck(:target_id)).includes(:sender).where(created_at: 10.minutes.ago..10.minutes.since).last(20) do |message|
+  json.array! @room.messages.where.not(sender_id: Block.where(target: current_user).pluck(:owner_id) + Block.where(owner: current_user).pluck(:target_id)).includes(:sender).where(created_at: 10.minutes.ago..10.minutes.since).last(10) do |message|
     json.set! :sender do
       json.set! :id, message.sender.id
       json.set! :nickname, message.sender.nickname

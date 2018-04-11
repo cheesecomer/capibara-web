@@ -1,5 +1,5 @@
 class SessionsController < Devise::SessionsController
-  skip_before_action :authenticate_user!, only: %i[new create]
+  skip_before_action :authenticate_admin!, only: %i[new create]
 
   def new
     super
@@ -10,7 +10,7 @@ class SessionsController < Devise::SessionsController
   end
 
   def after_sign_in_path_for(_resource)
-    rooms_path
+    dashboard_path
   end
 
   def after_sign_out_path_for(_resource)

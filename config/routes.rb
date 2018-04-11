@@ -1,12 +1,27 @@
 Rails.application.routes.draw do
-  root to: 'welcoms#show'
-  get '/inquiries', to: 'welcoms#show'
-  resource :welcom, only: [:show]
   devise_for :users, only: []
-  resources :informations, only: [:index, :show]
+
+  devise_for :admins, only: []
+  devise_scope :admin do
+    resource :session, only: [:new, :create, :destroy], controller: :sessions
+    get '/session', to: 'sessions#new'
+  end
+
+  resource :dashboard, only: [:show]
+  resources :informations do
+    post :preview, on: :collection
+  end
+  resources :inquiries, except: [:edit, :destroy]
+  resources :rooms
+  resources :reports, only: [:index, :show]
+  resources :users
+  resources :ban_devices
+
+  resource :welcom, only: [:show]
   resource :privacy_policy, only: [:show]
-  resources :inquiries, only: [:new, :create]
   resource :terms, only: [:show]
+
+  get '/inquiries', to: 'welcoms#show'
 
   namespace :api, defaults: { format: :json } do
     resource :session, only: [:show, :create, :destroy], controller: :sessions
@@ -22,5 +37,6 @@ Rails.application.routes.draw do
     end
   end
 
+  root to: 'welcoms#show'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

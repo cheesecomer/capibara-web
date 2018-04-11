@@ -1,0 +1,32 @@
+<% provide(:container_append_class, [:white]) %>
+<%= link_to 'Add', new_information_path, remote: true, class: %[btn btn-primary], style: 'width: 120px; margin-bottom: 50px;' %>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title / Message</th>
+      <th scope="col">Published At</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @informations.each.with_index(1) do |information, index| %>
+    <tr>
+      <%= content_tag :th, index, scope: 'row' %>
+      <td>
+        <%= link_to information.title, information_path(information) %>
+        <%= content_tag :p, information.message.truncate(50), class: "text-secondary", style:"margin-top: 1rem; margin-bottom: 0;" %>
+      </td>
+      <%= content_tag :td, information.published_at.to_s(:long) %>
+      <%= content_tag :td do %>
+        <% content_tag :div,
+          information.published? ? 'Published' : 'Pending',
+          class: information.published? ? %[alert alert-success] : %[alert alert-secondary],
+          style: 'height: 50px;' %>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div id="information-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

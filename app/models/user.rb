@@ -25,6 +25,7 @@
 #  oauth_uid                 :string(255)
 #  deleted_at                :datetime
 #  accepted                  :boolean          default(FALSE), not null
+#  last_device_id            :string(255)
 #
 # Indexes
 #
@@ -36,6 +37,10 @@
 
 class User < ApplicationRecord
   acts_as_paranoid
+
+  has_many :reports, foreign_key: :sender_id
+
+  belongs_to :ban_device, foreign_key: :last_device_id, primary_key: :device_id, optional: true
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -64,6 +69,21 @@ class User < ApplicationRecord
     update!(access_token: Digest::SHA256.hexdigest(SecureRandom.uuid)) and return self
   end
 
+  def update_oauth!(oauth)
+    provider = oauth[:provider].to_s.downcase.to_sym
+    uid = oauth[:uid]
+
+    # 自分以外のユーザーでログインしたSNSと紐付いているならば、ユーザーを削除
+    User.where(oauth_provider: provider, oauth_uid: uid).where.not(id: self.id).first&.destroy
+
+    self.update \
+      oauth_provider: provider,
+      oauth_uid: uid,
+      oauth_access_token: oauth[:credentials][:token],
+      oauth_access_token_secret: oauth[:credentials][:secret]
+    self.update_access_token!
+  end
+
   def to_broadcast_hash
     {
       id: self.id,
@@ -76,20 +96,18 @@ class User < ApplicationRecord
   def self.find_or_create_from_oauth(oauth)
     provider = oauth[:provider].to_s.downcase.to_sym
     uid = oauth[:uid]
-    nickname = oauth[:info][:nickname]
-    name = oauth[:info][:name]
     image_url = oauth[:info][:image]
-    token = oauth[:credentials][:token]
-    token_secret = oauth[:credentials][:secret]
-    description = oauth[:info][:description]
 
-    self.find_or_create_by(oauth_provider: provider, oauth_uid: uid) do |user|
-      user.nickname = name || nickname
+    user = self.find_or_create_by(oauth_provider: provider, oauth_uid: uid) do |user|
+      user.nickname = oauth[:info][:name] || oauth[:info][:nickname]
       user.remote_icon_url = image_url if image_url.present?
-      user.oauth_access_token = token
-      user.oauth_access_token_secret = token_secret
-      user.biography = description
+      user.biography = oauth[:info][:description]
     end
+
+    user.update \
+      oauth_access_token: oauth[:credentials][:token],
+      oauth_access_token_secret: oauth[:credentials][:secret]
+    user
   end
 
   protected

@@ -1,10 +1,31 @@
-<% @rooms.each do |room| %>
-  <%= link_to room do %>
-  <div class="card">
-    <div class="card-block">
-      <h4 class="card-title"><%= room.name %></h4>
-      <p><%= ChatChannel.connected_users_count(room) %>/<%= room.capacity %></p>
-    </div>
-  </div>
+<% provide(:container_append_class, [:white]) %>
+<%= link_to 'Add', new_room_path, remote: true, class: %[btn btn-primary], style: 'width: 120px; margin-bottom: 50px;' %>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Capacity</th>
+      <th scope="col">Priority</th>
+      <th scope="col">User Num</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @rooms.each.with_index(1) do |room, index| %>
+    <tr>
+      <%= content_tag :th, index, scope: 'row' %>
+      <%= content_tag :td, room.name %>
+      <%= content_tag :td, room.capacity %>
+      <%= content_tag :td, room.priority %>
+      <%= content_tag :td, ChatChannel.connected_users_count(room) %>
+      <td>
+        <%= link_to 'Edit', edit_room_path(room), remote: true, class: %[btn btn-success], style: 'width: 120px' %>
+        <%= link_to 'Delete', room, method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: %[btn btn-danger], style: 'width: 120px' %>
+      </td>
+    </tr>
   <% end %>
-<% end %>
+  </tbody>
+</table>
+
+<div id="room-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

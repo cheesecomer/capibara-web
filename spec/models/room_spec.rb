@@ -8,10 +8,21 @@
 #  priority   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  deleted_at :datetime
 #
 
 require 'rails_helper'
 
 RSpec.describe Room, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#name' do
+    it { is_expected.to validate_presence_of(:name) }
+  end
+  describe '#capacity' do
+    it { is_expected.to validate_presence_of(:capacity) }
+    it { is_expected.to validate_numericality_of(:capacity).only_integer.is_greater_than(0) }
+  end
+  describe '#priority' do
+    it { is_expected.to validate_presence_of(:priority) }
+    it { is_expected.to validate_numericality_of(:priority).only_integer.is_greater_than(0) }
+  end
 end

@@ -15,6 +15,8 @@
 
 FactoryBot.define do
   factory :inquiry do
-    
+    name { Precure.all.sample[:precure_name] }
+    email { FFaker::Internet.email }
+    content { FFaker::LoremJA.sentence }
   end
 end

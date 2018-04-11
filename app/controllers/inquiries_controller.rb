@@ -1,5 +1,10 @@
 class InquiriesController < ApplicationController
-  skip_before_action :authenticate_user!, only: %i[new create]
+  skip_before_action :authenticate_admin!, only: %i[new create]
+  def index
+    @inquiries = Inquiry.includes(:sender).order :created_at
+    render layout: 'admin'
+  end
+
   def new
     @inquiry = Inquiry.new
   end

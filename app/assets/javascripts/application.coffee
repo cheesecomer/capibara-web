@@ -15,7 +15,7 @@
 #= require_tree .
 #= require jquery3
 #= require jquery_ujs
-#= require bootstrap-sprockets
+#= require bootstrap
 
 @App ?= {}
 
@@ -35,5 +35,35 @@ $(document)
       $.each actions, (i, action) ->
         activeController[action]() if $.isFunction(activeController[action])
 
+    return
+  .on 'ajax:error', '[data-method="delete"]', () ->
+    Turbolinks.visit window.location.toString(), { action: 'replace' }
+    return
+  .on 'ajax:success', '[data-method="delete"]', () ->
+    Turbolinks.visit window.location.toString(), { action: 'replace' }
+    return
+  .on 'click', '.modal [data-submit]', ->
+    $(@).parents('.modal').find('button').prop("disabled", true)
+    $($(@).data('submit')).submit()
+    return
+  .on 'show.bs.modal', '.modal', () ->
+    $(@).parents('.modal').find('button').prop("disabled", false)
+    $('.error[data-attribute]').empty()
+    $('.error[data-attribute]').hide()
+    return
+  .on 'ajax:error', '.modal form', (event, xhr, status, error) ->
+    $(@).parents('.modal').find('button').prop("disabled", false)
+    $('.error[data-attribute]').empty()
+    $('.error[data-attribute]').hide()
+    xhr.responseJSON.errors.forEach (v) ->
+      $(".modal form [data-attribute='#{v.attribute}']").append $('<p>').text(v.message)
+      return
+    $('.error[data-attribute]').not(':empty').show()
+    return
+  .on 'ajax:success', '.modal form', (event, data, status, xhr) ->
+    $(@).parents('.modal').find('button').prop("disabled", false)
+    $('.error[data-attribute]').empty()
+    $('.error[data-attribute]').hide()
+    Turbolinks.visit window.location.toString(), { action: 'replace' }
     return
   return

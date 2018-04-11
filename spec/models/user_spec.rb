@@ -25,6 +25,7 @@
 #  oauth_uid                 :string(255)
 #  deleted_at                :datetime
 #  accepted                  :boolean          default(FALSE), not null
+#  last_device_id            :string(255)
 #
 # Indexes
 #
@@ -37,11 +38,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  context '.update_access_token!' do
+  context '#update_access_token!' do
     subject { user.update_access_token! }
     let(:user) { FactoryBot.create(:user) }
     it { expect { subject }.to change { user.access_token } }
   end
+
   describe '#to_broadcast_hash' do
     let(:user) { FactoryBot.create(:user) }
     subject { user.to_broadcast_hash }
@@ -58,6 +60,40 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '#update_oauth!' do
+    let!(:user) { FactoryBot.create(:user) }
+    subject { user.update_oauth!(oauth) }
+    it { expect { subject }.to change { user.access_token } }
+    let(:oauth) {
+      girl = Precure.all.sample
+      {
+        provider: 'twitter',
+        uid: '1',
+        info: {
+          nickname: girl[:precure_name],
+          image: nil,
+          description: girl[:transform_message]
+        },
+        credentials: {
+          token: '1234567890',
+          secret: 'abcdefghijklmnopqrstuvwxyz'
+        }
+      }
+    }
+    it { expect { subject }.to change { user.oauth_provider }.to eq('twitter') }
+    it { expect { subject }.to change { user.oauth_uid }.to eq('1') }
+    it { expect { subject }.to change { user.oauth_access_token }.to eq('1234567890') }
+    it { expect { subject }.to change { user.oauth_access_token_secret }.to eq('abcdefghijklmnopqrstuvwxyz') }
+    context 'when exists provider uid' do
+      let!(:exist_user) { FactoryBot.create(:user, oauth_provider: :twitter, oauth_uid: 1)}
+      it { expect { subject }.to change { User.all.count }.by(-1) }
+    end
+    context 'when not exists provider uid' do
+      it { expect { subject }.to change { User.all.count }.by(0) }
+    end
+  end
+
   describe '.find_or_create_from_oauth' do
     subject { User.find_or_create_from_oauth(oauth) }
     let(:oauth) {

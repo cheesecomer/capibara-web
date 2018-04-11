@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= content_tag :title, "#{yield(:title).present? ? "#{yield(:title)} | " : ''}Capibara" %>
+    <%= csrf_meta_tags %>
+    <meta name='viewport' content='width=device-width,initial-scale=1'>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link href='https://fonts.googleapis.com/css?family=Passion+One' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oxygen' rel='stylesheet' type='text/css'>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  </head>
+  <%= content_tag :body, class: 'admin', data: { controller: @controller_path || controller.controller_path, action: controller.action_name } do %>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="sidebar">
+          <a class="navbar-brand">Capibara</a>
+          <ul class="nav nav-pills flex-column">
+            <li><%= link_to 'Dashboard', dashboard_path, class: 'nav-link' %></li>
+            <li><%= link_to 'Rooms', rooms_path, class: 'nav-link' %></li>
+            <li><%= link_to 'Users', users_path, class: 'nav-link' %></li>
+            <li><%= link_to 'Informations', informations_path, class: 'nav-link' %></li>
+            <li><%= link_to 'Reports', reports_path, class: 'nav-link' %></li>
+            <li><%= link_to 'Inquiries', inquiries_path, class: 'nav-link' %></li>
+          </ul>
+          <%= link_to 'SignOut', session_path, method: :delete, class: 'sign-out' %>
+        </nav>
+
+        <main class="pt-3">
+          <% unless yield(:flash).present? -%>
+            <% if notice.present? %>
+              <div class="alert alert-info" role="alert"><%= notice %></div>
+            <% end %>
+            <% if alert.present? %>
+              <div class="alert alert-danger" role="alert"><%= alert %></div>
+            <% end %>
+          <% end -%>
+          <%= yield %>
+        </main>
+      </div>
+    </div>
+  <% end %>
+</html>

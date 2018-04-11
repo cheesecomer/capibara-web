@@ -13,6 +13,8 @@
 
 FactoryBot.define do
   factory :report do
-
+    association :sender, factory: :user
+    association :target, factory: :user
+    reason { Random.rand(1..5) }
   end
 end

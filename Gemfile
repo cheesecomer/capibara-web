@@ -33,7 +33,7 @@ gem 'jquery-ui-rails'
 gem 'devise'
 
 # bootstrap
-gem 'bootstrap-sass'
+gem 'bootstrap', '~> 4.0.0'
 
 # File Uploader
 gem 'carrierwave'
@@ -47,6 +47,11 @@ gem 'omniauth-line'
 gem 'omniauth-google-oauth2'
 
 gem "paranoia", "~> 2.2"
+
+# for Heroku loging
+gem 'rails_12factor', group: :production
+
+gem 'enum_help'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -64,6 +69,7 @@ group :test do
   gem 'simplecov'
   gem 'codecov'
   gem 'shoulda-matchers', '~> 3.1'
+  gem 'rails-controller-testing'
 end
 
 group :development do

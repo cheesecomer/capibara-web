@@ -1,0 +1,24 @@
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <%= content_tag :h5, @user.nickname %>
+      <h5 class="modal-title"></h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <%= image_tag @user.icon_url, style: "width: 80%; border-radius: 50%; border: 9px solid #58CE91; margin-bottom: 50px;", class: %[mx-auto d-block] if @user.icon_url.present? %>
+      <%= content_tag :p, @user.biography %>
+      <%= form_for BanDevice.new, remote: true do |f| %>
+        <%= f.hidden_field :device_id, value: @user.last_device_id %>
+        <div class="form-group">
+          <button type="submit" class="btn btn-danger mx-auto" style="width: 100%">BAN</button>
+        </div>
+      <% end if @user.ban_device.nil? && @user.last_device_id.present? %>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+  </div>
+</div>
