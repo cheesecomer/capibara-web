@@ -1,0 +1,32 @@
+<% provide(:container_append_class, [:white]) %>
+<%#= link_to 'Add', new_room_path, remote: true, class: %[btn btn-primary], style: 'width: 120px; margin-bottom: 50px;' %>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nickname</th>
+      <th scope="col">Provider</th>
+      <th scope="col">UUID</th>
+      <th scope="col">Last Sign In At</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @users.each.with_index(1) do |user, index| %>
+    <tr>
+      <%= content_tag :th, index, scope: 'row' %>
+      <%= content_tag :td do %>
+        <%= link_to user.nickname, user, remote: true %>
+      <% end %>
+      <%= content_tag :td, user.oauth_provider %>
+      <%= content_tag :td, user.last_device_id %>
+      <%= content_tag :td, user.last_sign_in_at&.to_s(:long) %>
+      <td>
+        <%= link_to 'Delete', user, method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: %[btn btn-danger], style: 'width: 120px' %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div id="user-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

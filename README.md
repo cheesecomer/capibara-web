@@ -1,5 +1,8 @@
 # README
 
+[![Build Status](https://travis-ci.org/cheesecomer/capibara-web.svg?branch=develop)](https://travis-ci.org/cheesecomer/capibara-web)
+[![codecov](https://codecov.io/gh/cheesecomer/capibara-web/branch/develop/graph/badge.svg)](https://codecov.io/gh/cheesecomer/capibara-web)
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 

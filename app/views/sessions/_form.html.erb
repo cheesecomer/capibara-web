@@ -1,0 +1,31 @@
+<% provide(:title, 'ログイン') %>
+<div class="balloon">
+  <% content_for :flash do %>
+    <% if notice.present? %>
+      <div class="alert alert-info" role="alert" ><%= notice %></div>
+    <% end %>
+    <% if alert.present? %>
+      <div class="alert alert-danger" role="alert" ><%= alert %></div>
+    <% end %>
+  <% end %>
+  <%= yield :flash %>
+  <%= form_for(resource, url: session_path) do |f| %>
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+        <%= f.text_field :email, autofocus: true, placeholder: "email", style: 'width: 100%', class: :"form-control" %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="input-group">
+        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+        <%= f.password_field :password, autocomplete: "off", placeholder: "password", style: 'width: 100%', class: :"form-control" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <!-- Button -->
+      <%= f.submit "Sign in.", class: "btn btn-lg btn-primary btn-block" %>
+    </div>
+  <% end %>
+</div>

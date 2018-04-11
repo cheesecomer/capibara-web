@@ -1,0 +1,52 @@
+<div class="panel-heading">
+<div class="panel-title text-center">
+  <h1 class="title">Capibara</h1>
+</div>
+</div>
+
+<div class="balloon">
+<% content_for :flash do %>
+  <% if resource.errors.present? %>
+    <div class="alert alert-danger" role="alert" >
+    <% resource.errors.full_messages.each do |message| %>
+      <p><%= message %></p>
+    <% end %>
+    </div>
+  <% end %>
+<% end %>
+<%= yield :flash %>
+<%= form_for(resource) do |f| %>
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+      <%= f.text_field :nickname, autofocus: true, placeholder: "ニックネーム", style: 'width: 100%', class: :"form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+      <%= f.text_field :email, autofocus: true, placeholder: "Eメールアドレス", style: 'width: 100%', class: :"form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+      <%= f.password_field :password, autocomplete: "off", placeholder: "パスワード", style: 'width: 100%', class: :"form-control" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+      <%= f.password_field :password_confirmation, autocomplete: "off", placeholder: "パスワード(確認)", style: 'width: 100%', class: :"form-control" %>
+    </div>
+  </div>
+  <div class="form-group">
+    <!-- Button -->
+    <%= f.submit "Sign up.", class: "btn btn-lg btn-primary btn-block" %>
+  </div>
+<% end %>
+<div class="text-warning">パスワードは忘れないでください</div>
+</div>

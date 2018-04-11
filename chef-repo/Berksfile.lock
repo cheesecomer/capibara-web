@@ -2,12 +2,17 @@ DEPENDENCIES
   capibara
     path: site-cookbooks/capibara
   git
+  imagemagick
   mariadb
   nginx
   rbenv
     path: site-cookbooks/rbenv
+  redisio
+    git: https://github.com/brianbianco/redisio.git
+    revision: 5ccfdff183ae00ce9b71498ac3c1ae948fbc4057
   ruby_rbenv
-  unicorn
+  selinux-policy
+    path: site-cookbooks/selinux-policy
 
 GRAPH
   apt (6.1.4)
@@ -21,6 +26,7 @@ GRAPH
     build-essential (>= 0.0.0)
     homebrew (>= 0.0.0)
   homebrew (4.2.0)
+  imagemagick (0.2.3)
   inifile_chef_gem (0.1.0)
     build-essential (>= 0.0.0)
   mariadb (1.5.2)
@@ -41,13 +47,17 @@ GRAPH
   ohai (5.2.0)
   rbenv (0.1.0)
     ruby_rbenv (~> 2.0.4)
+  redisio (2.6.1)
+    build-essential (>= 0.0.0)
+    selinux_policy (>= 0.0.0)
+    ulimit (>= 0.1.2)
   ruby_rbenv (2.0.5)
+  selinux-policy (0.1.0)
   selinux_policy (2.0.1)
     compat_resource (>= 12.16.3)
   seven_zip (2.0.2)
     windows (>= 1.2.2)
-  unicorn (2.1.2)
-    build-essential (>= 0.0.0)
+  ulimit (0.4.0)
   windows (3.2.0)
     ohai (>= 4.0.0)
   yum (5.0.1)

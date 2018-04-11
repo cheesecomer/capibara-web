@@ -23,3 +23,10 @@
 .byebug_history
 
 .vagrant
+
+/coverage
+
+/public/assets/
+/public/uploads/
+
+.DS_Store

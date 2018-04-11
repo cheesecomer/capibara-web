@@ -5,3 +5,10 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+seed_script = Rails.root.join( 'db', 'seeds', "#{Rails.env.downcase}.rb")
+if seed_script.exist?
+  ActiveRecord::Base.transaction { load(seed_script) }
+else
+  puts 'Seed script file is not exist'
+end

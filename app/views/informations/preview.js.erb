@@ -1,0 +1,8 @@
+var childWindow = window.open('about:blank')
+childWindow.document.write("<html></html>");
+childWindow.document.close();
+
+childWindow.history.replaceState(null, null, "<%= preview_informations_url %>");
+
+childWindow.document.write("<%= j @html %>")
+childWindow.document.close();

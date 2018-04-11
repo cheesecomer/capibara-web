@@ -27,6 +27,13 @@ end
 
 user = node[:capibara][:application_user]
 ruby = node[:capibara][:application_ruby_version]
+rbenv_script "chown /home/#{user}/.rbenv/" do
+  rbenv_version ruby
+  user          'root'
+  group         'root'
+  code          "chown -R #{user} /home/#{user}/.rbenv/"
+end
+
 rbenv_script "bundle install" do
   rbenv_version ruby
   user          user

@@ -14,5 +14,17 @@ module Capibara
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+    config.active_record.default_timezone = :local
+    config.time_zone = 'Tokyo'
+
+    config.i18n.default_locale = :ja
+
+    config.application_versions = {
+      'test': Gem::Version.new('1.0'),
+      'iOS': Gem::Version.new('1.0'),
+      'Android': Gem::Version.new('1.0')
+    }.with_indifferent_access
+
+    config.filter_parameters += ['password', 'icon']
   end
 end
