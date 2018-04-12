@@ -53,7 +53,7 @@ class User < ApplicationRecord
 
   attr_accessor :is_api_request
 
-  mount_base64_uploader :icon, ImageUploader
+  mount_base64_uploader :icon, IconUploader
 
   enum oauth_provider: {
     twitter: 1,

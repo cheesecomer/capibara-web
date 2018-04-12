@@ -21,6 +21,7 @@ class ChatChannel < ApplicationCable::Channel
     data.deep_symbolize_keys!
     Message.create! \
       content: data[:message],
+      image: data[:image],
       sender: connection.current_user,
       room_id: params[:room_id]
   end
