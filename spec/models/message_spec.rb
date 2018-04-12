@@ -8,6 +8,7 @@
 #  room_id    :integer
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  image      :string(255)
 #
 
 require 'rails_helper'
@@ -19,6 +20,9 @@ RSpec.describe Message, type: :model do
   end
   describe '#content' do
     it { is_expected.to validate_presence_of(:content) }
+  end
+  describe '#image' do
+    it { is_expected.to validate_presence_of(:image) }
   end
   describe '#sender' do
     it { is_expected.to validate_presence_of(:sender) }
@@ -45,6 +49,7 @@ RSpec.describe Message, type: :model do
           {
             id: message.id,
             content: message.content,
+            image: message.image_url,
             sender: {
               id: message.sender.id,
               nickname: message.sender.nickname,
