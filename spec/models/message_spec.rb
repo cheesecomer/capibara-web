@@ -49,7 +49,8 @@ RSpec.describe Message, type: :model do
           {
             id: message.id,
             content: message.content,
-            image: message.image_url,
+            image_url: nil,
+            image_thumb_url: nil,
             sender: {
               id: message.sender.id,
               nickname: message.sender.nickname,

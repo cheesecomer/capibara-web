@@ -29,7 +29,8 @@ class Message < ApplicationRecord
     {
       id: self.id,
       content: self.content,
-      image: self.image_url,
+      image_url: self.image_url,
+      image_thumb_url: self.image_url(:thumb),
       sender: {
         id: self.sender.id,
         nickname: self.sender.nickname,
