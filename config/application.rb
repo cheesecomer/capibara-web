@@ -24,5 +24,7 @@ module Capibara
       'iOS': Gem::Version.new('1.0'),
       'Android': Gem::Version.new('1.0')
     }.with_indifferent_access
+
+    ActionCable.server.config.logger = Logger.new(nil)
   end
 end
