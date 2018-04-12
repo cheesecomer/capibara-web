@@ -20,6 +20,12 @@ class ImageUploader < CarrierWave::Uploader::Base
     "#{secure_token}.#{file.extension}" if original_filename.present?
   end
 
+  process resize_to_fit: [1000, 1000]
+
+  version :thumb do
+    process :resize_to_limit => [20, 20]
+  end
+
   protected
   def secure_token
     var = :"@#{mounted_as}_secure_token"
