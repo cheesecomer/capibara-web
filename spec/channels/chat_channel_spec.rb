@@ -25,9 +25,10 @@ RSpec.describe ChatChannel, type: :channel do
       let(:number_of_participants) { 0 }
       it do
         allow(ChatChannel).to receive(:connected_users_count).with(room).and_return(0)
+        allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
         expect(channel).to receive(:stream_for).with(room)
         expect(channel).to receive(:stream_for).with([room, connection.current_user])
-        expect(ChatChannel).to receive(:broadcast_to).with(room, join_user_message)
+        expect(ChatChannel).to receive(:broadcast_to).with([room, user], join_user_message)
         channel.subscribed
       end
     end
@@ -35,15 +36,17 @@ RSpec.describe ChatChannel, type: :channel do
       let(:number_of_participants) { 9 }
       it do
         allow(ChatChannel).to receive(:connected_users_count).with(room).and_return(9)
+        allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
         expect(channel).to receive(:stream_for).with(room)
         expect(channel).to receive(:stream_for).with([room, connection.current_user])
-        expect(ChatChannel).to receive(:broadcast_to).with(room, join_user_message)
+        expect(ChatChannel).to receive(:broadcast_to).with([room, user], join_user_message)
         channel.subscribed
       end
     end
     context 'when crowded' do
       it do
         allow(ChatChannel).to receive(:connected_users_count).with(room).and_return(10)
+        allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
         expect(channel).to receive(:reject_subscription)
         expect(channel).not_to receive(:stream_for)
         expect(ChatChannel).not_to receive(:broadcast_to)
@@ -68,7 +71,8 @@ RSpec.describe ChatChannel, type: :channel do
       }
     end
     it do
-      expect(ChatChannel).to receive(:broadcast_to).with(room, leave_user_message)
+      allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
+      expect(ChatChannel).to receive(:broadcast_to).with([room, user], leave_user_message)
       channel.unsubscribed
     end
   end

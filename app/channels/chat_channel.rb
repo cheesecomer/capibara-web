@@ -8,12 +8,12 @@ class ChatChannel < ApplicationCable::Channel
     end
     stream_for room
     stream_for [room, connection.current_user]
-    ChatChannel.broadcast_to room, join_user_message
+    ChatChannel.broadcast room, connection.current_user, join_user_message
   end
 
   def unsubscribed
     room = Room.find params[:room_id]
-    ChatChannel.broadcast_to room, leave_user_message
+    ChatChannel.broadcast room, connection.current_user, leave_user_message
     stop_all_streams
   end
 
@@ -58,5 +58,16 @@ class ChatChannel < ApplicationCable::Channel
 
   def leave_user_message
     join_state_message :leave_user
+  end
+
+  def self.broadcast(room, sender, message)
+    users = ChatChannel.connected_users(room).map{|v| v };
+    block_user_ids = []
+    block_user_ids += Block.where(owner: sender, target: users).map{|v| v.target_id }
+    block_user_ids += Block.where(owner: users, target: sender).map{|v| v.owner_id }
+    users.select {|v| !block_user_ids.include?(v.id)}
+      .each do |user|
+        ChatChannel.broadcast_to [room, user], message
+      end
   end
 end
