@@ -3,7 +3,7 @@ json.set! :name, @room.name
 json.set! :capacity, @room.capacity
 json.set! :number_of_participants, ChatChannel.connected_users_count(@room)
 json.set! :participants do
-  json.array! ChatChannel.connected_users(@room) do |user|
+  json.array! ChatChannel.connected_users(@room).where.not(id: Block.where(target: current_user).pluck(:owner_id) + Block.where(owner: current_user).pluck(:target_id)) do |user|
     json.set! :id, user.id
     json.set! :nickname, user.nickname
     json.set! :icon_url, user.icon_url
