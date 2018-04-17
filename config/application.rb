@@ -25,6 +25,6 @@ module Capibara
       'Android': Gem::Version.new('1.0')
     }.with_indifferent_access
 
-    config.filter_parameters += ['password', 'icon']
+    ActionCable.server.config.logger = Logger.new(nil)
   end
 end

@@ -1,4 +1,4 @@
-class ImageUploader < CarrierWave::Uploader::Base
+class IconUploader < CarrierWave::Uploader::Base
 
   # Include RMagick
   include CarrierWave::RMagick
@@ -20,15 +20,17 @@ class ImageUploader < CarrierWave::Uploader::Base
     "#{secure_token}.#{file.extension}" if original_filename.present?
   end
 
-  process resize_to_fit: [1000, 1000]
-
-  version :thumb do
-    process :resize_to_limit => [20, 20]
-  end
-
   protected
   def secure_token
     var = :"@#{mounted_as}_secure_token"
     model.instance_variable_get(var) or model.instance_variable_set(var, SecureRandom.uuid)
+  end
+
+  # Process files as they are uploaded:
+  process resize_to_fit: [500, 500]
+
+  # Create different versions of your uploaded files:
+  version :thumb do
+    process resize_to_fit: [100, 100]
   end
 end

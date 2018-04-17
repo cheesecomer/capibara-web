@@ -32,7 +32,7 @@ module ApplicationCable
         .map { |v| v[:identifier] }
         .uniq
 
-      access_tokens.size
+      User.where(access_token: access_tokens).count
     end
 
     protected
