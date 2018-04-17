@@ -43,9 +43,20 @@ RSpec.describe ChatChannel, type: :channel do
         channel.subscribed
       end
     end
-    context 'when crowded' do
+    context 'whne full' do
+      let(:number_of_participants) { 10 }
       it do
         allow(ChatChannel).to receive(:connected_users_count).with(room).and_return(10)
+        allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
+        expect(channel).to receive(:stream_for).with(room)
+        expect(channel).to receive(:stream_for).with([room, connection.current_user])
+        expect(ChatChannel).to receive(:broadcast_to).with([room, user], join_user_message)
+        channel.subscribed
+      end
+    end
+    context 'when crowded' do
+      it do
+        allow(ChatChannel).to receive(:connected_users_count).with(room).and_return(11)
         allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
         expect(channel).to receive(:reject_subscription)
         expect(channel).not_to receive(:stream_for)
