@@ -40,6 +40,8 @@ class User < ApplicationRecord
 
   has_many :reports, foreign_key: :sender_id
 
+  has_many :follows, foreign_key: :owner_id
+
   belongs_to :ban_device, foreign_key: :last_device_id, primary_key: :device_id, optional: true
 
   # Include default devise modules. Others available are:
