@@ -13,4 +13,18 @@
 class DirectMessage < ApplicationRecord
   belongs_to :addressee, class_name: 'User'
   belongs_to :sender, class_name: 'User'
+
+  def to_broadcast_hash
+    {
+      id: self.id,
+      content: self.content,
+      sender: {
+        id: self.sender.id,
+        nickname: self.sender.nickname,
+        icon_url: self.sender.icon_url,
+        icon_thumb_url: self.sender.icon_url(:thumb)
+      },
+      at: self.created_at
+    }
+  end
 end
