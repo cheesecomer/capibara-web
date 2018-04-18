@@ -58,14 +58,21 @@ RSpec.describe 'Users', type: :request do
       let(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), is_block: false }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), is_block: false, follow: nil }
     end
     context 'when is block' do
       let(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       let!(:block) { FactoryBot.create(:block, owner: signin_user, target: user) }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), is_block: true }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), is_block: true, follow: nil }
+    end
+    context 'when is follow' do
+      let(:signin_user) { FactoryBot.create(:user) }
+      let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
+      let!(:follow) { FactoryBot.create(:follow, owner: signin_user, target: user) }
+      it { is_expected.to have_http_status :ok }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), is_block: false, follow: follow.id }
     end
     context 'when myself' do
       let(:signin_user) { user }
