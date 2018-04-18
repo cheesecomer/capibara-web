@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     resources :oauth, only: [], param: :provider do
       get 'callback', on: :member
     end
+    resources :follows, only: [:index, :create, :destroy]
   end
 
   root to: 'welcoms#show'
