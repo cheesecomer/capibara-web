@@ -41,6 +41,7 @@ class User < ApplicationRecord
   has_many :reports, foreign_key: :sender_id
 
   has_many :follows, foreign_key: :owner_id
+  has_many :follow_users, through: :follows, source: :target
 
   belongs_to :ban_device, foreign_key: :last_device_id, primary_key: :device_id, optional: true
 
