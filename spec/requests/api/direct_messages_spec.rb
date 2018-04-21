@@ -45,4 +45,49 @@ RSpec.describe 'Blocks', type: :request do
         }
     end
   end
+  describe 'GET /api/blocks' do
+    let(:target) { FactoryBot.create(:user) }
+    subject do
+      get api_direct_message_url(id: target.id), headers: request_header
+      response
+    end
+    let(:request_header) do
+      { 'content-type': 'application/json', accept: 'application/json', 'X-ApplicationVersion': '1.0', 'X-Platform': 'test' }.merge optional_header
+    end
+    context 'when unauthorized' do
+      let(:error_response) { { message: I18n.t('devise.failure.unauthenticated') } }
+      let(:optional_header) { {} }
+      it { is_expected.to have_http_status :unauthorized }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq error_response }
+    end
+    context 'when empty' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:optional_header) { { authorization: "Token #{user.access_token}" } }
+      it { is_expected.to have_http_status :ok }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq direct_messages:[] }
+    end
+    context 'when not empty' do
+      let(:user) { FactoryBot.create(:user) }
+      let!(:direct_messages) { (1..10).map{ [FactoryBot.create(:direct_message, sender: user, addressee: target), FactoryBot.create(:direct_message, sender: target, addressee: user)] }.flatten }
+      let(:optional_header) { { authorization: "Token #{user.access_token}" } }
+      it { is_expected.to have_http_status :ok }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq direct_messages:
+        direct_messages
+          .map {|v, i|
+            {
+              id: v.id,
+              content: v.content,
+              at: v.created_at.iso8601(3),
+              sender: {
+                id: v.sender.id,
+                nickname: v.sender.nickname,
+                icon_url: v.sender.icon_url,
+                icon_thumb_url: v.sender.icon_url(:thumb)
+              }
+            }
+          }
+          .reverse
+        }
+    end
+  end
 end
