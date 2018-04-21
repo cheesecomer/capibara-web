@@ -2,11 +2,12 @@
 #
 # Table name: follows
 #
-#  id         :integer          not null, primary key
-#  owner_id   :integer          not null
-#  target_id  :integer          not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                     :integer          not null, primary key
+#  owner_id               :integer          not null
+#  target_id              :integer          not null
+#  last_direct_message_id :integer
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
 #
 
 FactoryBot.define do
