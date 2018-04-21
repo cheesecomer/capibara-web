@@ -32,8 +32,17 @@ RSpec.describe 'Blocks', type: :request do
           .map { |v| v.last }
           .map.with_index {|v, i|
             {
-              content: v.content,
-              at: v.created_at.iso8601(3),
+              latest_direct_message: {
+                id: v.id,
+                content: v.content,
+                at: v.created_at.iso8601(3),
+                sender: {
+                  id: v.sender.id,
+                  nickname: v.sender.nickname,
+                  icon_url: v.sender.icon_url,
+                  icon_thumb_url: v.sender.icon_url(:thumb)
+                }
+              },
               user: {
                 id: follows[i].target.id,
                 nickname: follows[i].target.nickname,
