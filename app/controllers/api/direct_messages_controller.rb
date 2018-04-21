@@ -3,14 +3,15 @@ class Api::DirectMessagesController < Api::ApplicationController
     @direct_messages =
       DirectMessage.joins(:follows)
         .where(follows: { owner_id: current_user })
-        .order(created_at: :desc, id: :desc)
   end
 
   def show
     target = User.find(params[:id])
+    last_id = params[:last_id]&.to_i
     @direct_messages =
       DirectMessage.where(sender: current_user, addressee: target)
         .or(DirectMessage.where(sender: target, addressee: current_user))
-        .order(created_at: :desc, id: :desc)
+
+    @direct_messages = @direct_messages.where(id: -Float::INFINITY...last_id) if last_id.present?
   end
 end

@@ -47,8 +47,9 @@ RSpec.describe 'Blocks', type: :request do
   end
   describe 'GET /api/blocks' do
     let(:target) { FactoryBot.create(:user) }
+    let(:last_id) { nil }
     subject do
-      get api_direct_message_url(id: target.id), headers: request_header
+      get api_direct_message_url(id: target.id, last_id: last_id), headers: request_header
       response
     end
     let(:request_header) do
@@ -86,7 +87,53 @@ RSpec.describe 'Blocks', type: :request do
               }
             }
           }
-          .reverse
+        }
+    end
+    context 'when over 50 hasnt id' do
+      let(:user) { FactoryBot.create(:user) }
+      let!(:direct_messages) { (1..30).map{ [FactoryBot.create(:direct_message, sender: user, addressee: target), FactoryBot.create(:direct_message, sender: target, addressee: user)] }.flatten }
+      let(:optional_header) { { authorization: "Token #{user.access_token}" } }
+      it { is_expected.to have_http_status :ok }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq direct_messages:
+        direct_messages
+          .drop(10)
+          .map {|v, i|
+            {
+              id: v.id,
+              content: v.content,
+              at: v.created_at.iso8601(3),
+              sender: {
+                id: v.sender.id,
+                nickname: v.sender.nickname,
+                icon_url: v.sender.icon_url,
+                icon_thumb_url: v.sender.icon_url(:thumb)
+              }
+            }
+          }
+        }
+    end
+    context 'when over 50 has id' do
+      let(:last_id) { direct_messages[10].id }
+      let(:user) { FactoryBot.create(:user) }
+      let!(:direct_messages) { (1..30).map{ [FactoryBot.create(:direct_message, sender: user, addressee: target), FactoryBot.create(:direct_message, sender: target, addressee: user)] }.flatten }
+      let(:optional_header) { { authorization: "Token #{user.access_token}" } }
+      it { is_expected.to have_http_status :ok }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq direct_messages:
+        direct_messages
+          .take(10)
+          .map {|v, i|
+            {
+              id: v.id,
+              content: v.content,
+              at: v.created_at.iso8601(3),
+              sender: {
+                id: v.sender.id,
+                nickname: v.sender.nickname,
+                icon_url: v.sender.icon_url,
+                icon_thumb_url: v.sender.icon_url(:thumb)
+              }
+            }
+          }
         }
     end
   end
