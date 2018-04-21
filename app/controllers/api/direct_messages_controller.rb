@@ -1,6 +1,9 @@
 class Api::DirectMessagesController < Api::ApplicationController
   def index
-    @messages = DirectMessage.where(sender: user).or(DirectMessage.where(sender: user))
+    @direct_messages =
+      DirectMessage.joins(:follows)
+        .where(follows: { owner_id: current_user })
+        .order(created_at: :desc, id: :desc)
   end
 
   def show
