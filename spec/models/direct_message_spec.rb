@@ -17,6 +17,20 @@ RSpec.describe DirectMessage, type: :model do
     it { is_expected.to belong_to(:addressee) }
     it { is_expected.to belong_to(:sender) }
   end
+  describe "#after_create_commit" do
+    let(:own) { FactoryBot.create(:user) }
+    let(:other) { FactoryBot.create(:user) }
+    let!(:own_follow) { FactoryBot.create(:follow, owner: own, target: other)}
+    subject { FactoryBot.create(:direct_message, sender: own, addressee: other) }
+    context 'when onw only' do
+      it { expect { subject }.to change { own_follow.tap{|v| v.reload }.last_direct_message } }
+    end
+    context 'when follow for follow' do
+      let!(:other_follow) { FactoryBot.create(:follow, owner: other, target: own)}
+      it { expect { subject }.to change { own_follow.tap{|v| v.reload }.last_direct_message } }
+      it { expect { subject }.to change { other_follow.tap{|v| v.reload }.last_direct_message } }
+    end
+  end
   describe '#to_broadcast_hash' do
     let(:message) { FactoryBot.create(:direct_message) }
     subject { message.to_broadcast_hash }
