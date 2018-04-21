@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     resources :blocks, only: [:index, :create, :destroy]
     resources :reports, only: [:create]
     resources :inquiries, only: [:create]
+    resources :direct_messages, only: [:index, :show]
     resources :oauth, only: [], param: :provider do
       get 'callback', on: :member
     end
