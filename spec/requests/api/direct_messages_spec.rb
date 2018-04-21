@@ -19,7 +19,7 @@ RSpec.describe 'Blocks', type: :request do
       let(:user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq direct_messages:[] }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq threads:[] }
     end
     context 'when not empty' do
       let(:user) { FactoryBot.create(:user) }
@@ -27,14 +27,14 @@ RSpec.describe 'Blocks', type: :request do
       let!(:direct_messages) { follows.map{|v| FactoryBot.create_list(:direct_message, 10, sender: user, addressee: v.target).map{|v| v } + FactoryBot.create_list(:direct_message, 10, sender: v.target, addressee: user).map{|v| v } } }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq direct_messages:
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq threads:
         direct_messages
           .map { |v| v.last }
           .map.with_index {|v, i|
             {
               content: v.content,
               at: v.created_at.iso8601(3),
-              target: {
+              user: {
                 id: follows[i].target.id,
                 nickname: follows[i].target.nickname,
                 icon_thumb_url: follows[i].target.icon_url(:thumb)

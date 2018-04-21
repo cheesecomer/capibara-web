@@ -23,12 +23,12 @@ RSpec.describe DirectMessage, type: :model do
     let!(:own_follow) { FactoryBot.create(:follow, owner: own, target: other)}
     subject { FactoryBot.create(:direct_message, sender: own, addressee: other) }
     context 'when onw only' do
-      it { expect { subject }.to change { own_follow.tap{|v| v.reload }.last_direct_message } }
+      it { expect { subject }.to change { own_follow.tap{|v| v.reload }.latest_direct_message } }
     end
     context 'when follow for follow' do
       let!(:other_follow) { FactoryBot.create(:follow, owner: other, target: own)}
-      it { expect { subject }.to change { own_follow.tap{|v| v.reload }.last_direct_message } }
-      it { expect { subject }.to change { other_follow.tap{|v| v.reload }.last_direct_message } }
+      it { expect { subject }.to change { own_follow.tap{|v| v.reload }.latest_direct_message } }
+      it { expect { subject }.to change { other_follow.tap{|v| v.reload }.latest_direct_message } }
     end
   end
   describe '#to_broadcast_hash' do
