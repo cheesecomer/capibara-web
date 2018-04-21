@@ -16,5 +16,6 @@ RSpec.describe Follow, type: :model do
   describe "Associations" do
     it { is_expected.to belong_to(:owner) }
     it { is_expected.to belong_to(:target) }
+    it { is_expected.to belong_to(:last_direct_message) }
   end
 end

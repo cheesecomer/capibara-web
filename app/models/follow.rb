@@ -13,4 +13,5 @@
 class Follow < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :target, class_name: 'User'
+  belongs_to :last_direct_message, class_name: 'DirectMessage', optional: true
 end
