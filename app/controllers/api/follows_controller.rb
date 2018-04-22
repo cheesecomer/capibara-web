@@ -12,6 +12,7 @@ class Api::FollowsController < Api::ApplicationController
     follow = Follow.find params[:id]
     raise Forbidden if follow.owner != current_user
     follow.destroy!
+    head :no_content
   end
 
   def create_params
