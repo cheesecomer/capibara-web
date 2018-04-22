@@ -4,9 +4,8 @@ class Api::FollowsController < Api::ApplicationController
   end
 
   def create
-    Follow.create! create_params.merge(owner: current_user)
-    @follows = current_user.follows
-    render :index
+    @follow = Follow.create! create_params.merge(owner: current_user)
+    render :show
   end
 
   def destroy
