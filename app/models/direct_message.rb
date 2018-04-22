@@ -16,8 +16,8 @@ class DirectMessage < ApplicationRecord
   has_many :follows, foreign_key: :latest_direct_message_id
 
   after_create_commit {
-    Follow.where(owner_id: sender_id, target: addressee_id).take&.update(latest_direct_message: self)
-    Follow.where(owner_id: addressee_id, target: sender_id).take&.update(latest_direct_message: self)
+    Follow.where(owner: sender, target: addressee).take&.update(latest_direct_message: self)
+    Follow.where(owner: addressee, target: sender).take&.update(latest_direct_message: self)
   }
 
   def to_broadcast_hash

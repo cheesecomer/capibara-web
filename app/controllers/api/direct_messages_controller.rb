@@ -1,8 +1,9 @@
 class Api::DirectMessagesController < Api::ApplicationController
   def index
     @direct_messages =
-      DirectMessage.joins(:follows)
-        .where(follows: { owner_id: current_user })
+      DirectMessage.includes(:follows).references(:follows)
+        .where(follows: { owner: current_user })
+        .preload(:sender, follows: :target)
   end
 
   def show
