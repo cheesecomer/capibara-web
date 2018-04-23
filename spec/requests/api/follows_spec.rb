@@ -59,7 +59,7 @@ RSpec.describe 'Follows', type: :request do
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { is_expected.to have_http_status :ok }
       it { expect { subject }.to change { Follow.all.count }.by(1) }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq follows: (follows + [Follow.last]).map {|v| { id: v[:id], target: { id: v.target.id, nickname: v.target.nickname, icon_thumb_url: v.target.icon_url(:thumb) } } } }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq follow: { id: Follow.last.id, target: { id: Follow.last.target.id, nickname: Follow.last.target.nickname, icon_thumb_url: Follow.last.target.icon_url(:thumb) } } }
     end
   end
 
