@@ -22,7 +22,10 @@ RSpec.describe DirectMessageChannel, type: :channel do
 
   describe '#speak' do
     let(:data) { { message: FFaker::Lorem.sentence } }
-    it { expect { channel.speak(data) }.to change { DirectMessage.all.count }.by(1) }
+    it {
+      allow(DirectMessageChannel).to receive(:broadcast_to)
+      expect { channel.speak(data) }.to change { DirectMessage.all.count }.by(1)
+    }
 
     context 'whne follower' do
       let(:number_of_participants) { 10 }
