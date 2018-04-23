@@ -12,4 +12,7 @@
 class Block < ApplicationRecord
   belongs_to :owner, class_name: 'User'
   belongs_to :target, class_name: 'User'
+  after_create_commit {
+    Follow.where(owner: owner, target: target).destroy_all
+  }
 end

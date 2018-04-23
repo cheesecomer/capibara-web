@@ -16,4 +16,13 @@ RSpec.describe Block, type: :model do
     it { is_expected.to belong_to(:owner) }
     it { is_expected.to belong_to(:target) }
   end
+
+  describe '#after_create_commit' do
+    context 'When Follow' do
+      let(:user) { FactoryBot.create :user }
+      let(:target) { FactoryBot.create :user }
+      let!(:follow) { FactoryBot.create :follow, owner: user, target: target }
+      it { expect { Block.create(owner: user, target: target) }.to change { Follow.all.count }.by (-1) }
+    end
+  end
 end
