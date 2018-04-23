@@ -1,5 +1,5 @@
 json.set! :direct_messages do
-  json.array! @direct_messages.last(50) do |direct_message|
+  json.array! @direct_messages.includes(:sender).last(50) do |direct_message|
     json.set! :sender do
       json.set! :id, direct_message.sender.id
       json.set! :nickname, direct_message.sender.nickname
