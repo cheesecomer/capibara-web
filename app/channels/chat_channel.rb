@@ -19,11 +19,18 @@ class ChatChannel < ApplicationCable::Channel
 
   def speak(data)
     data.deep_symbolize_keys!
-    Message.create! \
+    message = Message.create!(
       content: data[:message],
       image: data[:image],
       sender: connection.current_user,
-      room_id: params[:room_id]
+      room_id: params[:room_id])
+    users = ChatChannel.connected_users(message.room).map{|v| v };
+    block_user_ids = []
+    block_user_ids += Block.where(owner: message.sender, target: users).map{|v| v.target_id }
+    block_user_ids += Block.where(owner: users, target: message.sender).map{|v| v.owner_id }
+    users.select {|v| !block_user_ids.include?(v.id)} .each do |user|
+        ChatChannel.broadcast_to [message.room, user], message.to_broadcast_hash
+    end
   end
 
   def self.connected_users(room)
