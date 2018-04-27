@@ -22,42 +22,36 @@ RSpec.describe ChatChannel, type: :channel do
       }
     end
     context 'whne empty' do
-      let(:number_of_participants) { 0 }
+      let(:number_of_participants) { 1 }
       it do
-        allow(ChatChannel).to receive(:connected_users_count).with(room).and_return(0)
-        allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
         expect(channel).to receive(:stream_for).with(room)
         expect(channel).to receive(:stream_for).with([room, connection.current_user])
-        expect(ChatChannel).to receive(:broadcast_to).with([room, user], join_user_message)
+        expect(ChatChannel).to receive(:broadcast_to).with([room, connection.current_user], join_user_message)
         channel.subscribed
       end
     end
     context 'whne soon crowded' do
-      let(:number_of_participants) { 9 }
+      let!(:participants) { FactoryBot.create_list(:participant, 9, room: room) }
+      let(:number_of_participants) { 10 }
       it do
-        allow(ChatChannel).to receive(:connected_users_count).with(room).and_return(9)
-        allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
         expect(channel).to receive(:stream_for).with(room)
         expect(channel).to receive(:stream_for).with([room, connection.current_user])
-        expect(ChatChannel).to receive(:broadcast_to).with([room, user], join_user_message)
+        expect(ChatChannel).to receive(:broadcast_to).with([room, anything], join_user_message).exactly(10).times
         channel.subscribed
       end
     end
     context 'whne full' do
-      let(:number_of_participants) { 10 }
+      let!(:participants) { FactoryBot.create_list(:participant, 10, room: room) }
       it do
-        allow(ChatChannel).to receive(:connected_users_count).with(room).and_return(10)
-        allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
-        expect(channel).to receive(:stream_for).with(room)
-        expect(channel).to receive(:stream_for).with([room, connection.current_user])
-        expect(ChatChannel).to receive(:broadcast_to).with([room, user], join_user_message)
+        expect(channel).to receive(:reject_subscription)
+        expect(channel).not_to receive(:stream_for)
+        expect(ChatChannel).not_to receive(:broadcast_to)
         channel.subscribed
       end
     end
     context 'when crowded' do
+      let!(:participants) { FactoryBot.create_list(:participant, 11, room: room) }
       it do
-        allow(ChatChannel).to receive(:connected_users_count).with(room).and_return(11)
-        allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
         expect(channel).to receive(:reject_subscription)
         expect(channel).not_to receive(:stream_for)
         expect(ChatChannel).not_to receive(:broadcast_to)
@@ -82,8 +76,7 @@ RSpec.describe ChatChannel, type: :channel do
       }
     end
     it do
-      allow(ChatChannel).to receive(:connected_users).with(room).and_return([user])
-      expect(ChatChannel).to receive(:broadcast_to).with([room, user], leave_user_message)
+      channel.subscribed
       channel.unsubscribed
     end
   end
@@ -92,79 +85,5 @@ RSpec.describe ChatChannel, type: :channel do
     subject { channel.speak(data) }
     let(:data) { { message: FFaker::Lorem.sentence } }
     it { expect { subject }.to change { Message.all.count }.by(1) }
-  end
-
-  describe '.connected_users' do
-    let!(:users) { FactoryBot.create_list :user, 10 }
-    subject { ChatChannel.connected_users(room) }
-    context 'when connected user nobody' do
-      it { is_expected.to be_empty }
-    end
-
-    context 'when connected user exists in other channels' do
-      let(:rooms) { FactoryBot.create_list :room, 10 }
-      before(:each) do
-        connections_statistics =
-          users.map do|user|
-            {
-              identifier: user.access_token,
-              subscriptions: [ { channel: ChatChannel.name, room_id: rooms.sample(1).sample.id }.to_json ]
-            }
-          end
-        allow(ActionCable.server).to receive(:open_connections_statistics).and_return(connections_statistics)
-      end
-      it { is_expected.to be_empty }
-    end
-
-    context 'when connected user exists in own channels' do
-      before(:each) do
-        connections_statistics =
-          users.map do|user|
-            {
-              identifier: user.access_token,
-              subscriptions: [ { channel: ChatChannel.name, room_id: room.id }.to_json ]
-            }
-          end
-        allow(ActionCable.server).to receive(:open_connections_statistics).and_return(connections_statistics)
-      end
-      it { is_expected.to eq users }
-    end
-  end
-
-  describe '.connected_users_count' do
-    let!(:users) { FactoryBot.create_list :user, 10 }
-    subject { ChatChannel.connected_users_count(room) }
-    context 'when connected user nobody' do
-      it { is_expected.to eq 0 }
-    end
-
-    context 'when connected user exists in other channels' do
-      let(:rooms) { FactoryBot.create_list :room, 10 }
-      before(:each) do
-        connections_statistics =
-          users.map do|user|
-            {
-              identifier: user.access_token,
-              subscriptions: [ { channel: ChatChannel.name, room_id: rooms.sample(1).sample.id }.to_json ]
-            }
-          end
-        allow(ActionCable.server).to receive(:open_connections_statistics).and_return(connections_statistics)
-      end
-      it { is_expected.to eq 0 }
-    end
-
-    context 'when connected user exists in own channels' do
-      before(:each) do
-        connections_statistics =
-          users.map do|user|
-            {
-              identifier: user.access_token,
-              subscriptions: [ { channel: ChatChannel.name, room_id: room.id }.to_json ]
-            }
-          end
-        allow(ActionCable.server).to receive(:open_connections_statistics).and_return(connections_statistics)
-      end
-      it { is_expected.to eq 10 }
-    end
   end
 end
