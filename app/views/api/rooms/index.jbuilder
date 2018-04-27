@@ -1,8 +1,8 @@
 json.set! :rooms do
-  json.array! @rooms do |room|
+  json.array! @rooms.includes(:users) do |room|
     json.set! :id, room.id
     json.set! :name, room.name
     json.set! :capacity, room.capacity
-    json.set! :number_of_participants, room.users.count
+    json.set! :number_of_participants, room.users.size
   end
 end
