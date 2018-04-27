@@ -4,7 +4,7 @@ class Api::SessionsController < Api::ApplicationController
 
   def show
     @user = current_user
-    @user.update_access_token!
+    # @user.update_access_token!
     render :create
   end
 
