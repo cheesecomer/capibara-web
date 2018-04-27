@@ -70,13 +70,15 @@ RSpec.describe ChatChannel, type: :channel do
         content: {
           type: :leave_user,
           user: connection.current_user.to_broadcast_hash,
-          number_of_participants: 0
+          number_of_participants: 1
         }.to_json,
         at: Time.zone.now
       }
     end
+    let!(:participant) { FactoryBot.create(:participant, user: connection.current_user, room: room) }
+    let!(:other_participant) { FactoryBot.create(:participant, room: room) }
     it do
-      channel.subscribed
+      expect(ChatChannel).to receive(:broadcast_to).with([room, anything], leave_user_message)
       channel.unsubscribed
     end
   end

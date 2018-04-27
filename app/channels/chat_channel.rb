@@ -14,7 +14,7 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    Participant.where(user: connection.current_user)
+    Participant.where(user: connection.current_user).destroy_all
     ChatChannel.broadcast Room.find(params[:room_id]), connection.current_user, leave_user_message
     stop_all_streams
   end
