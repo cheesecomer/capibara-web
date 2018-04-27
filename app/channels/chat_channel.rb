@@ -1,19 +1,21 @@
 class ChatChannel < ApplicationCable::Channel
   def subscribed
     room = Room.find params[:room_id]
-    connected_users_count = ChatChannel.connected_users_count room
-    if connected_users_count > room.capacity
+    connected_users_count = room.users.count
+    if connected_users_count >= room.capacity
       reject_subscription
       return
     end
+    Participant.where(user: connection.current_user).destroy_all
+    room.users << connection.current_user
     stream_for room
     stream_for [room, connection.current_user]
     ChatChannel.broadcast room, connection.current_user, join_user_message
   end
 
   def unsubscribed
-    room = Room.find params[:room_id]
-    ChatChannel.broadcast room, connection.current_user, leave_user_message
+    Participant.where(user: connection.current_user)
+    ChatChannel.broadcast Room.find(params[:room_id]), connection.current_user, leave_user_message
     stop_all_streams
   end
 
@@ -24,25 +26,12 @@ class ChatChannel < ApplicationCable::Channel
       image: data[:image],
       sender: connection.current_user,
       room_id: params[:room_id])
-    users = ChatChannel.connected_users(message.room).map{|v| v };
-    block_user_ids = []
-    block_user_ids += Block.where(owner: message.sender, target: users).map{|v| v.target_id }
-    block_user_ids += Block.where(owner: users, target: message.sender).map{|v| v.owner_id }
-    users.select {|v| !block_user_ids.include?(v.id)} .each do |user|
+    message.room.users
+      .where.not(id: Block.where(owner: message.sender).select(:target_id))
+      .where.not(id: Block.where(target: message.sender).select(:owner_id))
+      .each do |user|
         ChatChannel.broadcast_to [message.room, user], message.to_broadcast_hash
-    end
-  end
-
-  def self.connected_users(room)
-    ApplicationCable::Connection.connected_users do |h|
-      h[:channel] == ChatChannel.name && h[:room_id] == room.id
-    end
-  end
-
-  def self.connected_users_count(room)
-    ApplicationCable::Connection.connected_users_count do |h|
-      h[:channel] == ChatChannel.name && h[:room_id] == room.id
-    end
+      end
   end
 
   protected
@@ -53,7 +42,7 @@ class ChatChannel < ApplicationCable::Channel
       content: {
         type: type,
         user: connection.current_user.to_broadcast_hash,
-        number_of_participants: ChatChannel.connected_users_count(Room.find(params[:room_id]))
+        number_of_participants: Room.find(params[:room_id]).users.count
       }.to_json,
       at: Time.zone.now
     }
@@ -68,11 +57,9 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def self.broadcast(room, sender, message)
-    users = ChatChannel.connected_users(room).map{|v| v };
-    block_user_ids = []
-    block_user_ids += Block.where(owner: sender, target: users).map{|v| v.target_id }
-    block_user_ids += Block.where(owner: users, target: sender).map{|v| v.owner_id }
-    users.select {|v| !block_user_ids.include?(v.id)}
+    room.users
+      .where.not(id: Block.where(owner: sender).select(:target_id))
+      .where.not(id: Block.where(target: sender).select(:owner_id))
       .each do |user|
         ChatChannel.broadcast_to [room, user], message
       end
