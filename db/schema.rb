@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 20180427143058) do
     t.string "image"
   end
 
-  create_table "participants", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
+  create_table "participants", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.integer "room_id", null: false
     t.integer "user_id", null: false
   end
