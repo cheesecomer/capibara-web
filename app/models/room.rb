@@ -21,4 +21,8 @@ class Room < ApplicationRecord
   validates :priority, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
   has_many :messages, dependent: :destroy
+
+  has_many :participants
+
+  has_many :users, through: :participants
 end
