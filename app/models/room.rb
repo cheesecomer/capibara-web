@@ -23,6 +23,6 @@ class Room < ApplicationRecord
   has_many :messages, dependent: :destroy
 
   def participants
-    ActionCable.server.connections.select { |v| v.identifier == self.id }.map{|v| v.current_user }
+    ActionCable.server.connections.select { |v| v.group_identifier == self.id }.map{|v| v.current_user }
   end
 end
