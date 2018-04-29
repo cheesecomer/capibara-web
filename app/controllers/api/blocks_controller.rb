@@ -4,9 +4,8 @@ class Api::BlocksController < Api::ApplicationController
   end
 
   def create
-    Block.create! create_params.merge(owner: current_user)
-    @blocks = Block.where(owner: current_user)
-    render :index
+    block = Block.create! create_params.merge(owner: current_user)
+    render :show
   end
 
   def destroy
