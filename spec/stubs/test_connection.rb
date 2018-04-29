@@ -1,6 +1,6 @@
 class TestConnection
   attr_reader :identifiers, :logger, :access_token, :current_user, :server, :transmissions
-
+  attr_accessor :group_identifier
   delegate :pubsub, to: :server
 
   def initialize(user, coder: ActiveSupport::JSON, subscription_adapter: SuccessAdapter)

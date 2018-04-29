@@ -4,35 +4,11 @@ module ApplicationCable
 
     attr_reader :current_user
 
+    attr_accessor :group_identifier
+
     def connect
       @current_user = find_verified_user
       self.access_token = @current_user.access_token
-    end
-
-    def self.connected_users(&block)
-      access_tokens =
-        ActionCable \
-        .server
-        .open_connections_statistics
-        .map(&:with_indifferent_access)
-        .select { |v| select_subscriptions(v[:subscriptions], &block) }
-        .map { |v| v[:identifier] }
-        .uniq
-
-      User.where access_token: access_tokens
-    end
-
-    def self.connected_users_count(&block)
-      access_tokens =
-        ActionCable \
-        .server
-        .open_connections_statistics
-        .map(&:with_indifferent_access)
-        .select { |v| select_subscriptions(v[:subscriptions], &block) }
-        .map { |v| v[:identifier] }
-        .uniq
-
-      User.where(access_token: access_tokens).count
     end
 
     protected
