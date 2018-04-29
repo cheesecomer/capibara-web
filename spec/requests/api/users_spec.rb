@@ -58,21 +58,28 @@ RSpec.describe 'Users', type: :request do
       let(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), is_block: false, follow: nil }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), block: nil, follow: nil, is_follower: false }
     end
     context 'when is block' do
       let(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       let!(:block) { FactoryBot.create(:block, owner: signin_user, target: user) }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), is_block: true, follow: nil }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), block: block.id, follow: nil, is_follower: false }
     end
     context 'when is follow' do
       let(:signin_user) { FactoryBot.create(:user) }
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       let!(:follow) { FactoryBot.create(:follow, owner: signin_user, target: user) }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), is_block: false, follow: follow.id }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), block: nil, follow: follow.id, is_follower: false }
+    end
+    context 'when is follower' do
+      let(:signin_user) { FactoryBot.create(:user) }
+      let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
+      let!(:follow) { FactoryBot.create(:follow, owner: user, target: signin_user) }
+      it { is_expected.to have_http_status :ok }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), block: nil, follow: nil, is_follower: true }
     end
     context 'when myself' do
       let(:signin_user) { user }
