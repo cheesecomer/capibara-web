@@ -6,6 +6,8 @@ class ChatChannel < ApplicationCable::Channel
       reject_subscription
       return
     end
+
+    connection.group_identifier = params[:room_id]
     Participant.where(user: connection.current_user).destroy_all
     room.users << connection.current_user
     stream_for room
