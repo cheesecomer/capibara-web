@@ -1,6 +1,11 @@
 class ChatChannel < ApplicationCable::Channel
   def subscribed
     room = Room.find params[:room_id]
+    ActionCable.server.connections
+      .select { |v| v.group_identifier == room.id }
+      .select { |v| v.current_user.id == connection.current_user.id }
+      .select { |v| v != connection }
+      .each { |v| v.disconnect }
     connected_users_count = room.participants.count
     if connected_users_count >= room.capacity
       reject_subscription
