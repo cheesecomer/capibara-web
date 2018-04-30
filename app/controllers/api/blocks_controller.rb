@@ -4,7 +4,7 @@ class Api::BlocksController < Api::ApplicationController
   end
 
   def create
-    block = Block.create! create_params.merge(owner: current_user)
+    @block = Block.create! create_params.merge(owner: current_user)
     render :show
   end
 
