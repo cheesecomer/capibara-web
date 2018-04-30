@@ -59,7 +59,7 @@ RSpec.describe 'Blocks', type: :request do
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { is_expected.to have_http_status :ok }
       it { expect { subject }.to change { Block.all.count }.by(1) }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq blocks: (blocks + [Block.last]).map {|v| { id: v[:id], target: { id: v.target.id, nickname: v.target.nickname } } } }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: Block.last.id, target: { id: Block.last.target.id, nickname: Block.last.target.nickname } }
     end
   end
 
