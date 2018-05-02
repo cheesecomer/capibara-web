@@ -11,7 +11,7 @@ ARG BUILD_PACKAGES="build-base make python git bash curl findutils binutils-gold
 ARG LIBV8_BRANCH="v3.16.14.19"
 ARG LIBV8_VERSION="3.16.14.19-x86_64-linux"
 ARG LIBV8_DEPENDS="3.16.14.19-x86_64-linux"
-ARG BUNDLE_INSTALL_OPTION
+ARG BUNDLE_INSTALL_OPTION="--without development test"
 
 RUN echo 'install: --no-document' >> ~/.gemrc && \
     echo 'update: --no-document' >> ~/.gemrc  && \
