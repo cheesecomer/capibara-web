@@ -61,6 +61,11 @@ services:
       REDIS_URL: redis://redis:6379
     volumes:
       - .:/var/capibara
+      - ~/.cache/bundle:/usr/local/bundle
+    links:
+      - redis
+    volumes_from:
+      - mysql
 
 ### Networks Setup ##########################################
 
