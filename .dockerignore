@@ -1,0 +1,14 @@
+.git
+.vagrant
+coverage
+log
+tmp
+mysql
+nginx
+public/assets
+public/uploads
+.dockerignore
+.DS_Store
+.gitignore
+.travis.yml
+Vagrantfile

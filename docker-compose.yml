@@ -1,0 +1,57 @@
+version: '2'
+
+services:
+
+### MySql Container ###########################################
+  mysql:
+    build:
+      context: ./mysql
+    volumes:
+      - ~/.data/mysql:/var/lib/mysql
+
+### Redis Container ###########################################
+  redis:
+    image: redis:latest
+    networks:
+      - backend
+
+### APP Container ###########################################
+  app:
+    build:
+      context: .
+    environment:
+      TZ: Asia/Tokyo
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - .:/var/capibara
+    networks:
+      - backend
+    links:
+      - redis
+    volumes_from:
+      - mysql
+
+
+### NGINX Server Container ##################################
+  nginx:
+    build:
+      context: ./nginx
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - ./log:/var/log/nginx
+    ports:
+      - 80:80
+    volumes_from:
+      - app
+    networks:
+      - frontend
+      - backend
+
+### Networks Setup ##########################################
+
+networks:
+  frontend:
+    driver: "bridge"
+  backend:
+    driver: "bridge"
