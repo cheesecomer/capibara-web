@@ -52,6 +52,16 @@ services:
       - frontend
       - backend
 
+### Workspace Utilities #####################################
+  workspace:
+    build:
+      context: ./workspace
+    environment:
+      TZ: Asia/Tokyo
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - .:/var/capibara
+
 ### Networks Setup ##########################################
 
 networks:
