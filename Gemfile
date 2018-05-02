@@ -39,7 +39,7 @@ gem 'bootstrap', '~> 4.0.0'
 gem 'carrierwave'
 gem 'carrierwave-base64'
 gem 'rmagick'
-gem 'fog'
+gem 'fog-aws'
 
 gem 'omniauth'
 gem 'omniauth-twitter'
