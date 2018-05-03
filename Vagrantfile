@@ -16,29 +16,47 @@ Vagrant.configure('2') do |config|
   config.vm.box_download_insecure = true
   config.vm.network 'forwarded_port', guest: 80, host: 3000, auto_correct: true
   config.vm.synced_folder '.', '/vagrant/capibara', create: true, owner: 'vagrant', group: 'vagrant'
-  config.vm.provision "shell", inline: <<-SHELL
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
   if [ ! -e '/usr/bin/docker' ]; then
     echo '################################################################################'
     echo '#  Install Docker'
     echo '################################################################################'
+    echo ' '
+    echo ' '
+    echo ' '
     if [ ! -e '/etc/yum.repos.d/docker-ce.repo' ]; then
-      yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && yum makecache fast
+      sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && yum makecache fast
     fi
 
-    yum install -y yum-utils device-mapper-persistent-data lvm2
-    yum install -y docker-ce-18.03.0.ce-1.el7.centos
-
-    usermod -aG docker vagrant
-
-    systemctl enable docker
-    systemctl start docker
+    sudo yum install -y yum-utils device-mapper-persistent-data lvm2 && \
+    sudo yum install -y docker-ce-18.03.0.ce-1.el7.centos && \
+    sudo usermod -aG docker vagrant && \
+    sudo systemctl enable docker && \
+    sudo systemctl start docker
   fi
 
-  if [ ! -e '/usr/local/bin/docker-compose' ]; then
+  if [ ! -e '/usr/bin/docker-compose' ]; then
     echo '################################################################################'
     echo '#  Install Docker-Compose'
     echo '################################################################################'
-    curl -L https://github.com/docker/compose/releases/download/1.20.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+    echo ' '
+    echo ' '
+    echo ' '
+    sudo curl -L https://github.com/docker/compose/releases/download/1.20.1/docker-compose-`uname -s`-`uname -m` -s -o /usr/bin/docker-compose && \
+    sudo chmod +x /usr/bin/docker-compose
+  fi
+
+  if [ ! -e '/usr/bin/aws' ]; then
+    echo '################################################################################'
+    echo '#  Install AWS CLI'
+    echo '################################################################################'
+    echo ' '
+    echo ' '
+    echo ' '
+    curl https://bootstrap.pypa.io/get-pip.py -s -o get-pip.py && \
+    sudo python get-pip.py && \
+    suco pip install awscli && \
+    sudo rm get-pip.py
   fi
 SHELL
 end
