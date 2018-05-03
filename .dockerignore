@@ -5,6 +5,8 @@ log
 tmp
 mysql
 nginx
+deploy
+workspace
 public/assets
 public/uploads
 .dockerignore
