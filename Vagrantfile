@@ -58,5 +58,11 @@ Vagrant.configure('2') do |config|
     suco pip install awscli && \
     sudo rm get-pip.py
   fi
+
+  cd /vagrant/capibara
+  docker-compose --version
+  if [ $(docker-compose images |tail -n +3|wc -l) = 0 ]; then docker-compose build; fi
+  docker-compose images
+  docker-compose run workspace bundle install -j4
 SHELL
 end
