@@ -17,6 +17,10 @@ Vagrant.configure('2') do |config|
   config.vm.network 'forwarded_port', guest: 80, host: 3000, auto_correct: true
   config.vm.synced_folder '.', '/home/vagrant/capibara', create: true, owner: 'vagrant', group: 'vagrant'
   config.vm.provision "shell", inline: <<-SHELL
+    if [ ! -e '/usr/bin/git' ]; then
+      yum install -y git
+    fi
+
     if [ ! -e '/usr/bin/docker' ]; then
       echo '################################################################################'
       echo '#  Install Docker'
