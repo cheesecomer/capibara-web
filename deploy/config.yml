@@ -9,6 +9,7 @@ images:
       - lib/
       - public/
       - .dockerignore
+      - docker-entrypoint.sh
       - Dockerfile
       - Gemfile
       - Gemfile.lock
