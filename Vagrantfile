@@ -1,4 +1,4 @@
-# -*- mode: ruby -*-
+  # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
 # All Vagrant configuration is done below. The '2' in Vagrant.configure
@@ -15,7 +15,7 @@ Vagrant.configure('2') do |config|
   config.vm.box = "centos/7"
   config.vm.box_download_insecure = true
   config.vm.network 'forwarded_port', guest: 80, host: 3000, auto_correct: true
-  config.vm.synced_folder '.', '/vagrant/capibara', create: true, owner: 'vagrant', group: 'vagrant'
+  config.vm.synced_folder '.', '/home/vagrant/capibara', create: true, owner: 'vagrant', group: 'vagrant'
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
   if [ ! -e '/usr/bin/docker' ]; then
     echo '################################################################################'
@@ -55,7 +55,7 @@ Vagrant.configure('2') do |config|
     echo ' '
     curl https://bootstrap.pypa.io/get-pip.py -s -o get-pip.py && \
     sudo python get-pip.py && \
-    suco pip install awscli && \
+    sudo pip install awscli && \
     sudo rm get-pip.py
   fi
 
@@ -70,15 +70,15 @@ Vagrant.configure('2') do |config|
     sudo yum install -y rh-ruby24 rh-ruby24-ruby-devel rh-ruby24-rubygem-bundler && \
     sudo ln -s /opt/rh/rh-ruby24/enable /etc/profile.d/rh-ruby24.sh && \
     source /etc/profile.d/rh-ruby24.sh &&
-    cd /vagrant/capibara/deploy &&
+    cd /home/vagrant/capibara/deploy &&
     bundle install
     ruby -v
   fi
 
-  cd /vagrant/capibara
+  cd /home/vagrant/capibara
   docker-compose --version
-  if [ $(docker-compose images |tail -n +3|wc -l) = 0 ]; then docker-compose build; fi
-  docker-compose images
-  docker-compose run workspace bundle install -j4
+  if [ $(sudo docker-compose images |tail -n +3|wc -l) = 0 ]; then sudo docker-compose build; fi
+  sudo docker-compose images
+  sudo docker-compose run workspace bundle install -j4
 SHELL
 end
