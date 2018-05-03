@@ -59,6 +59,22 @@ Vagrant.configure('2') do |config|
     sudo rm get-pip.py
   fi
 
+  if [ ! -e '/opt/rh/rh-ruby24/root/usr/bin/ruby' ]; then
+    echo '################################################################################'
+    echo '#  Install Ruby 2.4'
+    echo '################################################################################'
+    echo ' '
+    echo ' '
+    echo ' '
+    sudo yum install -y centos-release-scl && \
+    sudo yum install -y rh-ruby24 rh-ruby24-ruby-devel rh-ruby24-rubygem-bundler && \
+    sudo ln -s /opt/rh/rh-ruby24/enable /etc/profile.d/rh-ruby24.sh && \
+    source /etc/profile.d/rh-ruby24.sh &&
+    cd /vagrant/capibara/deploy &&
+    bundle install
+    ruby -v
+  fi
+
   cd /vagrant/capibara
   docker-compose --version
   if [ $(docker-compose images |tail -n +3|wc -l) = 0 ]; then docker-compose build; fi
