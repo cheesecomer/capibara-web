@@ -7,7 +7,7 @@ services:
     build:
       context: ./mysql
     volumes:
-      - ~/.data/mysql:/var/lib/mysql
+      - /etc/docker/.data/mysql:/var/lib/mysql
 
 ### Redis Container ###########################################
   redis:
@@ -19,8 +19,6 @@ services:
   app:
     build:
       context: .
-      args:
-        - BUNDLE_INSTALL_OPTION=
     environment:
       TZ: Asia/Tokyo
       REDIS_URL: redis://redis:6379
@@ -61,7 +59,7 @@ services:
       REDIS_URL: redis://redis:6379
     volumes:
       - .:/var/capibara
-      - ~/.cache/bundle:/usr/local/bundle
+      - /etc/docker/.cache/bundle:/usr/local/bundle
     links:
       - redis
     volumes_from:
