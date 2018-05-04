@@ -13,7 +13,7 @@ class String
   end
 end
 
-config =  HashWithIndifferentAccess.new YAML.load_file('./deploy/config.yml')
+config =  HashWithIndifferentAccess.new YAML.load_file("#{__dir__}/config.yml")
 aws = 'aws --output json'
 
 current_commit = `git rev-parse HEAD`.chomp
