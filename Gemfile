@@ -38,8 +38,8 @@ gem 'bootstrap', '~> 4.0.0'
 # File Uploader
 gem 'carrierwave'
 gem 'carrierwave-base64'
+gem 'carrierwave-aws'
 gem 'rmagick'
-gem 'fog-aws'
 
 gem 'omniauth'
 gem 'omniauth-twitter'
