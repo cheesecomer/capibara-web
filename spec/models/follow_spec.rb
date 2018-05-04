@@ -2,7 +2,7 @@
 #
 # Table name: follows
 #
-#  id                       :integer          not null, primary key
+#  id                       :bigint(8)        not null, primary key
 #  owner_id                 :integer          not null
 #  target_id                :integer          not null
 #  latest_direct_message_id :integer

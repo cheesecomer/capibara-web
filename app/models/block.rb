@@ -2,7 +2,7 @@
 #
 # Table name: blocks
 #
-#  id         :integer          not null, primary key
+#  id         :bigint(8)        not null, primary key
 #  owner_id   :integer          not null
 #  target_id  :integer          not null
 #  created_at :datetime         not null

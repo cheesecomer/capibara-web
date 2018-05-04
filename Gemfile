@@ -20,7 +20,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'therubyracer', platforms: :ruby
+# gem 'therubyracer', platforms: :ruby
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
@@ -38,8 +38,8 @@ gem 'bootstrap', '~> 4.0.0'
 # File Uploader
 gem 'carrierwave'
 gem 'carrierwave-base64'
+gem 'carrierwave-aws'
 gem 'rmagick'
-gem 'fog'
 
 gem 'omniauth'
 gem 'omniauth-twitter'
@@ -49,7 +49,7 @@ gem 'omniauth-google-oauth2'
 gem "paranoia", "~> 2.2"
 
 # for Heroku loging
-gem 'rails_12factor', group: :production
+gem 'rails_12factor', group: :production if `echo $PLATFORM`.chomp.downcase == 'heroku'
 
 gem 'enum_help'
 

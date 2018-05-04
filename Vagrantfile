@@ -1,4 +1,4 @@
-# -*- mode: ruby -*-
+  # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
 # All Vagrant configuration is done below. The '2' in Vagrant.configure
@@ -14,86 +14,76 @@ Vagrant.configure('2') do |config|
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "centos/7"
   config.vm.box_download_insecure = true
-  config.vm.network 'forwarded_port', guest: 3000, host: 3000, auto_correct: true
-  config.vm.network :public_network
-  config.vm.synced_folder '.', '/vagrant/capibara', create: true, owner: 'vagrant', group: 'vagrant'
+  config.vm.network 'forwarded_port', guest: 80, host: 3000, auto_correct: true
+  config.vm.synced_folder '.', '/home/vagrant/capibara', create: true, owner: 'vagrant', group: 'vagrant'
+  config.vm.provision "shell", inline: <<-SHELL
+    if [ ! -e '/usr/bin/git' ]; then
+      yum install -y git
+    fi
 
-  config.omnibus.chef_version=:latest
-  config.berkshelf.berksfile_path = './chef-repo/Berksfile'
-  config.berkshelf.enabled = true
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = ['./chef-repo/cookbooks']
-    chef.json = {
-      nginx: {
-        repo_source: 'epel'
-      },
-      redisio: {
-        servers: [
-          { name: 'master', port: '6379', unixsocket: '/tmp/redis.sock', unixsocketperm: '755'},
-        ]
-      },
-      rbenv: {
-        user_installs: [
-          {
-            user: 'vagrant',
-            rubies: ['2.5.1'],
-            global: '2.5.1',
-            gems: {
-              '2.5.1' => [ { name: 'bundler' } ]
-            }
-          }
-        ]
-      },
-      mariadb: {
-        use_default_repository: true,
-        server_root_password: 'vagrant',
-        mysqld: {
-          options:{
-            :'collation-server' => 'utf8mb4_bin',
-            :'init-connect' => '\'SET NAMES utf8mb4\'',
-            :'character-set-server' => 'utf8mb4'
-          }
-        },
-      },
-      capibara: {
-        application_root: '/vagrant/capibara',
-        application_user: 'vagrant',
-        application_ruby_version: '2.4.2',
-        mariadb: {
-          databases: [
-            { name: 'capibara_development', encoding: 'utf8mb4' },
-            { name: 'capibara_test'       , encoding: 'utf8mb4' },
-          ],
-          users: [
-            {
-              name: 'capibara_dev',
-              password: 'password',
-              grants: [
-                { host: 'localhost', database: 'capibara_development', privileges: [ :all ] }
-              ]
-            },
-            {
-              name: 'capibara_test',
-              password: 'password',
-              grants: [
-                { host: 'localhost', database: 'capibara_test', privileges: [ :all ] }
-              ]
-            },
-          ],
-        }
-      }
-    }
-    chef.run_list = [
-      'selinux-policy::upgrade',
-      'git',
-      'nginx',
-      'rbenv',
-      'redisio',
-      'redisio::enable',
-      'imagemagick::rmagick',
-      'mariadb::server',
-      'mariadb::client',
-      'capibara'
-    ]
-  end
+    if [ ! -e '/usr/bin/docker' ]; then
+      echo '################################################################################'
+      echo '#  Install Docker'
+      echo '################################################################################'
+      echo ' '
+      echo ' '
+      echo ' '
+      if [ ! -e '/etc/yum.repos.d/docker-ce.repo' ]; then
+        yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo && yum makecache fast
+      fi
+
+      yum install -y yum-utils device-mapper-persistent-data lvm2 && \
+      yum install -y docker-ce-18.03.0.ce-1.el7.centos && \
+      usermod -aG docker vagrant && \
+      systemctl enable docker && \
+      systemctl start docker
+    fi
+
+    if [ ! -e '/usr/bin/docker-compose' ]; then
+      echo '################################################################################'
+      echo '#  Install Docker-Compose'
+      echo '################################################################################'
+      echo ' '
+      echo ' '
+      echo ' '
+      curl -L https://github.com/docker/compose/releases/download/1.20.1/docker-compose-`uname -s`-`uname -m` -s -o /usr/bin/docker-compose && \
+      chmod +x /usr/bin/docker-compose
+    fi
+
+    if [ ! -e '/usr/bin/aws' ]; then
+      echo '################################################################################'
+      echo '#  Install AWS CLI'
+      echo '################################################################################'
+      echo ' '
+      echo ' '
+      echo ' '
+      curl https://bootstrap.pypa.io/get-pip.py -s -o get-pip.py && \
+      python get-pip.py && \
+      pip install awscli && \
+      rm get-pip.py
+    fi
+
+    if [ ! -e '/opt/rh/rh-ruby24/root/usr/bin/ruby' ]; then
+      echo '################################################################################'
+      echo '#  Install Ruby 2.4'
+      echo '################################################################################'
+      echo ' '
+      echo ' '
+      echo ' '
+      yum install -y centos-release-scl && \
+      yum install -y rh-ruby24 rh-ruby24-ruby-devel rh-ruby24-rubygem-bundler && \
+      ln -s /opt/rh/rh-ruby24/enable /etc/profile.d/rh-ruby24.sh && \
+      source /etc/profile.d/rh-ruby24.sh &&
+      cd /home/vagrant/capibara/deploy &&
+      bundle install
+      ruby -v
+    fi
+
+    cd /home/vagrant/capibara
+    docker-compose --version
+    if [ $(docker-compose images |tail -n +3|wc -l) = 0 ]; then docker-compose build; fi
+    docker-compose images
+    docker-compose run workspace bundle install -j4
+
+SHELL
 end

@@ -1,0 +1,76 @@
+version: '2'
+
+services:
+
+### MySql Container ###########################################
+  mysql:
+    build:
+      context: ./mysql
+    volumes:
+      - /etc/docker/.data/mysql:/var/lib/mysql
+
+### Redis Container ###########################################
+  redis:
+    image: redis:latest
+    networks:
+      - backend
+
+### APP Container ###########################################
+  app:
+    build:
+      context: .
+      args:
+        - BUNDLE_INSTALL_OPTION=''
+    environment:
+      TZ: Asia/Tokyo
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - .:/var/capibara
+    networks:
+      - backend
+    links:
+      - redis
+    volumes_from:
+      - mysql
+
+
+### NGINX Server Container ##################################
+  nginx:
+    build:
+      context: ./nginx
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - ./log:/var/log/nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/capibara.conf:/etc/nginx/sites-available/capibara.conf
+    ports:
+      - 80:80
+    volumes_from:
+      - app
+    networks:
+      - frontend
+      - backend
+
+### Workspace Utilities #####################################
+  workspace:
+    build:
+      context: ./workspace
+    environment:
+      TZ: Asia/Tokyo
+      REDIS_URL: redis://redis:6379
+    volumes:
+      - .:/var/capibara
+      - /etc/docker/.cache/bundle:/usr/local/bundle
+    links:
+      - redis
+    volumes_from:
+      - mysql
+
+### Networks Setup ##########################################
+
+networks:
+  frontend:
+    driver: "bridge"
+  backend:
+    driver: "bridge"

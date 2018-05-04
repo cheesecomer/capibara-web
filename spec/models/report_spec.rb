@@ -2,7 +2,7 @@
 #
 # Table name: reports
 #
-#  id         :integer          not null, primary key
+#  id         :bigint(8)        not null, primary key
 #  sender_id  :integer          not null
 #  target_id  :integer          not null
 #  reason     :integer          not null
