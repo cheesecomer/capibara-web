@@ -3,6 +3,7 @@ class Api::DirectMessagesController < Api::ApplicationController
     @direct_messages =
     DirectMessage.eager_load(:sender, :follows)
       .preload(follows: :target)
+      .joins(:sender, :follows)
       .where(follows: { owner: current_user })
   end
 
