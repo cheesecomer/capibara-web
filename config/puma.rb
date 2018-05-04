@@ -1,8 +1,10 @@
-app_root = "#{File.expand_path("../..", __FILE__)}"
-app_name = File.basename(app_root)
-pidfile "/var/run/#{app_name}/#{app_name}.pid"
-bind "unix:///var/run/#{app_name}/#{app_name}.sock"
-directory app_root
+if ENV['USE_UNIXSOCKET'].present?
+  app_root = "#{File.expand_path("../..", __FILE__)}"
+  app_name = File.basename(app_root)
+  pidfile "/var/run/#{app_name}/#{app_name}.pid"
+  bind "unix:///var/run/#{app_name}/#{app_name}.sock"
+  directory app_root
+end
 
 # Puma can serve each request in a thread from an internal thread pool.
 # The `threads` method setting takes two numbers: a minimum and maximum.
@@ -15,7 +17,9 @@ threads threads_count, threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-# port        ENV.fetch("PORT") { 3000 }
+if ENV['USE_UNIXSOCKET'].blank?
+  port ENV.fetch("PORT") { 3000 }
+end
 
 # Specifies the `environment` that Puma will run in.
 #
