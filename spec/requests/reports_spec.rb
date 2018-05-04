@@ -13,8 +13,8 @@ RSpec.describe ReportsController, type: :request do
       let(:admin) { FactoryBot.create(:admin) }
       before { sign_in admin }
       it { is_expected.to have_http_status :ok }
-      it 'when valid should execute order by priority' do
-        expect(Report).to receive_message_chain(:includes ,:order).with(:sender, :target).with(:created_at).and_return(Report.all)
+      it 'when valid should execute ncludes, joins and order' do
+        expect(Report).to receive_message_chain(:includes, :joins, :order).with(:sender, :target).with(:sender, :target).with(:created_at).and_return(Report.all)
         subject
       end
     end
