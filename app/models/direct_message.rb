@@ -2,7 +2,7 @@
 #
 # Table name: direct_messages
 #
-#  id           :integer          not null, primary key
+#  id           :bigint(8)        not null, primary key
 #  addressee_id :integer          not null
 #  sender_id    :integer          not null
 #  content      :text(65535)

@@ -2,7 +2,7 @@
 #
 # Table name: inquiries
 #
-#  id         :integer          not null, primary key
+#  id         :bigint(8)        not null, primary key
 #  sender_id  :integer
 #  name       :string(255)
 #  email      :string(191)      not null
