@@ -13,6 +13,8 @@ default: &default
   pool: 5
   host: localhost
 
+asset:
+  <<: *default
 
 development:
   <<: *default

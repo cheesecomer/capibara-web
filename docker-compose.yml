@@ -20,7 +20,7 @@ services:
     build:
       context: .
       args:
-        - BUNDLE_INSTALL_OPTION=''
+        - BUNDLE_INSTALL_OPTION=
     environment:
       TZ: Asia/Tokyo
       REDIS_URL: redis://redis:6379

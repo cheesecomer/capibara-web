@@ -39,4 +39,6 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 WORKDIR /var/capibara
 
+RUN rake assets:precompile --trace RAILS_ENV=asset
+
 CMD [ "puma", "-w", "2" ]
