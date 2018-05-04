@@ -96,8 +96,6 @@ CarrierWave.configure do |config|
   config.aws_bucket = ENV.fetch('AWS_S3_BUCKET')
   config.aws_acl    = 'public-read'
   config.aws_credentials = {
-    access_key_id:     ENV.fetch('AWS_S3_ACCESS_KEY'),
-    secret_access_key: ENV.fetch('AWS_S3_SECRET_KEY'),
     region: 'ap-northeast-1'
   }
 end
