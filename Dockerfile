@@ -39,6 +39,4 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 WORKDIR /var/capibara
 
-RUN bundle exec rake assets:precompile
-
 CMD [ "puma", "-w", "2" ]
