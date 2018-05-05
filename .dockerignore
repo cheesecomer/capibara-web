@@ -9,6 +9,7 @@ deploy
 workspace
 public/assets
 public/uploads
+vendor
 .dockerignore
 .DS_Store
 .gitignore
