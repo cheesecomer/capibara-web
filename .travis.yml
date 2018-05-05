@@ -16,7 +16,6 @@ after_success:
   - docker --version
   - pip install --user awscli
   - export PATH=$PATH:$HOME/.local/bin
-  - git symbolic-ref --short HEAD
   - bundle exec rake deploy
 before_deploy:
   - git checkout -- .

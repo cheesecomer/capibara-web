@@ -6,11 +6,12 @@ task :deploy do
     end
   end
 
-  config =  HashWithIndifferentAccess.new YAML.load_file(Rails.root.join('config', 'deploy.yml'))
-
+  current_branch = `git name-rev --name-only HEAD`.chomp
+  current_commit = `git rev-parse HEAD`.chomp
   aws = 'aws --output json'
 
-  current_commit = `git rev-parse HEAD`.chomp
+  configs =  HashWithIndifferentAccess.new YAML.load_file(Rails.root.join('config', 'deploy.yml'))
+  config = configs[configs.keys.select {|v| current_branch.match(/^#{v}/) }.first]
 
   puts 'login ecr'
   system `aws ecr get-login --no-include-email`
