@@ -27,3 +27,12 @@ master:
   services:
     - cluster: capibara
       service: capibara-app
+develop:
+  images:
+    - <<: *app_container
+      repository_uri: 980331077313.dkr.ecr.ap-northeast-1.amazonaws.com/capibara/app
+    - <<: *nginx_container
+      repository_uri: 980331077313.dkr.ecr.ap-northeast-1.amazonaws.com/capibara/nginx
+  services:
+    - cluster: capibara
+      service: capibara-app
