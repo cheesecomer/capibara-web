@@ -54,6 +54,7 @@ services:
 
 ### Workspace Utilities #####################################
   workspace:
+    env_file: ./workspace/.env
     build:
       context: ./workspace
     environment:
