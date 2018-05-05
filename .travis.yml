@@ -3,6 +3,7 @@ rvm:
   - 2.4.2
 services:
   - mysql
+  - docker
 bundler_args: "--without development --deployment"
 cache: bundler
 before_script:
@@ -11,6 +12,11 @@ before_script:
   - bundle exec rake db:migrate
 script:
   - bundle exec rspec
+after_success:
+  - docker --version
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+  - bundle exec rake deploy
 before_deploy:
   - git checkout -- .
 deploy:
@@ -21,3 +27,4 @@ deploy:
     master: capibara-production
     develop: capibara-staging
     release/1.0: capibara-staging
+

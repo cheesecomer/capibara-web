@@ -1,4 +1,4 @@
-if ENV['USE_UNIXSOCKET'].present?
+if ENV['USE_UNIXSOCKET'] != nil
   app_root = "#{File.expand_path("../..", __FILE__)}"
   app_name = File.basename(app_root)
   pidfile "/var/run/#{app_name}/#{app_name}.pid"
@@ -17,7 +17,7 @@ threads threads_count, threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-if ENV['USE_UNIXSOCKET'].blank?
+if ENV['USE_UNIXSOCKET'] == nil
   port ENV.fetch("PORT") { 3000 }
 end
 

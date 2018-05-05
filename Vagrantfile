@@ -79,6 +79,9 @@ Vagrant.configure('2') do |config|
       ruby -v
     fi
 
+    yum install -y nodejs gcc ruby-devel zlib-devel mysql-dev ImageMagick ImageMagick-devel && \
+    bundle install
+
     cd /home/vagrant/capibara
     docker-compose --version
     if [ $(docker-compose images |tail -n +3|wc -l) = 0 ]; then docker-compose build; fi

@@ -28,10 +28,8 @@ RUN echo 'install: --no-document' >> ~/.gemrc && \
 RUN adduser -D -H -u 1000 -s /bin/bash www-data && \
     mkdir -p /var/run/capibara && \
     chown www-data:www-data /var/run/capibara
-VOLUME ["/var/run/capibara"]
 
 COPY . /var/capibara
-VOLUME ["/var/capibara/public"]
 
 ADD ./docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
@@ -39,4 +37,9 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 WORKDIR /var/capibara
 
+RUN mkdir -p /var/capibara/public/assets && \
+    rake assets:precompile --trace RAILS_ENV=asset
+
+VOLUME ["/var/run/capibara"]
+VOLUME ["/var/capibara/public"]
 CMD [ "puma", "-w", "2" ]
