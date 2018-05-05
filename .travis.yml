@@ -13,11 +13,11 @@ before_script:
 script:
   - bundle exec rspec
 after_success:
-  - docker --version  # document the version travis is using
-  - pip install --user awscli # install aws cli w/o sudo
-  - export PATH=$PATH:$HOME/.local/bin # put aws in the path
-  - eval $(aws ecr get-login) #needs AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY envvars
-  - ruby ./deploy/deploy.rb
+  - docker --version
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+  - gem install active_support
+  - ruby ./deploy.rb
 before_deploy:
   - git checkout -- .
 deploy:
