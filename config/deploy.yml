@@ -18,7 +18,7 @@ default:
     docker_file: ./nginx/Dockerfile
     dependencies:
       - nginx/
-feature/*:
+master:
   images:
     - <<: *app_container
       repository_uri: 980331077313.dkr.ecr.ap-northeast-1.amazonaws.com/capibara/app

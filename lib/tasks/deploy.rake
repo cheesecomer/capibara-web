@@ -13,6 +13,11 @@ task :deploy do
   configs =  HashWithIndifferentAccess.new YAML.load_file(Rails.root.join('config', 'deploy.yml'))
   config = configs[configs.keys.select {|v| current_branch.match(/^#{v}/) }.first]
 
+  if config.blank?
+    puts "  Because there is no setting for branch #{current_branch}, we skip the deployment."
+    return
+  end
+
   puts 'login ecr'
   system `aws ecr get-login --no-include-email`
   puts
