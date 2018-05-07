@@ -19,7 +19,7 @@ RSpec.describe 'Session', type: :request do
     end
     context 'when authorized' do
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
-      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil, icon_thumb_url: user.icon_url(:thumb), accepted: false } }
+      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil, icon_thumb_url: user.icon_url(:thumb), accepted: false, friends_count: 0 } }
       it { is_expected.to have_http_status :ok }
       # it { expect { subject }.to change { user.access_token } }
       it { expect { subject }.to change { user.current_sign_in_at } }
@@ -39,7 +39,7 @@ RSpec.describe 'Session', type: :request do
     let(:error_response) { { message: I18n.t('devise.failure.invalid') } }
     context 'when email found and valid password' do
       let(:request_json) { { email: 'user@email.com', password: 'password' }.to_json }
-      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil, icon_thumb_url: user.icon_url(:thumb), accepted: false } }
+      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil, icon_thumb_url: user.icon_url(:thumb), accepted: false, friends_count: 0 } }
       it { is_expected.to have_http_status :ok }
       it { expect { subject }.to change { user.access_token } }
       it { expect { subject }.to change { user.current_sign_in_at } }

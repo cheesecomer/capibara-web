@@ -32,7 +32,7 @@ RSpec.describe 'Users', type: :request do
     context 'When nickname is presence' do
       let(:request_json) { { nickname: FFaker::Name.name }.to_json }
       let(:user) { User.last }
-      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil, icon_thumb_url: user.icon_url(:thumb), accepted: false } }
+      let(:response_body) { { access_token: user.access_token, id: user.id, nickname: user.nickname, biography: user.biography, icon_url: nil, icon_thumb_url: user.icon_url(:thumb), accepted: false, friends_count: 0 } }
       it { is_expected.to have_http_status :ok }
       it { expect { subject }.to change { User.all.count }.by(1) }
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
@@ -86,7 +86,15 @@ RSpec.describe 'Users', type: :request do
       let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
       let!(:block) { FactoryBot.create(:block, owner: signin_user, target: user) }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), accepted: false }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), accepted: false, friends_count: 0 }
+    end
+    context 'when has friends' do
+      let(:signin_user) { user }
+      let(:optional_header) { { authorization: "Token #{signin_user.access_token}" } }
+      let!(:block) { FactoryBot.create(:block, owner: signin_user, target: user) }
+      let!(:friends) { FactoryBot.create_list(:follow, 10, owner: signin_user) }
+      it { is_expected.to have_http_status :ok }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: user.id, nickname: user.nickname, biography: user.biography, icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), accepted: false, friends_count: 10 }
     end
   end
 
@@ -130,7 +138,7 @@ RSpec.describe 'Users', type: :request do
     context 'When nickname is presence' do
       let(:params) { { nickname: FFaker::Name.name, biography: FFaker::LoremJA.paragraph } }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
-      let(:response_body) { { id: user.id, nickname: params[:nickname], biography: params[:biography], icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), accepted: false } }
+      let(:response_body) { { id: user.id, nickname: params[:nickname], biography: params[:biography], icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), accepted: false, friends_count: 0 } }
       it { is_expected.to have_http_status :ok }
       it { expect { subject }.to_not change { User.all.count } }
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
@@ -138,7 +146,7 @@ RSpec.describe 'Users', type: :request do
     context 'When accepted' do
       let(:params) { { nickname: FFaker::Name.name, biography: FFaker::LoremJA.paragraph, accepted: true } }
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
-      let(:response_body) { { id: user.id, nickname: params[:nickname], biography: params[:biography], icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), accepted: true } }
+      let(:response_body) { { id: user.id, nickname: params[:nickname], biography: params[:biography], icon_url: user.icon_url, icon_thumb_url: user.icon_url(:thumb), accepted: true, friends_count: 0 } }
       it { is_expected.to have_http_status :ok }
       it { expect { subject }.to_not change { User.all.count } }
       it { expect(JSON.parse(subject.body).deep_symbolize_keys).to eq response_body }
