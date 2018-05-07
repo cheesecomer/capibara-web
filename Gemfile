@@ -48,10 +48,11 @@ gem 'omniauth-google-oauth2'
 
 gem "paranoia", "~> 2.2"
 
-# for Heroku loging
-gem 'rails_12factor', group: :heroku
-
 gem 'enum_help'
+
+group :development, :production do
+  gem 'rails_12factor'
+end
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]

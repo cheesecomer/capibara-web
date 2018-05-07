@@ -2,6 +2,14 @@ version: '2'
 
 services:
 
+### Fluentd Container #########################################
+  fluentd:
+    image: fluent/fluentd:latest
+    ports:
+      - "24224:24224"
+    volumes:
+      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
+
 ### MySql Container ###########################################
   mysql:
     build:
@@ -24,10 +32,19 @@ services:
     environment:
       TZ: Asia/Tokyo
       REDIS_URL: redis://redis:6379
+      RAILS_LOG_TO_STDOUT: enable
+      USE_UNIXSOCKET: enable
     volumes:
       - .:/var/capibara
     networks:
       - backend
+    depends_on:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.{{.FullID}}
     links:
       - redis
     volumes_from:
@@ -41,13 +58,19 @@ services:
     environment:
       TZ: Asia/Tokyo
     volumes:
-      - ./log:/var/log/nginx
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/capibara.conf:/etc/nginx/sites-available/capibara.conf
     ports:
       - 80:80
     volumes_from:
       - app
+    depends_on:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.{{.FullID}}
     networks:
       - frontend
       - backend

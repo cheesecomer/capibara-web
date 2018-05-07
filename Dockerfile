@@ -8,9 +8,6 @@ WORKDIR ~/.temp/
 
 ARG RUNTIME_PACKAGES="libxml2-dev python libxslt-dev mysql-dev nodejs imagemagick=6.9.6.8-r1 tzdata"
 ARG BUILD_PACKAGES="build-base make python-dev py-pip git bash curl findutils binutils-gold tar linux-headers imagemagick-dev=6.9.6.8-r1"
-ARG LIBV8_BRANCH="v3.16.14.19"
-ARG LIBV8_VERSION="3.16.14.19-x86_64-linux"
-ARG LIBV8_DEPENDS="3.16.14.19-x86_64-linux"
 ARG BUNDLE_INSTALL_OPTION="--without development test"
 
 RUN echo 'install: --no-document' >> ~/.gemrc && \
