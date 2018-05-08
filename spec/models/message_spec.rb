@@ -2,8 +2,8 @@
 #
 # Table name: messages
 #
-#  id         :integer          not null, primary key
-#  content    :string(255)
+#  id         :bigint(8)        not null, primary key
+#  content    :text(65535)
 #  sender_id  :integer
 #  room_id    :integer
 #  created_at :datetime         not null
@@ -29,16 +29,6 @@ RSpec.describe Message, type: :model do
   end
   describe '#room' do
     it { is_expected.to validate_presence_of(:room) }
-  end
-  describe '#create' do
-    let(:message) { FactoryBot.build(:message) }
-    subject { message.save }
-    context 'when valid' do
-      it 'when valid should execute MessageBroadcastJob.perform_later' do
-        expect(MessageBroadcastJob).to receive(:perform_later).with(message)
-        subject
-      end
-    end
   end
   describe '#to_broadcast_hash' do
     let(:message) { FactoryBot.create(:message) }

@@ -18,7 +18,7 @@
       <%= content_tag :td, room.name %>
       <%= content_tag :td, room.capacity %>
       <%= content_tag :td, room.priority %>
-      <%= content_tag :td, ChatChannel.connected_users_count(room) %>
+      <%= content_tag :td, room.participants.count %>
       <td>
         <%= link_to 'Edit', edit_room_path(room), remote: true, class: %[btn btn-success], style: 'width: 120px' %>
         <%= link_to 'Delete', room, method: :delete, data: { confirm: 'Are you sure?' }, remote: true, class: %[btn btn-danger], style: 'width: 120px' %>

@@ -92,13 +92,19 @@ end
 
 CarrierWave.configure do |config|
   config.asset_host = "https://s3-ap-northeast-1.amazonaws.com/#{ENV['AWS_S3_BUCKET']}"
-  config.fog_credentials = {
-    provider: 'AWS',
-    aws_access_key_id: ENV['AWS_S3_ACCESS_KEY'],
-    aws_secret_access_key: ENV['AWS_S3_SECRET_KEY'],
-    region: 'ap-northeast-1'
-  }
+  config.storage    = :aws
 
-  config.fog_directory  = ENV['AWS_S3_BUCKET']
-  config.cache_storage = :fog
+  config.aws_bucket = ENV.fetch('AWS_S3_BUCKET')
+  config.aws_acl    = 'public-read'
+  if (ENV['AWS_S3_ACCESS_KEY'].present? && ENV['AWS_S3_SECRET_KEY'].present?)
+    config.aws_credentials = {
+      access_key_id:     ENV.fetch('AWS_S3_ACCESS_KEY'),
+      secret_access_key: ENV.fetch('AWS_S3_SECRET_KEY'),
+      region: 'ap-northeast-1'
+    }
+  else
+    config.aws_credentials = {
+      region: 'ap-northeast-1'
+    }
+  end
 end

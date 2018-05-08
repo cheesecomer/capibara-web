@@ -2,7 +2,7 @@
 #
 # Table name: users
 #
-#  id                        :integer          not null, primary key
+#  id                        :bigint(8)        not null, primary key
 #  nickname                  :string(255)      not null
 #  email                     :string(191)
 #  encrypted_password        :string(255)
@@ -39,6 +39,9 @@ class User < ApplicationRecord
   acts_as_paranoid
 
   has_many :reports, foreign_key: :sender_id
+
+  has_many :follows, foreign_key: :owner_id
+  has_many :follow_users, through: :follows, source: :target
 
   belongs_to :ban_device, foreign_key: :last_device_id, primary_key: :device_id, optional: true
 

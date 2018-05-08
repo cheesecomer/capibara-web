@@ -2,7 +2,7 @@
 #
 # Table name: rooms
 #
-#  id         :integer          not null, primary key
+#  id         :bigint(8)        not null, primary key
 #  name       :string(255)
 #  capacity   :integer          not null
 #  priority   :integer          not null
@@ -21,4 +21,8 @@ class Room < ApplicationRecord
   validates :priority, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
   has_many :messages, dependent: :destroy
+
+  def participants
+    ActionCable.server.connections.select { |v| v.group_identifier == self.id }.map{|v| v.current_user }.uniq {|v| v.id }
+  end
 end

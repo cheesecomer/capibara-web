@@ -1,5 +1,7 @@
-test:
+test: &default
   adapter: mysql2
   database: capibara_test
   username: travis
   encoding: utf8
+asset:
+  <<: *default

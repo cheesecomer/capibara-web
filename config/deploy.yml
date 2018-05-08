@@ -1,0 +1,38 @@
+default:
+  - &app_container
+    context: .
+    docker_file: ./Dockerfile
+    dependencies:
+      - app/
+      - config/
+      - db/
+      - lib/
+      - public/
+      - .dockerignore
+      - docker-entrypoint.sh
+      - Dockerfile
+      - Gemfile
+      - Gemfile.lock
+  - &nginx_container
+    context: nginx
+    docker_file: ./nginx/Dockerfile
+    dependencies:
+      - nginx/
+master:
+  images:
+    - <<: *app_container
+      repository_uri: 980331077313.dkr.ecr.ap-northeast-1.amazonaws.com/capibara/app
+    - <<: *nginx_container
+      repository_uri: 980331077313.dkr.ecr.ap-northeast-1.amazonaws.com/capibara/nginx
+  services:
+    - cluster: capibara
+      service: capibara-app
+develop:
+  images:
+    - <<: *app_container
+      repository_uri: 980331077313.dkr.ecr.ap-northeast-1.amazonaws.com/capibara/app
+    - <<: *nginx_container
+      repository_uri: 980331077313.dkr.ecr.ap-northeast-1.amazonaws.com/capibara/nginx
+  services:
+    - cluster: capibara
+      service: capibara-app

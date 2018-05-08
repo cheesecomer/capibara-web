@@ -2,7 +2,7 @@
 #
 # Table name: admins
 #
-#  id                     :integer          not null, primary key
+#  id                     :bigint(8)        not null, primary key
 #  nickname               :string(255)      not null
 #  email                  :string(191)
 #  encrypted_password     :string(255)

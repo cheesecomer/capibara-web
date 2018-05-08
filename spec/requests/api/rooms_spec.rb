@@ -82,8 +82,7 @@ RSpec.describe 'Rooms', type: :request do
       let!(:message) { FactoryBot.create(:message, sender: other_user, room: room)}
       let(:optional_header) { { authorization: "Token #{user.access_token}" } }
       it { is_expected.to have_http_status :ok }
-      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: room.id, name: room.name, capacity: room.capacity, number_of_participants: 0, participants: [], messages: [
-        { sender: nil, image_url: nil, image_thumb_url: nil, id: message.id, content: message.content, at: message.created_at.iso8601(3) }] }
+      it { expect(JSON.parse(subject.body, symbolize_names: true)).to eq id: room.id, name: room.name, capacity: room.capacity, number_of_participants: 0, participants: [], messages: [ ] }
     end
   end
 end

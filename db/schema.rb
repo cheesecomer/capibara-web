@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180411234545) do
+ActiveRecord::Schema.define(version: 20180429122913) do
 
   create_table "admins", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "nickname", null: false
@@ -43,6 +43,22 @@ ActiveRecord::Schema.define(version: 20180411234545) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "direct_messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
+    t.integer "addressee_id", null: false
+    t.integer "sender_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "follows", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
+    t.integer "owner_id", null: false
+    t.integer "target_id", null: false
+    t.integer "latest_direct_message_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "information", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "title", null: false
     t.string "message", null: false
@@ -64,7 +80,7 @@ ActiveRecord::Schema.define(version: 20180411234545) do
   end
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
-    t.string "content"
+    t.text "content"
     t.integer "sender_id"
     t.integer "room_id"
     t.datetime "created_at", null: false

@@ -2,7 +2,7 @@
 #
 # Table name: users
 #
-#  id                        :integer          not null, primary key
+#  id                        :bigint(8)        not null, primary key
 #  nickname                  :string(255)      not null
 #  email                     :string(191)
 #  encrypted_password        :string(255)
@@ -38,6 +38,10 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  describe "Associations" do
+    it { is_expected.to have_many(:follows) }
+  end
+
   context '#update_access_token!' do
     subject { user.update_access_token! }
     let(:user) { FactoryBot.create(:user) }

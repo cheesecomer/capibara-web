@@ -1,9 +1,12 @@
 json.set! :id, @room.id
 json.set! :name, @room.name
 json.set! :capacity, @room.capacity
-json.set! :number_of_participants, ChatChannel.connected_users_count(@room)
+json.set! :number_of_participants, @room.participants.count
 json.set! :participants do
-  json.array! ChatChannel.connected_users(@room).where.not(id: Block.where(target: current_user).pluck(:owner_id) + Block.where(owner: current_user).pluck(:target_id)) do |user|
+  block_user_ids = []
+  block_user_ids += Block.where(owner: current_user).pluck(:target_id)
+  block_user_ids += Block.where(target: current_user).pluck(:owner_id)
+  json.array! @room.participants.select {|v| !block_user_ids.include?(v.id) }.each do |user|
     json.set! :id, user.id
     json.set! :nickname, user.nickname
     json.set! :icon_url, user.icon_url
@@ -11,7 +14,7 @@ json.set! :participants do
   end
 end
 json.set! :messages do
-  json.array! @room.messages.where.not(sender_id: Block.where(target: current_user).pluck(:owner_id) + Block.where(owner: current_user).pluck(:target_id)).includes(:sender).where(created_at: 10.minutes.ago..10.minutes.since).last(10) do |message|
+  json.array! @room.messages.joins(:sender).where.not(sender_id: Block.where(target: current_user).select(:owner_id)).where.not(sender_id: Block.where(owner: current_user).select(:target_id)).includes(:sender).where(created_at: 10.minutes.ago..10.minutes.since).last(10) do |message|
     json.set! :sender do
       json.set! :id, message.sender.id
       json.set! :nickname, message.sender.nickname

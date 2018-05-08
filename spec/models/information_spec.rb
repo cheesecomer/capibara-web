@@ -2,7 +2,7 @@
 #
 # Table name: information
 #
-#  id           :integer          not null, primary key
+#  id           :bigint(8)        not null, primary key
 #  title        :string(255)      not null
 #  message      :string(255)      not null
 #  published_at :datetime         not null
