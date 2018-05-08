@@ -1,6 +1,6 @@
 class Api::FollowsController < Api::ApplicationController
   def index
-    @follows = current_user.follows
+    @follows = current_user.follows.joins(:target)
   end
 
   def create
