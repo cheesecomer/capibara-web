@@ -3,11 +3,11 @@
 export WORKDIR=$(pwd)
 cd /var/capibara
 
-rails db:migrate
-
 if [ -n "$SSM_PARAMETER_PREFIX" ]; then
   $(rake ssm:deploy_parameters)
 fi
+
+rails db:migrate
 
 cd $WORKDIR
 exec "$@"
