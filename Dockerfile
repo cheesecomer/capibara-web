@@ -15,8 +15,8 @@ RUN echo 'install: --no-document' >> ~/.gemrc && \
     echo 'http://dl-cdn.alpinelinux.org/alpine/v3.5/main' >> /etc/apk/repositories  && \
     apk add --update --no-cache --virtual build-dependencies $BUILD_PACKAGES && \
     apk add --update --no-cache $RUNTIME_PACKAGES && \
-    rm /usr/lib/libmysqld* && \
-    rm /usr/bin/mysql* && \
+    rm -f /usr/lib/libmysqld* && \
+    rm -f /usr/bin/mysql* && \
     pip3 install --upgrade pip && \
     pip3 install awscli && \
     gem install bundler && \
