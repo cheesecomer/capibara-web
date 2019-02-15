@@ -6,8 +6,8 @@ ADD ./Gemfile.lock ~/.temp/Gemfile.lock
 
 WORKDIR ~/.temp/
 
-ARG RUNTIME_PACKAGES="libxml2-dev python libxslt-dev mysql-dev nodejs imagemagick=6.9.6.8-r1 tzdata"
-ARG BUILD_PACKAGES="build-base make python-dev py-pip git bash curl findutils binutils-gold tar linux-headers imagemagick-dev=6.9.6.8-r1"
+ARG RUNTIME_PACKAGES="libxml2-dev python3 libxslt-dev mysql-dev nodejs imagemagick=6.9.6.8-r1 tzdata"
+ARG BUILD_PACKAGES="build-base make python3-dev git bash curl findutils binutils-gold tar linux-headers imagemagick-dev=6.9.6.8-r1"
 ARG BUNDLE_INSTALL_OPTION="--without development test"
 
 RUN echo 'install: --no-document' >> ~/.gemrc && \
@@ -17,8 +17,8 @@ RUN echo 'install: --no-document' >> ~/.gemrc && \
     apk add --update --no-cache $RUNTIME_PACKAGES && \
     rm /usr/lib/libmysqld* && \
     rm /usr/bin/mysql* && \
-    pip install --upgrade pip && \
-    pip install awscli && \
+    pip3 install --upgrade pip && \
+    pip3 install awscli && \
     gem install bundler && \
     bundle config build.nokogiri --use-system-libraries && \
     bundle install -j4 $BUNDLE_INSTALL_OPTION && \
