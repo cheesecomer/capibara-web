@@ -49,7 +49,7 @@ task :deploy do
       puts
 
       files = `git diff #{latest_commit}..#{current_commit} --name-only`.lines.map(&:chomp)
-      if !v[:dependencies].any? {|f| files.grep(/^#{f}/).present? } || $?.success?
+      if !v[:dependencies].any? {|f| files.grep(/^#{f}/).present? } && $?.success?
         puts '  The dependent file has not been modified'
         puts '    Dependent Files'
         v[:dependencies].each{|f| puts "      => #{f}"}
