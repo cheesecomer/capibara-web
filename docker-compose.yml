@@ -90,6 +90,9 @@ services:
       - redis
     volumes_from:
       - mysql
+    networks:
+      - frontend
+      - backend
 
 ### Networks Setup ##########################################
 
