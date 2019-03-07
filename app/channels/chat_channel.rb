@@ -66,7 +66,7 @@ class ChatChannel < ApplicationCable::Channel
     block_user_ids += Block.where(owner: sender).map{|v| v.target_id }
     block_user_ids += Block.where(target: sender).map{|v| v.owner_id }
     room.participants.select {|v| !block_user_ids.include?(v.id) }.each do |user|
-        ChatChannel.broadcast_to [room, user], message
-      end
+      ChatChannel.broadcast_to [room, user], message
+    end
   end
 end

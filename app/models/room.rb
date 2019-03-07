@@ -23,6 +23,12 @@ class Room < ApplicationRecord
   has_many :messages, dependent: :destroy
 
   def participants
-    ActionCable.server.connections.select { |v| v.group_identifier == self.id }.map{|v| v.current_user }.uniq {|v| v.id }
+    channel_prefix = ActionCable.server.pubsub.send(:channel_with_prefix, ChatChannel.channel_name)
+    Redis.new.pubsub("channels", "#{channel_prefix}:*")
+      .map {|v| v.split(':').drop(2).map{|c| Base64.decode64(c) } }
+      .select {|v| v.length == 2 }.select {|v| v[0] == self.to_global_id.to_s }
+      .select {|v| v[1] =~ /^gid:\/\/capibara\/User\/[0-9]{1,}$/ }
+      .map {|v| v[1].split('/').last.to_i }
+      .tap{|v| break User.where(id: v) }
   end
 end

@@ -57,10 +57,12 @@ Vagrant.configure('2') do |config|
       echo ' '
       echo ' '
       echo ' '
-      curl https://bootstrap.pypa.io/get-pip.py -s -o get-pip.py && \
-      python get-pip.py && \
-      pip install awscli && \
-      rm get-pip.py
+      yum install -y centos-release-scl && \
+      yum install -y rh-python36 && \
+      ln -s /opt/rh/rh-python36/enable /etc/profile.d/rh-python36.sh && \
+      source /opt/rh/rh-python36/enable && \
+      pip install --upgrade pip && \
+      pip install awscli
     fi
 
     if [ ! -e '/opt/rh/rh-ruby24/root/usr/bin/ruby' ]; then
@@ -74,7 +76,6 @@ Vagrant.configure('2') do |config|
       yum install -y rh-ruby24 rh-ruby24-ruby-devel rh-ruby24-rubygem-bundler && \
       ln -s /opt/rh/rh-ruby24/enable /etc/profile.d/rh-ruby24.sh && \
       source /etc/profile.d/rh-ruby24.sh &&
-      cd /home/vagrant/capibara/deploy &&
       bundle install
       ruby -v
     fi
@@ -84,6 +85,12 @@ Vagrant.configure('2') do |config|
 
     cd /home/vagrant/capibara
     docker-compose --version
+
+    if [ ! -e '/home/vagrant/capibara/workspace/.env' ]; then 
+      touch /home/vagrant/capibara/workspace/.env
+      chown vagrant:vagrant /home/vagrant/capibara/workspace/.env
+    fi
+
     if [ $(docker-compose images |tail -n +3|wc -l) = 0 ]; then docker-compose build; fi
     docker-compose images
     docker-compose run workspace bundle install -j4
