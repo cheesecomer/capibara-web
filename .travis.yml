@@ -4,6 +4,7 @@ rvm:
 services:
   - mysql
   - docker
+  - redis-server
 bundler_args: "--without development --deployment"
 cache: bundler
 before_script:
