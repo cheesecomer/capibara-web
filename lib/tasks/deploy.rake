@@ -49,7 +49,7 @@ task :deploy do
       puts
 
       files = `git diff #{latest_commit}..#{current_commit} --name-only`.lines.map(&:chomp)
-      if !v[:dependencies].any? {|f| files.grep(/^#{f}/).present? }
+      if !v[:dependencies].any? {|f| files.grep(/^#{f}/).present? } || $?.success?
         puts '  The dependent file has not been modified'
         puts '    Dependent Files'
         v[:dependencies].each{|f| puts "      => #{f}"}
@@ -59,9 +59,11 @@ task :deploy do
         puts
         puts
         next
+      elsif !`git log #{latest_commit}`.tap { break $? }.success?
+        puts '  Because could not find the latest commit, will do a force update'
       end
 
-      image_uri = "#{v[:repository_uri]}:#{current_commit}"
+      image_uri  = "#{v[:repository_uri]}:#{current_commit}"
 
       puts '--------------------------------------------------------------------------------'
       puts '  Build Docker Image'
